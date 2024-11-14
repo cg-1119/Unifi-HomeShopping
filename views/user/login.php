@@ -16,7 +16,7 @@
     </div>
 
     <?php
-    include '/footer.php';
+    include '../home/footer.php';
     ?>
 </body>
 
