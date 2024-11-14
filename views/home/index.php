@@ -9,11 +9,11 @@
 </head>
 
 <body>
+
     <?php
-    // 페이지 예시
     include 'header.php';
     ?>
-    <!-- 추천 제품 리스트 내용 -->
+    
     <div class="bg-light py-2">
         <div class="container text-center">
             <a href="#" class="text-decoration-none text-dark">상품 카테고리 메뉴</a>
