@@ -1,6 +1,6 @@
 <?php
 // 페이지 예시
-include 'views/home/header.php';
+include 'header.php';
 ?>
 
 <div class="content">
@@ -12,5 +12,5 @@ include 'views/home/header.php';
 </div>
 
 <?php
-include 'views/home/footer.php';
+include 'footer.php';
 ?>
