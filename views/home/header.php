@@ -17,11 +17,4 @@
                 <a href="#">회원가입</a>
             </div>
         </div>
-        <div class="category-menu">
-            <a href="#">상품 카테고리 메뉴</a>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="검색어를 입력하세요">
-            <button>검색</button>
-        </div>
     </header>
