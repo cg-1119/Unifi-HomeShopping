@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+}
+
+.navbar h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.category-menu, .search-bar {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.category-menu a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #333;
+}
+
+.search-bar input[type="text"] {
+    padding: 5px;
+    width: 200px;
+}
+
+.search-bar button {
+    padding: 5px 10px;
+}
+
+/* 푸터 스타일 */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-content p {
+    margin: 0;
+}
