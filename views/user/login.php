@@ -20,7 +20,7 @@
             <input type="text" class="mb-4 form-control" name="" id="" placeholder="비밀번호" />
             <input type="submit" class="form-control" value="로그인">
             <div class="mt-2 d-flex justify-content-center" style="width: 100%">
-                <a class="nav-link text-secondary" href="#">회원가입</a>
+                <a class="nav-link text-secondary" href="signup.php">회원가입</a>
                 <span class="link-border"></span>
                 <a class="nav-link text-secondary" href="#">아이디 찾기</a>
                 <span class="link-border"></span>
