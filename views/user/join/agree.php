@@ -55,7 +55,7 @@
             </div>
             <div class="box">
                 <div style="padding:24px; width: 100%; flex-direction: column;">
-                    <input class="form-control" type="submit" value="다음으로">
+                    <input class="form-control btn btn-outline-secondary" type="submit" value="다음으로" disabled>
                 </div>
             </div>
         </div>
@@ -69,6 +69,7 @@ include "../../home/footer.php";
 <script src="/public/js/cg1119.js"></script>
 <script>
     changeIcon();
+    formValidation();
 </script>
 
 </body>

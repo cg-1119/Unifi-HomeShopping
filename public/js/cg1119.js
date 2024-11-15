@@ -18,17 +18,16 @@
     })
 })()
 
-// changeIcon
+// agree.php
+const checkService = document.getElementById('checkService');
+const serviceIcon = document.getElementById('serviceIcon');
+const checkPrivacy = document.getElementById('checkPrivacy');
+const privacyIcon = document.getElementById('privacyIcon');
+const checkAll = document.getElementById('checkAll');
+const checkAllIcon = document.getElementById(' checkAllIcon');
+const submitButton = document.querySelector('.form-control');
+
 function changeIcon() {
-    const checkService = document.getElementById('checkService');
-    const serviceIcon = document.getElementById('serviceIcon');
-
-    const checkPrivacy = document.getElementById('checkPrivacy');
-    const privacyIcon = document.getElementById('privacyIcon');
-
-    const checkAll = document.getElementById('checkAll');
-    const checkAllIcon = document.getElementById(' checkAllIcon');
-
     function updateIcon(checkbox, icon) {
         if (checkbox.checked) {
             icon.classList.remove('bi-check-circle');
@@ -75,4 +74,25 @@ function changeIcon() {
         }
         updateIcon(checkAll, checkAllIcon);
     });
+}
+function formValidation() {
+    function updateSubmitButton() {
+        const allChecked = checkService.checked && checkPrivacy.checked;
+        submitButton.disabled = !allChecked;
+
+        if (allChecked) {
+            submitButton.classList.remove('btn-outline-secondary');
+            submitButton.classList.add('btn-primary');
+            submitButton.classList.add('bg-secondary');
+        } else {
+            submitButton.classList.remove('bg-secondary');
+            submitButton.classList.remove('btn-primary');
+            submitButton.classList.add('btn-outline-secondary');
+        }
+    }
+    updateSubmitButton()
+
+    checkService.addEventListener('change', updateSubmitButton);
+    checkPrivacy.addEventListener('change', updateSubmitButton);
+    checkAll.addEventListener('change', updateSubmitButton);
 }
