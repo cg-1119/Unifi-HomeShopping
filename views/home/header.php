@@ -1,4 +1,4 @@
-<!-- views/home/header.php -->
+<!-- connect header.php -->
 <link rel="stylesheet" href="/public/css/custom-style.css">
 
 <header>
