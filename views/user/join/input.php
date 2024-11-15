@@ -22,9 +22,9 @@
                         </div>
                     </li>
                     <li class="list-group">
-                        <label for="psValidation" class="form-label"></label>
-                        <input type="password" class="form-control is-invalid" id="psValidation" aria-describedby="psValidationFeedback" placeholder="비밀번호" required>
-                        <div id="psValidationFeedback" class="invalid-feedback">
+                        <label for="pwValidation" class="form-label"></label>
+                        <input type="password" class="form-control is-invalid" id="pwValidation" aria-describedby="pwValidationFeedback" placeholder="비밀번호" required>
+                        <div id="pwValidationFeedback" class="invalid-feedback">
                             비밀번호를 입력하세요.
                         </div>
                     </li>
@@ -43,13 +43,6 @@
                         </div>
                     </li>
                     <li class="list-group">
-                        <label for="zipValidation" class="form-label"></label>
-                        <input type="text" class="form-control is-invalid" id="zipValidation" aria-describedby="zipValidationFeedback" placeholder="집주소" required>
-                        <div id="idValidationFeedback" class="invalid-feedback">
-                            집주소를 입력하세요.
-                        </div>
-                    </li>
-                    <li class="list-group">
                         <button class="btn btn-primary" type="submit">제출하기</button>
                     </li>
                 </ul>
@@ -60,9 +53,8 @@
 <?php
 include '../../home/footer.php';
 ?>
+<!-- JavaScript 파일 연결 -->
 <script src="/public/js/input.js"></script>
-<script>
 
-</script>
 </body>
 </html>
