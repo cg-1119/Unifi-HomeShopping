@@ -7,7 +7,7 @@
             <a class="navbar-brand mx-auto" href="/views/home/index.php">쇼핑몰</a>
             <div class="d-flex gap-3">
                 <a class="nav-link text-white" href="/views/user/login.php">로그인</a>
-                <a class="nav-link text-white" href="/views/user/signup.php">회원가입</a>
+                <a class="nav-link text-white" href="/views/user/join/agree.php">회원가입</a>
             </div>
         </div>
     </nav>
