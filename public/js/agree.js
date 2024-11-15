@@ -36,10 +36,10 @@
         submitButton.disabled = !allChecked;
 
         if (allChecked) {
-            submitButton.classList.add('btn-primary', 'bg-secondary');
+            submitButton.classList.add('bg-secondary', 'btn-secondary');
             submitButton.classList.remove('btn-outline-secondary');
         } else {
-            submitButton.classList.remove('bg-secondary', 'btn-primary');
+            submitButton.classList.remove('bg-secondary', 'btn-secondary');
             submitButton.classList.add('btn-outline-secondary');
         }
     }
