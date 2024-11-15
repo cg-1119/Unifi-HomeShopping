@@ -10,15 +10,29 @@
 </head>
 
 <body>
-
+<div class="d-flex justify-content-center">
+    <h3><a class="navbar-brand mx-auto" href="/views/home/index.php">Cg1119 Homeshopping</a></h3>
+</div>
 <div class="mt-5 d-flex justify-content-center">
     <h1>로그인</h1>
 </div>
 <div class="d-flex justify-content-center border-box">
     <div style="padding:24px; width: 100%;">
-        <input type="text" class="mb-4 form-control " name="username" id="" placeholder="이름"/>
-        <input type="password" class="mb-4 form-control" name="password" id="" placeholder="비밀번호"/>
-        <input type="submit" class="form-control" value="로그인">
+        <form class="needs-validation" method="POST" novalidate>
+            <div class="has-validation">
+                <input type="text" class="mb-4 form-control " name="username" id="nameValidation" placeholder="ID" required>
+                <div class="invalid-feedback">
+                    이름을 입력해 주세요.
+                </div>
+            </div>
+            <div class="has-validation">
+                <input type="password" class="mb-4 form-control" name="password" id="psValidation" placeholder="비밀번호" required>
+                <div class="invalid-feedback">
+                    비밀번호를 입력해 주세요.
+                </div>
+            </div>
+            <input type="submit" class="form-control" value="로그인">
+        </form>
         <div class="mt-2 d-flex justify-content-center" style="width: 100%">
             <a class="nav-link text-secondary" href="join/agree.php">회원가입</a>
             <span class="link-border"></span>
@@ -26,8 +40,6 @@
             <span class="link-border"></span>
             <a class="nav-link text-secondary" href="#">비밀번호 찾기</a>
         </div>
-        <div class="mt-5 text-bg-danger" id="id_error_msg" style="display: none">아이디를 잘못 입력하셨습니다.</div>
-        <div class="mt-5 text-bg-danger" id="pw_error_msg" style="display: none">비밀번호를 잘못 입력하셨습니다.</div>
     </div>
 </div>
 
