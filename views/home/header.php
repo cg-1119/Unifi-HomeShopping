@@ -4,7 +4,7 @@
 <header>
     <nav class="navbar navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container d-flex justify-content-end">
-            <a class="navbar-brand mx-auto" href="/views/home/index.php">Cg1119 Homeshopping</a>
+            <a class="navbar-brand mx-auto" href="/views/home/index.php" style="font-weight: bold;">Cg1119 Homeshopping</a>
             <div class="d-flex gap-3">
                 <a class="nav-link text-white" href="/views/user/login.php">로그인</a>
                 <a class="nav-link text-white" href="/views/user/join/agree.php">회원가입</a>

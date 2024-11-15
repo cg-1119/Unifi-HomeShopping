@@ -10,6 +10,13 @@
 </head>
 <body>
 <div class="container">
+    <div class="d-flex justify-content-center m-5">
+        <a class="navbar-brand mx-auto text-decoration-none text-white bg-dark py-2 px-4 rounded"
+           href="/views/home/index.php"
+           style="font-size: 1.5rem; font-weight: bold;">
+            Cg1119 HomeShopping
+        </a>
+    </div>
     <form method="GET" action="#" class="needs-validation" novalidate>
         <div class="mt-5 d-flex flex-column justify-content-center">
             <div class="box">

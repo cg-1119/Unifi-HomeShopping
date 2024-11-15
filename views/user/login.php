@@ -10,11 +10,12 @@
 </head>
 
 <body>
-<div class="d-flex justify-content-center">
-    <h3><a class="navbar-brand mx-auto" href="/views/home/index.php">Cg1119 Homeshopping</a></h3>
-</div>
-<div class="mt-5 d-flex justify-content-center">
-    <h1>로그인</h1>
+<div class="d-flex justify-content-center m-5">
+    <a class="navbar-brand mx-auto text-decoration-none text-white bg-dark py-2 px-4 rounded"
+       href="/views/home/index.php"
+       style="font-size: 1.5rem; font-weight: bold;">
+        Cg1119 HomeShopping
+    </a>
 </div>
 <div class="d-flex justify-content-center border-box">
     <div style="padding:24px; width: 100%;">
