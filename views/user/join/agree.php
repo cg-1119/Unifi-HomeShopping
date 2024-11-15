@@ -17,9 +17,9 @@
             <div class="border-box">
                 <ul class="list-group">
                     <li class="list-group">
-                        <input type="checkbox" id="check_service" hidden>
-                        <label for="check_service" class="label-box">
-                            <i class="bi bi-check-circle" style="font-size: 1.5rem"></i>
+                        <input type="checkbox" id="checkService" hidden>
+                        <label for="checkService" class="label-box">
+                            <i id="serviceIcon" class="bi bi-check-circle" style="font-size: 1.5rem"></i>
                             <span>홈쇼핑 이용약관</span>
                         </label>
                         <div class="text-box">
@@ -32,9 +32,9 @@
                         </div>
                     </li>
                     <li class="list-group">
-                        <input type="checkbox" id="check_privacy" hidden>
-                        <label for="check_privacy" class="label-box">
-                            <i class="bi bi-check-circle" style="font-size: 1.5rem"></i>
+                        <input type="checkbox" id="checkPrivacy" hidden>
+                        <label for="checkPrivacy" class="label-box">
+                            <i id="privacyIcon" class="bi bi-check-circle" style="font-size: 1.5rem"></i>
                             <span>개인정보 수집동의</span>
                         </label>
                         <div class="text-box">
@@ -43,9 +43,9 @@
                         </div>
                     </li>
                     <li class="list-group">
-                        <input type="checkbox" id="check_all" hidden>
-                        <label for="check_all" class="label-box">
-                            <i class="bi bi-check-circle" style="font-size: 1.5rem"></i>
+                        <input type="checkbox" id="checkAll" hidden>
+                        <label for="checkAll" class="label-box">
+                            <i id=" checkAllIcon" class="bi bi-check-circle" style="font-size: 1.5rem"></i>
                             <span>전체 동의하기</span>
                         </label>
                     </li>
@@ -63,6 +63,11 @@
 <?php
 include "../../home/footer.php";
 ?>
+<!-- JavaScript 파일 연결 -->
+<script src="/public/js/cg1119.js">
+    changeIcon();
+</script>
+
 </body>
 
 </html>
