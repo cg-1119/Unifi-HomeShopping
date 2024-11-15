@@ -47,7 +47,7 @@
                     <li class="list-group">
                         <input type="checkbox" id="checkAll" hidden>
                         <label for="checkAll" class="label-box">
-                            <i id=" checkAllIcon" class="bi bi-check-circle" style="font-size: 1.5rem"></i>
+                            <i id="checkAllIcon" class="bi bi-check-circle" style="font-size: 1.5rem"></i>
                             <span>전체 동의하기</span>
                         </label>
                     </li>
@@ -67,10 +67,6 @@ include "../../home/footer.php";
 ?>
 <!-- JavaScript 파일 연결 -->
 <script src="/public/js/agree.js"></script>
-<script>
-    changeIcon();
-    formValidation();
-</script>
 
 </body>
 
