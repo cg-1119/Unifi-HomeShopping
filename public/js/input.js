@@ -68,5 +68,28 @@
             '',
             '유효한 전화번호를 입력하세요 (예: 010-1234-5678).'
         );
+
+        // PassWordCheck Validation
+        const pwCheckInput = document.querySelector('#pwCheckValidation');
+        const pwCheckFeedback = document.querySelector('#pwCheckValidationFeedback');
+        function validatePasswordCheck() {
+            if (pwCheckInput.value === pwInput.value && pwInput.classList.contains('is-valid')) {
+                pwCheckInput.classList.remove('is-invalid');
+                pwCheckInput.classList.add('is-valid');
+                pwCheckFeedback.style.visibility = 'hidden';
+            } else {
+                pwCheckInput.classList.remove('is-valid');
+                pwCheckInput.classList.add('is-invalid');
+                pwCheckFeedback.textContent = pwCheckInput.value
+                    ? '비밀번호가 일치하지 않습니다.'
+                    : '비밀번호를 입력하세요.';
+                pwCheckFeedback.style.visibility = 'visible';
+            }
+        }
+
+        pwInput.addEventListener('input', () => validatePasswordCheck());
+        pwCheckInput.addEventListener('input', () => validatePasswordCheck());
+
+
     });
 })();

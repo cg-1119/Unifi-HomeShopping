@@ -28,7 +28,6 @@
                                aria-describedby="idValidationFeedback" placeholder="아이디" required>
                         <div id="idValidationFeedback" class="invalid-feedback">아이디를 입력하세요.</div>
                     </li>
-
                     <!-- Password -->
                     <li class="list-group mb-3">
                         <label for="pwValidation" class="form-label"></label>
@@ -36,7 +35,13 @@
                                aria-describedby="pwValidationFeedback" placeholder="비밀번호" required>
                         <div id="pwValidationFeedback" class="invalid-feedback">비밀번호를 입력하세요.</div>
                     </li>
-
+                    <!-- PasswordCheck -->
+                    <li class="list-group mb-3">
+                        <label for="pwCheckValidation" class="form-label"></label>
+                        <input type="password" class="form-control" id="pwCheckValidation"
+                               aria-describedby="pwCheckValidationFeedback" placeholder="비밀번호 재입력" required>
+                        <div id="pwCheckValidationFeedback" class="invalid-feedback">비밀번호를 입력하세요.</div>
+                    </li>
                     <!-- Name -->
                     <li class="list-group mb-3">
                         <label for="nameValidation" class="form-label"></label>
@@ -44,7 +49,6 @@
                                aria-describedby="nameValidationFeedback" placeholder="이름" required>
                         <div id="nameValidationFeedback" class="invalid-feedback">이름을 입력하세요.</div>
                     </li>
-
                     <!-- Phone -->
                     <li class="list-group mb-3">
                         <label for="phoneValidation" class="form-label"></label>
@@ -56,7 +60,7 @@
             </div>
             <div class="box">
                 <!-- Submit Button -->
-                <button class="btn btn-primary" type="submit">제출하기</button>
+                <button class="btn btn-secondary" type="submit">제출하기</button>
             </div>
         </div>
     </form>
