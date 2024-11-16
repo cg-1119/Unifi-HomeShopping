@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/public/css/custom-style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <title>회원가입 정보 입력</title>
+    <!-- JavaScript 파일 연결 -->
+    <script src="/public/js/input.js"></script>
 </head>
 <body>
 <div class="container">
@@ -17,7 +19,7 @@
             Cg1119 HomeShopping
         </a>
     </div>
-    <form method="GET" action="#" class="needs-validation" novalidate>
+    <form method="POST" action="/controllers/UsersController.php" class="needs-validation" novalidate>
         <div class="mt-5 d-flex flex-column justify-content-center">
             <div class="box">
                 <ul class="list-group">
@@ -60,6 +62,7 @@
             </div>
             <div class="box">
                 <!-- Submit Button -->
+                <input type="hidden" name="action" value="register">
                 <button class="btn btn-secondary" type="submit">제출하기</button>
             </div>
         </div>
@@ -68,7 +71,5 @@
 <?php
 include '../../home/footer.php';
 ?>
-<!-- JavaScript 파일 연결 -->
-<script src="/public/js/input.js"></script>
 </body>
 </html>

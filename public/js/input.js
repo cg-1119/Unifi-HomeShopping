@@ -63,10 +63,10 @@
         const phoneInput = document.querySelector('#phoneValidation');
         validateInput(
             phoneInput,
-            /^010\d{3,4}\d{4}$/,
+            /^010{8}$/,
             document.querySelector('#phoneValidationFeedback'),
             '',
-            '유효한 전화번호를 입력하세요 (예 01012345678, - 제외).'
+            '유효한 전화번호를 입력하세요 (예: 01012345678, - 제외).'
         );
 
         // PassWordCheck Validation
