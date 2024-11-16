@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="/public/css/custom-style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <title>회원가입 정보 입력</title>
-    <!-- JavaScript 파일 연결 -->
-    <script src="/public/js/input.js"></script>
 </head>
 <body>
 <div class="container">
@@ -26,14 +24,14 @@
                     <!-- ID -->
                     <li class="list-group mb-3">
                         <label for="idValidation" class="form-label"></label>
-                        <input type="text" class="form-control" id="idValidation"
+                        <input type="text" name="id" class="form-control" id="idValidation"
                                aria-describedby="idValidationFeedback" placeholder="아이디" required>
                         <div id="idValidationFeedback" class="invalid-feedback">아이디를 입력하세요.</div>
                     </li>
                     <!-- Password -->
                     <li class="list-group mb-3">
                         <label for="pwValidation" class="form-label"></label>
-                        <input type="password" class="form-control" id="pwValidation"
+                        <input type="password" name="pw" class="form-control" id="pwValidation"
                                aria-describedby="pwValidationFeedback" placeholder="비밀번호" required>
                         <div id="pwValidationFeedback" class="invalid-feedback">비밀번호를 입력하세요.</div>
                     </li>
@@ -47,14 +45,14 @@
                     <!-- Name -->
                     <li class="list-group mb-3">
                         <label for="nameValidation" class="form-label"></label>
-                        <input type="text" class="form-control" id="nameValidation"
+                        <input type="text" name="name" class="form-control" id="nameValidation"
                                aria-describedby="nameValidationFeedback" placeholder="이름" required>
                         <div id="nameValidationFeedback" class="invalid-feedback">이름을 입력하세요.</div>
                     </li>
                     <!-- Phone -->
                     <li class="list-group mb-3">
                         <label for="phoneValidation" class="form-label"></label>
-                        <input type="text" class="form-control" id="phoneValidation"
+                        <input type="text" name="phone" class="form-control" id="phoneValidation"
                                aria-describedby="phoneValidationFeedback" placeholder="전화번호" required>
                         <div id="phoneValidationFeedback" class="invalid-feedback">전화번호를 입력하세요.</div>
                     </li>
@@ -71,5 +69,7 @@
 <?php
 include '../../home/footer.php';
 ?>
+<!-- JavaScript 파일 연결 -->
+<script src="/public/js/input.js"></script>
 </body>
 </html>
