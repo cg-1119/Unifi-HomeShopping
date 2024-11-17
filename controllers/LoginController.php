@@ -24,14 +24,22 @@ class LoginController {
     public function logout() {
         session_start();
         session_destroy();
+        echo "<script>location.href = '/views/home/index.php';</script>";
     }
 }
+// POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $controller = new LoginController();
 
     if ($_POST['action'] === 'login') {
         $controller->login();
-    } elseif ($_POST['action'] === 'logout') {
+    }
+}
+// GET
+elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
+    $controller = new LoginController();
+
+    if ($_GET['action'] === 'logout') {
         $controller->logout();
     }
 }
