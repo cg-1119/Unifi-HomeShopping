@@ -73,7 +73,7 @@
 include "../../home/footer.php";
 ?>
 <!-- JavaScript 파일 연결 -->
-<script src="/public/js/agree.js"></script>
+<script src="/public/js/user/agree.js"></script>
 
 </body>
 
