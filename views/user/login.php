@@ -25,7 +25,7 @@
             <div class="border-box">
                 <div style="padding:24px; width: 100%;">
                     <div class="has-validation">
-                        <input type="text" class="mb-4 form-control " name="id" id="idValidation"
+                        <input type="text" class="form-control " name="id" id="idValidation"
                                placeholder="ID"
                                required>
                         <div class="invalid-feedback">
@@ -33,14 +33,14 @@
                         </div>
                     </div>
                     <div class="has-validation">
-                        <input type="password" class="mb-4 form-control" name="password" id="pwValidation"
+                        <input type="password" class="mt-4 form-control" name="password" id="pwValidation"
                                placeholder="비밀번호" required>
                         <div class="invalid-feedback">
                             비밀번호를 입력해 주세요.
                         </div>
                     </div>
                     <input class ="form-control" type="hidden" name="action" value="login">
-                    <button type="submit" class="mt-5 btn btn-secondary">로그인</button>
+                    <button type="submit" class="mt-5 btn btn-secondary" style="width: 100%;">로그인</button>
                 </div>
             </div>
         </div>
