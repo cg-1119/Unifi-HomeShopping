@@ -17,7 +17,7 @@
             Cg1119 HomeShopping
         </a>
     </div>
-    <form method="POST" action="/controllers/UsersController.php" class="needs-validation" novalidate>
+    <form method="POST" action="/controllers/UserController.php" class="needs-validation" novalidate>
         <div class="mt-5 d-flex flex-column justify-content-center">
             <div class="box">
                 <ul class="list-group">
