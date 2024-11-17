@@ -10,10 +10,10 @@ class UserController {
     }
 
     public function register() {
-        $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
         $id = isset($_POST['id']) ? $_POST['id'] : '';
         $pw = isset($_POST['pw']) ? $_POST['pw'] : '';
         $name = isset($_POST['name']) ? $_POST['name'] : '';
+        $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
 
 
         // 전화번호 중복 확인
