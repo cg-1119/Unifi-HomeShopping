@@ -1,12 +1,12 @@
 <?php
+require_once "../models/User.php";
 header('Content-Type: text/html; charset=utf-8');
-require_once "../models/Users.php";
 
-class UsersController {
+class UserController {
     private $users;
 
     public function __construct() {
-        $this->users = new Users();
+        $this->users = new User();
     }
 
     public function register() {
@@ -14,9 +14,6 @@ class UsersController {
         $id = isset($_POST['id']) ? $_POST['id'] : '';
         $pw = isset($_POST['pw']) ? $_POST['pw'] : '';
         $name = isset($_POST['name']) ? $_POST['name'] : '';
-
-        echo "Phone: $phone, ID: $id, PW: $pw, Name: $name";
-
 
 
         // 전화번호 중복 확인
@@ -38,7 +35,7 @@ class UsersController {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
-    $controller = new UsersController();
+    $controller = new UserController();
 
     if($_POST['action'] === 'register') {
         $controller->register();

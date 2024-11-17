@@ -1,6 +1,6 @@
 <?php
 require_once "../config/database.php";
-class Users {
+class User {
     private $db;
 
     public function __construct() {
