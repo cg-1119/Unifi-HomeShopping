@@ -20,38 +20,34 @@
     </div>
 </header>
 <div class="container">
-    <form class="needs-validation" method="POST" action="/controllers/LoginController.php" novalidate>
+    <form class="needs-validation" method="POST" action="/controllers/UserController.php?action=find_id" novalidate>
         <div class="mt-5 d-flex flex-column justify-content-center">
             <div class="border-box">
                 <div style="padding:24px; width: 100%;">
+                    <div>
+                        
+                    </div>
                     <div class="has-validation">
-                        <input type="text" class="form-control " name="id" id="idValidation"
-                               placeholder="ID"
+                        <input type="text" class="form-control " name="name" id="nameValidation"
+                               placeholder="이름"
                                required>
                         <div class="invalid-feedback">
-                            아이디를 입력해 주세요.
+                            이름을 입력해 주세요.
                         </div>
                     </div>
                     <div class="has-validation">
-                        <input type="password" class="mt-4 form-control" name="password" id="pwValidation"
-                               placeholder="비밀번호" required>
+                        <input type="text" class="mt-4 form-control" name="phone" id="phoneValidation"
+                               placeholder="전화번호" required>
                         <div class="invalid-feedback">
-                            비밀번호를 입력해 주세요.
+                            전화번호를 입력해 주세요.
                         </div>
                     </div>
-                    <input class ="form-control" type="hidden" name="action" value="login">
-                    <button type="submit" class="mt-5 btn btn-secondary" style="width: 100%;">로그인</button>
+                    <input class ="form-control" type="hidden" name="action" value="find_id">
+                    <button type="submit" class="mt-5 btn btn-secondary" style="width: 100%;">아이디 찾기</button>
                 </div>
             </div>
         </div>
     </form>
-    <div class="mt-2 d-flex justify-content-center" style="width: 100%">
-        <a class="nav-link text-secondary" href="join/agree.php">회원가입</a>
-        <span class="link-border"></span>
-        <a class="nav-link text-secondary" href="find_id.php">아이디 찾기</a>
-        <span class="link-border"></span>
-        <a class="nav-link text-secondary" href="#">비밀번호 찾기</a>
-    </div>
 </div>
 
 <script src="../../public/js/user/login.js"></script>
