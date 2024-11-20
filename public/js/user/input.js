@@ -1,4 +1,4 @@
-(() => {
+    (() => {
     'use strict';
 
     const forms = document.querySelectorAll('.needs-validation');
