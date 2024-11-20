@@ -70,6 +70,6 @@
 include '../../home/footer.php';
 ?>
 <!-- JavaScript 파일 연결 -->
-<script src="/public/js/user/input.js"></script>
+<script src="/public/js/user/inputValidation.js"></script>
 </body>
 </html>

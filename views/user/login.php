@@ -54,7 +54,7 @@
     </div>
 </div>
 
-<script src="../../public/js/user/login.js"></script>
+<script src="../../public/js/user/validation.js"></script>
 <?php
 include '../home/footer.php';
 ?>
