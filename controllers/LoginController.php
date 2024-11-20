@@ -9,7 +9,6 @@ class LoginController{
         $this->loginModel = new Login();
     }
 
-    // 로그인 메서드
     public function login() {
         // POST 데이터 확인 및 필터링
         $id = isset($_POST["id"]) ? htmlspecialchars(trim($_POST["id"])) : "";
@@ -21,7 +20,7 @@ class LoginController{
 
         if ($user) {
             session_start();
-            $_SESSION["user"] = $user;
+            $_SESSION['user'] = $user;
 
             echo "<script>location.href = '/views/home/index.php';</script>";
         } else {
@@ -29,14 +28,17 @@ class LoginController{
         }
     }
 
-    // 로그아웃 메서드
     public function logout() {
-        session_start();
-
-        // 세션이 시작되지 않았을 경우
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            session_destroy();
+        if (!isset($_SESSION)) {
+            session_start();
         }
+
+        $_SESSION = array();
+
+        if (isset($_COOKIE[session_name()])) {
+            setcookie(session_name(), '', time() - 42000, '/');
+        }
+        session_destroy();
     }
 }
 
@@ -47,12 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'login') {
         $controller->login();
     }
-}
-// GET 요청 처리
-elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
-    $controller = new LoginController();
-
-    if ($_GET['action'] === 'logout') {
+    else if ($_POST['action'] === 'logout') {
         $controller->logout();
     }
 }
