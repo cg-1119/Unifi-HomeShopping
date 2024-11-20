@@ -7,20 +7,24 @@ class Database {
     private $con;
 
     public function connect() {
-        $this->con = mysql_connect($this->host, $this->user, $this->password);
-        if (!$this->con) {
-            die("Database connection failed: " . mysql_error());
+        $this->con = new mysqli($this->host, $this->user, $this->password, $this->dbname);
+
+        // 연결 오류 확인
+        if ($this->con->connect_error) {
+            die("Database connection failed: " . $this->con->connect_error);
         }
-        mysql_select_db($this->dbname, $this->con);
+
         // UTF-8 설정
-        mysql_query("SET NAMES 'utf8'", $this->con);
+        if (!$this->con->set_charset("utf8")) {
+            die("Failed to set charset to utf8: " . $this->con->error);
+        }
 
         return $this->con;
     }
 
     public function close() {
         if ($this->con) {
-            mysql_close($this->con);
+            $this->con->close();
         }
     }
 }
