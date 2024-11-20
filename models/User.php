@@ -1,61 +1,67 @@
 <?php
 require_once "../config/database.php";
-header('Content-Type: text/html; charset=utf-8');
-class User
-{
+
+class User {
     private $db;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->db = new Database();
     }
 
-    public function checkDuplicatePhone($phone)
-    {
+    // 전화번호 중복 체크
+    public function checkDuplicatePhone($phone) {
         $con = $this->db->connect();
-        $phone = mysql_real_escape_string($phone);
-        $sql = "SELECT * FROM users WHERE phone = '$phone'";
-        $result = mysql_query($sql, $con);
+
+        $stmt = $con->prepare("SELECT phone FROM users WHERE phone = ?");
+        $stmt->bind_param("s", $phone); // 파라미터 바인딩
+        $stmt->execute();
+
+        $stmt->bind_result($retrievedPhone);
+        $isDuplicate = false;
+
+        if ($stmt->fetch()) {
+            $isDuplicate = true;
+        }
+
+        $stmt->close();
         $this->db->close();
-        return mysql_num_rows($result) > 0;
+
+        return $isDuplicate;
     }
 
-    public function registerUser($phone, $id, $pw, $name)
-    {
+    // 사용자 등록
+    public function registerUser($id, $pw, $name, $phone) {
         $con = $this->db->connect();
-        $phone = mysql_real_escape_string($phone);
-        $id = mysql_real_escape_string($id);
-        $pw = mysql_real_escape_string($pw);
-        $name = mysql_real_escape_string($name);
 
-        $sql = "INSERT INTO users (phone, id, pw, name) VALUES ('$phone', '$id', '$pw', '$name')";
-        $result = mysql_query($sql, $con);
+        $stmt = $con->prepare("INSERT INTO users (id, pw, name, phone) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $id, $pw, $name, $phone);
+        $result = $stmt->execute();
+
+        $stmt->close();
         $this->db->close();
+
         return $result;
     }
 
-    // find_id
-    public function findIdByNameAndPhone($name, $phone)
-    {
-        $sql = "SELECT id FROM users WHERE name = '$name' AND phone = '$phone'";
-        $result = mysql_query($sql, $this->db->connect());
-        return mysql_fetch_assoc($result);
-    }
+    // user/find_id.php
+    public function findIdByNameAndPhone($name, $phone) {
+        $con = $this->db->connect();
 
-    // find_pw
-    public function verifyUserForPasswordReset($name, $phone)
-    {
-        $sql = "SELECT id FROM users WHERE name = '$name' AND phone = '$phone'";
-        $result = mysql_query($sql, $this->db->connect());
-        return mysql_fetch_assoc($result);
-    }
+        $stmt = $con->prepare("SELECT id FROM users WHERE name = ? AND phone = ?");
+        $stmt->bind_param("ss", $name, $phone);
+        $stmt->execute();
 
-    // pw_update
-    public function updatePassword($id, $newPassword)
-    {
-        $hashedPassword = md5($newPassword);
-        $sql = "UPDATE users SET pw = '$hashedPassword' WHERE id = '$id'";
-        return mysql_query($sql, $this->db->connect());
+        $stmt->bind_result($id);
+        $result = null;
+
+        if ($stmt->fetch()) {
+            $result = array('id' => $id);
+        }
+
+        $stmt->close();
+        $this->db->close();
+
+        return $result;
     }
 }
 ?>

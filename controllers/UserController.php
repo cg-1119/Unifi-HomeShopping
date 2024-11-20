@@ -9,13 +9,12 @@ class UserController {
         $this->user = new User();
     }
 
-    // input
+    // 회원가입
     public function register() {
-        $id = isset($_POST['id']) ? $_POST['id'] : '';
-        $pw = isset($_POST['pw']) ? $_POST['pw'] : '';
-        $name = isset($_POST['name']) ? $_POST['name'] : '';
-        $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
-
+        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+        $pw = isset($_POST['pw']) ? trim($_POST['pw']) : '';
+        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+        $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
 
         // 전화번호 중복 확인
         if ($this->user->checkDuplicatePhone($phone)) {
@@ -24,24 +23,22 @@ class UserController {
         }
 
         // 비밀번호 암호화
-        $hashed_pw = md5($pw);
+        $hashed_pw = hash('sha256', $pw);
 
         // 회원 정보 등록
-        if ($this->user->registerUser($phone, $id, $hashed_pw, $name)) {
+        if ($this->user->registerUser($id, $hashed_pw, $name, $phone)) {
             echo "<script>alert('회원가입이 완료되었습니다!'); location.href = '/views/home/index.php';</script>";
         } else {
             echo "<script>alert('회원가입에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
     }
 
-    // find_id
+    // user/find_id
     public function findId() {
-        $name = $_POST['name'];
-        $phone = $_POST['phone'];
+        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+        $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
 
         $result = $this->user->findIdByNameAndPhone($name, $phone);
-
-        echo $result['id'];
 
         if ($result) {
             echo "<script>alert('아이디는 " . $result['id'] . "입니다.'); location.href = '/views/user/login.php';</script>";
@@ -51,7 +48,8 @@ class UserController {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
+// 요청 처리
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
     $controller = new UserController();
 
     if ($_POST['action'] === 'register') {
@@ -59,10 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
     } else if ($_POST['action'] === 'find_id') {
         $controller->findId();
     }
-} else if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['action'])) {
+} else if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action'])) {
     $controller = new UserController();
 
     if ($_GET['action'] === 'find_id') {
         $controller->findId();
     }
 }
+?>
