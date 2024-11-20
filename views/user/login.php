@@ -48,9 +48,9 @@
     <div class="mt-2 d-flex justify-content-center" style="width: 100%">
         <a class="nav-link text-secondary" href="join/agree.php">회원가입</a>
         <span class="link-border"></span>
-        <a class="nav-link text-secondary" href="find_id.php">아이디 찾기</a>
+        <a class="nav-link text-secondary" href="find/find_id.php">아이디 찾기</a>
         <span class="link-border"></span>
-        <a class="nav-link text-secondary" href="#">비밀번호 찾기</a>
+        <a class="nav-link text-secondary" href="find/find_pw.php">비밀번호 찾기</a>
     </div>
 </div>
 

@@ -1,5 +1,5 @@
 <?php
-require_once "../models/Login.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Login.php';
 header('Content-Type: text/html; charset=utf-8');
 
 class LoginController{
