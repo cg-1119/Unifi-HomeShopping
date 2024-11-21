@@ -22,13 +22,6 @@ if (!$product) {
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom-style.css">
     <title><?php echo htmlspecialchars($product['name']); ?> - 상품 상세 정보</title>
-    <style>
-        .product-image {
-            max-width: 100%;
-            height: auto;
-            object-fit: contain;
-        }
-    </style>
 </head>
 <body>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
