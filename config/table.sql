@@ -11,7 +11,7 @@ products
 CREATE TABLE products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
+    price DECIMAL(10) NOT NULL,
     image_url VARCHAR(2083) DEFAULT NULL,
     category VARCHAR(100) DEFAULT NULL
 ) DEFAULT CHARSET=utf8;
@@ -21,7 +21,5 @@ CREATE TABLE product_details (
     detail_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     description TEXT DEFAULT NULL,
-    option_name VARCHAR(100) DEFAULT NULL,
-    option_value VARCHAR(100) DEFAULT NULL,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
