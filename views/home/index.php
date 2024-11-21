@@ -20,21 +20,20 @@ if (session_id() == '') {
     <?php
     include 'header.php';
     ?>
-    
-    <div class="bg-light py-2">
-        <div class="container text-center">
-            <a href="/views/product/index.php" class="text-decoration-none text-dark">상품 리스트</a>
-        </div>
-    </div>
-
     <div class="container my-3">
-        <div class="row justify-content-center">
+        <div class="row justify-content-end">
             <div class="col-md-6">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="검색어를 입력하세요">
                     <button class="btn btn-outline-secondary" type="button">검색</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="container text-center">
+            <a href="/views/product/index.php" class="text-decoration-none text-black">상품 리스트</a>
         </div>
     </div>
 

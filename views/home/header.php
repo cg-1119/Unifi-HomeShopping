@@ -8,27 +8,26 @@ if (session_id() == '') {
 <link rel="stylesheet" href="/public/css/custom-style.css">
 
 <header>
-    <nav class="navbar navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container d-flex justify-content-end">
-            <a class="navbar-brand mx-auto" href="/views/home/index.php" style="font-weight: bold;">Cg1119
-                Homeshopping</a>
-            <div class="d-flex gap-3">
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="nav-link" href="/views/home/index.php" style="font-weight: bold;">Cg1119</a>
+            <div class="d-flex gap-3 align-items-center">
                 <?php if (isset($_SESSION['user'])): ?>
                     <?php if ($_SESSION['user']['is_admin'] == 1): ?>
                         <!-- 관리자 로그인 -->
-                        <span class="nav-link text-white">안녕하세요 관리자님!</span>
-                        <a href="/views/admin/index.php" class="nav-link text-white">관리자 페이지</a>
-                        <a href="#" id="logout-link" class="nav-link text-white">로그아웃</a>
+                        <span class="nav-link">안녕하세요 관리자님!</span>
+                        <a href="/views/admin/index.php" class="nav-link">관리자 페이지</a>
+                        <a href="#" id="logout-link" class="nav-link">로그아웃</a>
                     <?php else: ?>
                         <!-- 일반 사용자 로그인 -->
                         <span class="nav-link text-white">안녕하세요, <?php echo htmlspecialchars($_SESSION['user']['id']); ?>님!</span>
-                        <a href="#" class="nav-link text-white">마이페이지</a>
-                        <a href="#" id="logout-link" class="nav-link text-white">로그아웃</a>
+                        <a href="#" class="nav-link">마이페이지</a>
+                        <a href="#" id="logout-link" class="nav-link">로그아웃</a>
                     <?php endif; ?>
                 <?php else: ?>
                     <!-- 비로그인 상태 -->
-                    <a class="nav-link text-white" href="/views/user/login.php">로그인</a>
-                    <a class="nav-link text-white" href="/views/user/join/agree.php">회원가입</a>
+                    <a class="nav-link" href="/views/user/login.php">로그인</a>
+                    <a class="nav-link" href="/views/user/join/agree.php">회원가입</a>
                 <?php endif; ?>
             </div>
         </div>
