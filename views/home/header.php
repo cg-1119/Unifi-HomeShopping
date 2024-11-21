@@ -14,10 +14,17 @@ if (session_id() == '') {
                 Homeshopping</a>
             <div class="d-flex gap-3">
                 <?php if (isset($_SESSION['user'])): ?>
-                    <!-- 로그인 상태 -->
-                    <span class="nav-link text-white">안녕하세요, <?php echo htmlspecialchars($user['id']); ?>님!</span>
-                    <a href="#" class="nav-link text-white">마이페이지</a>
-                    <a href="#" id="logout-link" class="nav-link text-white">로그아웃</a>
+                    <?php if ($_SESSION['user']['is_admin'] == 1): ?>
+                        <!-- 관리자 로그인 -->
+                        <span class="nav-link text-white">안녕하세요 관리자님!</span>
+                        <a href="/views/admin/index.php" class="nav-link text-white">관리자 페이지</a>
+                        <a href="#" id="logout-link" class="nav-link text-white">로그아웃</a>
+                    <?php else: ?>
+                        <!-- 일반 사용자 로그인 -->
+                        <span class="nav-link text-white">안녕하세요, <?php echo htmlspecialchars($_SESSION['user']['id']); ?>님!</span>
+                        <a href="#" class="nav-link text-white">마이페이지</a>
+                        <a href="#" id="logout-link" class="nav-link text-white">로그아웃</a>
+                    <?php endif; ?>
                 <?php else: ?>
                     <!-- 비로그인 상태 -->
                     <a class="nav-link text-white" href="/views/user/login.php">로그인</a>
