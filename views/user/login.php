@@ -56,7 +56,7 @@
 
 <script src="../../public/js/user/validation.js"></script>
 <?php
-include '../home/footer.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
 ?>
 </body>
 
