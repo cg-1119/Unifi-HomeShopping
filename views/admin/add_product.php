@@ -25,7 +25,12 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] != 1) {
     <form action="/controllers/ProductController.php" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label for="category">카테고리</label>
-            <input type="text" class="form-control" id="category" name="category" required>
+            <select class="form-select" id="category" required>
+                <option value="" disabled selected hidden>카테고리를 선택해 주세요</option>
+                <option value="wifi">와이파이</option>
+                <option value="gateway">게이트웨이</option>
+                <option value="accessories">악세서리</option>
+            </select>
         </div>
         <div class="form-group mt-3">
             <label for="name">상품명</label>
