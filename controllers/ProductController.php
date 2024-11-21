@@ -21,18 +21,22 @@ class ProductController
         // 이미지 업로드
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $imageTmpPath = $_FILES['image']['tmp_name'];
-            $imageName = basename($_FILES['image']['name']);
+            $imageName = $_FILES['image']['name'];
 
+            // 이미지 파일 이름에서 공백을 '_'로 변경
+            $imageName = str_replace(' ', '_', $imageName);
+
+            // 이미지 저장 경로 설정
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/public/image/';
+            $uploadFilePath = $uploadDir . $imageName;
+
+            // 이미지 파일 포멧 확인
             $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
             $fileExtension = pathinfo($imageName, PATHINFO_EXTENSION);
-
             if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
                 echo "<script>alert('이미지 파일 형식이 올바르지 않습니다. (허용된 형식: jpg, jpeg, png, gif)'); history.back();</script>";
                 exit;
             }
-            // 이미지 저장 경로 설정
-            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/public/image/';
-            $uploadFilePath = $uploadDir . uniqid('image_', true) . '.' . $fileExtension;
 
             // 업로드 디렉토리가 없는 경우 생성
             if (!is_dir($uploadDir)) {
@@ -40,7 +44,7 @@ class ProductController
             }
 
             if (move_uploaded_file($imageTmpPath, $uploadFilePath)) {
-                $imageUrl = str_replace($_SERVER['DOCUMENT_ROOT'], '', $uploadFilePath);
+                $imageUrl = '/public/image/' . $imageName;
             } else {
                 echo "<script>alert('이미지 업로드 실패.'); history.back();</script>";
                 exit;
@@ -49,7 +53,8 @@ class ProductController
             echo "<script>alert('이미지를 선택해주세요.'); history.back();</script>";
             exit;
         }
-        // 상품 데이터베이스 삽입
+
+        // 상품 삽입
         $productId = $this->productModel->addProduct($category, $name, $price, $imageUrl);
 
         if ($productId) {

@@ -34,20 +34,24 @@ class Product
         return $product;
     }
 
-    public function getProductDetailsById($productId)
+    public function getProductDetailById($productId)
     {
         $con = $this->db->connect();
-        $stmt = $con->prepare("SELECT description, option_name, option_value FROM product_details WHERE product_id = ?");
+        $stmt = $con->prepare("SELECT description FROM product_details WHERE product_id = ?");
         $stmt->bind_param("i", $productId);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $details = array();
-        while ($row = $result->fetch_assoc()) {
-            $details[] = $row;
+
+        $stmt->bind_result($description);
+        $productDetail = array();
+
+
+        if ($stmt->fetch()) {
+            $productDetail['description'] = $description;
         }
+
         $stmt->close();
         $con->close();
-        return $details;
+        return $productDetail;
     }
 
     public function getProducts($category = null)
