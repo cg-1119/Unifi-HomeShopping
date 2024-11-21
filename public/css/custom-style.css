@@ -61,3 +61,24 @@ footer {
 .label-box i {
     margin-right: 8px;
 }
+
+/* product */
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+.product-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+.product-item:hover {
+    transform: scale(1.05);
+}
+.product-image {
+    max-width: 100%;
+    height: auto;
+}
