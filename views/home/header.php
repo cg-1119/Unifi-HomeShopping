@@ -1,6 +1,8 @@
 <?php
-session_start();
-$user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+if (session_id() == '') {
+    session_start();
+    $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+}
 ?>
 <!-- connect header.php -->
 <link rel="stylesheet" href="/public/css/custom-style.css">
@@ -14,6 +16,7 @@ $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
                 <?php if (isset($_SESSION['user'])): ?>
                     <!-- 로그인 상태 -->
                     <span class="nav-link text-white">안녕하세요, <?php echo htmlspecialchars($user['id']); ?>님!</span>
+                    <a href="#" class="nav-link text-white">마이페이지</a>
                     <a href="#" id="logout-link" class="nav-link text-white">로그아웃</a>
                 <?php else: ?>
                     <!-- 비로그인 상태 -->
@@ -24,9 +27,12 @@ $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         </div>
     </nav>
 </header>
+<?php
+ob_end_flush(); // 버퍼에 있는 내용을 출력
+?>
 
 <script>
-    document.getElementById('logout-link').addEventListener('click', function(event) {
+    document.getElementById('logout-link').addEventListener('click', function (event) {
         event.preventDefault();
 
         const confirmLogout = confirm("정말 로그아웃 하시겠습니까?");

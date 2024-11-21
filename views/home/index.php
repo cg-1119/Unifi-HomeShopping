@@ -1,5 +1,8 @@
 <?php
-session_start();
+ob_start();
+if (session_id() == '') {
+    session_start();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +22,7 @@ session_start();
     
     <div class="bg-light py-2">
         <div class="container text-center">
-            <a href="#" class="text-decoration-none text-dark">상품 카테고리 메뉴</a>
+            <a href="/views/product/index.php" class="text-decoration-none text-dark">상품 리스트</a>
         </div>
     </div>
 
@@ -36,13 +39,13 @@ session_start();
 
     <div class="container my-5">
         <h2 class="text-center">추천 제품 리스트</h2>
-
-        <h2 class="text-center mt-4">상품 리스트</h2>
     </div>
 
     <?php
     include 'footer.php';
     ?>
 </body>
-
 </html>
+<?php
+ob_end_flush();
+?>
