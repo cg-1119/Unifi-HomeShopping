@@ -22,8 +22,17 @@ class ProductController
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $imageTmpPath = $_FILES['image']['tmp_name'];
             $imageName = basename($_FILES['image']['name']);
+
+            $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
+            $fileExtension = pathinfo($imageName, PATHINFO_EXTENSION);
+
+            if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+                echo "<script>alert('이미지 파일 형식이 올바르지 않습니다. (허용된 형식: jpg, jpeg, png, gif)'); history.back();</script>";
+                exit;
+            }
+            // 이미지 저장 경로 설정
             $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/public/image/';
-            $uploadFilePath = $uploadDir . $imageName;
+            $uploadFilePath = $uploadDir . uniqid('image_', true) . '.' . $fileExtension;
 
             // 업로드 디렉토리가 없는 경우 생성
             if (!is_dir($uploadDir)) {
@@ -31,7 +40,7 @@ class ProductController
             }
 
             if (move_uploaded_file($imageTmpPath, $uploadFilePath)) {
-                $imageUrl = '/public/image/' . $imageName;
+                $imageUrl = str_replace($_SERVER['DOCUMENT_ROOT'], '', $uploadFilePath);
             } else {
                 echo "<script>alert('이미지 업로드 실패.'); history.back();</script>";
                 exit;

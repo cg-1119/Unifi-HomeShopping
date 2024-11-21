@@ -60,11 +60,21 @@ class Product
             $stmt = $con->prepare("SELECT product_id, name, price, image_url FROM products");
         }
         $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt->store_result();
         $products = array();
-        while ($row = $result->fetch_assoc()) {
-            $products[] = $row;
+
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($productId, $name, $price, $imageUrl);
+            while ($stmt->fetch()) {
+                $products[] = array(
+                    'product_id' => $productId,
+                    'name' => $name,
+                    'price' => $price,
+                    'image_url' => $imageUrl
+                );
+            }
         }
+
         $stmt->close();
         $con->close();
         return $products;
