@@ -1,25 +1,27 @@
 CREATE TABLE users (
-phone VARCHAR(11) NOT NULL PRIMARY KEY,
-id VARCHAR(30) NOT NULL UNIQUE,
-pw VARCHAR(255) NOT NULL,
-name VARCHAR(30) NOT NULL
-is_admin TINYINT(1) DEFAULT 0;
+    uid INT AUTO_INCREMENT PRIMARY KEY,
+    id VARCHAR(30) NOT NULL UNIQUE,
+    pw VARCHAR(255) NOT NULL,
+    name VARCHAR(10) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    phone VARCHAR(20) NOT NULL UNIQUE,
+    is_admin TINYINT(1) DEFAULT 0;
 ) DEFAULT CHARSET=utf8;
 
 
-products
 CREATE TABLE products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     price DECIMAL(10) NOT NULL,
-    image_url VARCHAR(2083) DEFAULT NULL,
-    category VARCHAR(100) DEFAULT NULL
+    category VARCHAR(100) DEFAULT NULL,
+    description TEXT DEFAULT NULL
 ) DEFAULT CHARSET=utf8;
 
-product_details
-CREATE TABLE product_details (
-    detail_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE product_images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
-    description TEXT DEFAULT NULL,
-    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
-) DEFAULT CHARSET=utf8;
+    file_path VARCHAR(255) NOT NULL,
+    img_url VARCHAR(255),
+    is_thumbnail TINYINT(1) DEFAULT 0,
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);

@@ -18,55 +18,87 @@ class ProductController
         $price = isset($_POST['price']) ? floatval($_POST['price']) : 0;
         $description = isset($_POST['description']) ? trim($_POST['description']) : '';
 
-        // 이미지 업로드
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $imageTmpPath = $_FILES['image']['tmp_name'];
-            $imageName = $_FILES['image']['name'];
-
-            // 이미지 파일 이름에서 공백을 '_'로 변경
-            $imageName = str_replace(' ', '_', $imageName);
-
-            // 이미지 저장 경로 설정
-            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/public/image/';
-            $uploadFilePath = $uploadDir . $imageName;
-
-            // 이미지 파일 포멧 확인
-            $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
-            $fileExtension = pathinfo($imageName, PATHINFO_EXTENSION);
-            if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
-                echo "<script>alert('이미지 파일 형식이 올바르지 않습니다. (허용된 형식: jpg, jpeg, png, gif)'); history.back();</script>";
-                exit;
-            }
-
-            // 업로드 디렉토리가 없는 경우 생성
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
-
-            if (move_uploaded_file($imageTmpPath, $uploadFilePath)) {
-                $imageUrl = '/public/image/' . $imageName;
-            } else {
-                echo "<script>alert('이미지 업로드 실패.'); history.back();</script>";
-                exit;
-            }
-        } else {
-            echo "<script>alert('이미지를 선택해주세요.'); history.back();</script>";
-            exit;
-        }
-
         // 상품 삽입
-        $productId = $this->productModel->addProduct($category, $name, $price, $imageUrl);
-
-        if ($productId) {
-            $detailResult = $this->productModel->addProductDetail($productId, $description);
-            if ($detailResult) {
-                echo "<script>alert('상품이 성공적으로 등록되었습니다.'); location.href = '/views/admin/index.php';</script>";
-            } else {
-                echo "<script>alert('상품 상세 정보 등록에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
-            }
-        } else {
+        $productId = $this->productModel->addProduct($category, $name, $price, $description);
+        if (!$productId) {
             echo "<script>alert('상품 등록에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
+            return;
         }
+
+        // 썸네일 이미지 처리
+        if (!$this->uploadThumbnail($productId)) {
+            echo "<script>alert('썸네일 업로드에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
+            return;
+        }
+
+        // 상품 설명 이미지 처리
+        if (!$this->uploadDescriptionImages($productId)) {
+            echo "<script>alert('상품 설명 이미지 업로드에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
+            return;
+        }
+
+        echo "<script>alert('상품이 성공적으로 등록되었습니다.'); location.href = '/views/admin/index.php';</script>";
+    }
+
+    private function uploadThumbnail($productId)
+    {
+        if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
+            $thumbnailTmp = $_FILES['thumbnail']['tmp_name'];
+            $thumbnailName = basename($_FILES['thumbnail']['name']);
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . "/uploads/products/$productId/";
+
+            // 디렉토리 생성
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $thumbnailPath = $uploadDir . $thumbnailName;
+
+            // 파일 이동
+            if (move_uploaded_file($thumbnailTmp, $thumbnailPath)) {
+                $thumbnailUrl = "/uploads/products/$productId/$thumbnailName";
+                return $this->productModel->addProductImage($productId, $thumbnailUrl, true);
+            } else {
+                error_log("Failed to upload thumbnail: " . $thumbnailName);
+                return false;
+            }
+        }
+
+        error_log("No thumbnail file uploaded or upload error.");
+        return false;
+    }
+
+    private function uploadDescriptionImages($productId)
+    {
+        if (isset($_FILES['descriptionImages'])) {
+            $uploadedFiles = $_FILES['descriptionImages'];
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . "/uploads/products/$productId/";
+
+            // 디렉토리 생성
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            foreach ($uploadedFiles['tmp_name'] as $index => $tmpName) {
+                if ($uploadedFiles['error'][$index] === UPLOAD_ERR_OK) {
+                    $fileName = basename($uploadedFiles['name'][$index]);
+                    $filePath = $uploadDir . $fileName;
+
+                    // 파일 이동
+                    if (move_uploaded_file($tmpName, $filePath)) {
+                        $fileUrl = "/uploads/products/$productId/$fileName";
+                        $this->productModel->addProductImage($productId, $fileUrl, false);
+                    } else {
+                        error_log("Failed to upload description image: " . $fileName);
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        error_log("No description images uploaded.");
+        return true; // 설명 이미지는 필수가 아니므로 true 반환
     }
 }
 
@@ -77,5 +109,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $controller->addProduct();
     }
 }
-
 ?>

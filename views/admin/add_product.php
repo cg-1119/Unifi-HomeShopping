@@ -15,6 +15,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] != 1) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom-style.css">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.css">
     <title>상품 등록</title>
 </head>
 <body>
@@ -25,7 +26,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] != 1) {
     <form action="/controllers/ProductController.php" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label for="category">카테고리</label>
-            <select class="form-select" id="category" required>
+            <select class="form-select" id="category" name="category" required>
                 <option value="" disabled selected hidden>카테고리를 선택해 주세요</option>
                 <option value="wifi">와이파이</option>
                 <option value="gateway">게이트웨이</option>
@@ -42,18 +43,21 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] != 1) {
         </div>
         <div class="form-group mt-3">
             <label for="description">상품 설명</label>
-            <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+            <textarea class="form-control" id="description" name="description"></textarea>
         </div>
         <div class="form-group mt-3">
-            <label for="image">상품 이미지</label>
-            <input type="file" class="form-control" id="image" name="image" required>
+            <label for="thumbnail">썸네일 이미지</label>
+            <input type="file" class="form-control" id="thumbnail" name="thumbnail" required>
+        </div>
+        <div class="form-group mt-3">
+            <label for="descriptionImages">상품 설명 이미지 (여러 이미지 선택 가능)</label>
+            <input type="file" class="form-control" id="descriptionImages" name="descriptionImages[]" multiple>
         </div>
         <button type="submit" class="btn btn-primary mt-4" name="action" value="addProduct">상품 등록</button>
     </form>
 </div>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
-
 <script src="/public/js/bootstrap.js"></script>
 </body>
 </html>
