@@ -35,38 +35,6 @@ foreach ($productImages as $image) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom-style.css">
-    <style>
-        .product-header {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-        .product-thumbnail {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 1px solid #ddd;
-            margin-right: 20px;
-        }
-        .product-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .product-info h1 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin: 0;
-            color: #333;
-        }
-        .product-info .product-slug {
-            font-size: 1rem;
-            color: #666;
-            margin-top: 5px;
-        }
-    </style>
     <title><?php echo htmlspecialchars($product['name']); ?></title>
 </head>
 <body>
@@ -83,11 +51,8 @@ foreach ($productImages as $image) {
         </div>
         <!-- 상품 정보 -->
         <div class="col">
-            <div class="product-info">
+            <div>
                 <h1><?php echo htmlspecialchars($product['name']); ?></h1>
-                <div class="product-slug">
-                    <?php echo htmlspecialchars(str_replace(' ', '-', $product['name'])); ?>
-                </div>
             </div>
         </div>
     </div>
