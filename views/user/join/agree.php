@@ -15,8 +15,9 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
 ?>
 <div class="container">
+    <div class="d-flex justify-content-center"><h2>약관 동의</div>
     <form method-="GET" action="verify.php">
-        <div class="mt-5 d-flex flex-column justify-content-center">
+        <div class="d-flex flex-column justify-content-center">
             <div class="border-box">
                 <ul class="list-group">
                     <li class="list-group">
@@ -28,7 +29,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
                         <div class="text-box">
                             <p>제1장 총 칙</p>
                             <p>제1조 【목적】</p>
-                            <p> 본 약관은 Cg1119 Homeshopping(이하 &quot;회사&quot;로 표기)가 제공하는 온라인 도서판매 쇼핑몰(이하 &quot;쇼핑몰&quot;로
+                            <p> 본 약관은 Cg1119 (이하 &quot;회사&quot;로 표기)가 제공하는 온라인 도서판매 쇼핑몰(이하 &quot;쇼핑몰&quot;로
                                 표기)의 회원 가입에 있어서
                                 회사와 회원간 권리의무에 관한 사항, 서비스 이용조건과 절차 및 기타 필요한 사항을 규정함을 목적으로 합니다.</p>
                             <p>제2조 【용어의 정의】</p>
@@ -57,7 +58,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
                 </ul>
             </div>
             <div class="box">
-                <div style="padding:24px; width: 100%; flex-direction: column;">
+                <div style="width: 100%; flex-direction: column;">
                     <input class="form-control btn btn-outline-secondary" type="submit" value="다음으로" disabled>
                 </div>
             </div>
