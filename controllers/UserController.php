@@ -14,6 +14,7 @@ class UserController {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         $pw = isset($_POST['pw']) ? trim($_POST['pw']) : '';
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+        $email = isset($_POST['email']) ? trim($_POST['email']) : '';
         $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
 
         // 전화번호 중복 확인

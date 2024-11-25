@@ -13,6 +13,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
 ?>
 <div class="container">
+    <div class="d-flex justify-content-center"><h2>정보 입력</div>
     <form method="POST" action="/controllers/UserController.php" class="needs-validation" novalidate>
         <div class="mt-5 d-flex flex-column justify-content-center">
             <div class="box">
@@ -45,6 +46,15 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
                                aria-describedby="nameValidationFeedback" placeholder="이름" required>
                         <div id="nameValidationFeedback" class="invalid-feedback">이름을 입력하세요.</div>
                     </li>
+                    <!-- email -->
+                    <li class="list-group mb-3">
+                        <label for="emailValidation" class="form-label"></label>
+                        <div class="input-group mb-2">
+                            <input type="text" name="email" class="form-control" id="emailValidation"
+                                   aria-describedby="emailValidationFeedback" placeholder="이메일" required>
+                            <div id="autocomplete-list" class="autocomplete-list d-none"></div>
+                            <div id="emailValidationFeedback" class="invalid-feedback">이메일을 입력하세요.</div>
+                    </li>
                     <!-- Phone -->
                     <li class="list-group mb-3">
                         <label for="phoneValidation" class="form-label"></label>
@@ -57,7 +67,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
             <div class="box">
                 <!-- Submit Button -->
                 <input type="hidden" name="action" value="register">
-                <button class="btn btn-secondary" type="submit">제출하기</button>
+                <button class="btn btn-secondary" type="submit">회원가입</button>
             </div>
         </div>
     </form>

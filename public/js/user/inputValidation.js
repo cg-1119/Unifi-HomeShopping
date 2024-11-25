@@ -1,11 +1,11 @@
-    (() => {
+(() => {
     'use strict';
 
     const forms = document.querySelectorAll('.needs-validation');
 
     // 커스텀 유효성 검사 함수
     const validateInput = (input, regex, feedback, validMessage, invalidMessage) => {
-        input.addEventListener('input', () => {
+        const validate = () => {
             if (regex.test(input.value)) {
                 input.setCustomValidity('');
                 input.classList.remove('is-invalid');
@@ -19,7 +19,10 @@
                 feedback.textContent = invalidMessage;
                 feedback.style.visibility = 'visible';
             }
-        });
+        };
+
+        input.addEventListener('input', validate);
+        return validate;
     };
 
     // 각 폼에 대해 처리
@@ -63,6 +66,20 @@
             );
         }
 
+        // Email Validation
+        const emailInput = form.querySelector('#emailValidation');
+        const emailFeedback = form.querySelector('#emailValidationFeedback');
+        let emailValidate = null;
+        if (emailInput && emailFeedback) {
+            emailValidate = validateInput(
+                emailInput,
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                emailFeedback,
+                '',
+                '유효한 이메일을 입력하세요.'
+            );
+        }
+
         // Phone Validation
         const phoneInput = form.querySelector('#phoneValidation');
         const phoneFeedback = form.querySelector('#phoneValidationFeedback');
@@ -100,6 +117,7 @@
             pwInput && pwInput.addEventListener('input', validatePasswordCheck);
             pwCheckInput.addEventListener('input', validatePasswordCheck);
         }
+
         // 폼 제출 시 동작
         form.addEventListener('submit', event => {
             if (!form.checkValidity()) {
@@ -107,6 +125,51 @@
                 event.stopPropagation();
             }
             form.classList.add('was-validated');
+        });
+
+        // 이메일 자동완성 관련 추가된 로직
+        const autocompleteList = document.getElementById('autocomplete-list');
+        const emailDomains = ['naver.com', 'gmail.com', 'daum.net', 'nate.com', 'outlook.com'];
+
+        emailInput.addEventListener('input', function() {
+            const value = emailInput.value;
+            autocompleteList.innerHTML = '';
+
+            if (value.includes('@')) {
+                autocompleteList.classList.add('d-none');
+                return;
+            }
+
+            if (value.trim() !== '') {
+                const fragment = document.createDocumentFragment();
+                emailDomains.forEach(domain => {
+                    const item = document.createElement('div');
+                    item.classList.add('autocomplete-item');
+                    item.textContent = `${value}@${domain}`;
+                    item.addEventListener('click', function() {
+                        emailInput.value = item.textContent;
+                        autocompleteList.innerHTML = '';
+                        autocompleteList.classList.add('d-none');
+
+                        // 이메일 자동완성 선택 후 유효성 검사 실행
+                        if (emailValidate) {
+                            emailValidate();
+                        }
+                    });
+                    fragment.appendChild(item);
+                });
+
+                autocompleteList.appendChild(fragment);
+                autocompleteList.classList.remove('d-none');
+            } else {
+                autocompleteList.classList.add('d-none');
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.form-group')) {
+                autocompleteList.classList.add('d-none');
+            }
         });
     });
 })();

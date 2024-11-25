@@ -9,11 +9,11 @@ class User {
     }
 
     // 사용자 등록
-    public function registerUser($id, $pw, $name, $phone) {
+    public function registerUser($id, $pw, $name, $email, $phone) {
         $con = $this->db->connect();
 
-        $stmt = $con->prepare("INSERT INTO users (id, pw, name, phone) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $id, $pw, $name, $phone);
+        $stmt = $con->prepare("INSERT INTO users (id, pw, name, email, phone) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $id, $pw, $name, $email, $phone);
         $result = $stmt->execute();
 
         $stmt->close();
