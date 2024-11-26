@@ -36,6 +36,7 @@ foreach ($productImages as $image) {
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
 
 <div class="container">
+    <a href="/views/product/index.php" class="text-decoration-none text-black">상품 리스트</a>
     <div class="d-flex justify-content-between">
         <!-- 왼쪽: 대표 이미지 및 추가 이미지 선택 -->
         <div class="product-thumbnail mb-3">
@@ -80,7 +81,6 @@ foreach ($productImages as $image) {
 </div>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
-<script src="/public/js/bootstrap.js"></script>
 <script src="/public/js/custom/product.js"></script>
 </body>
 </html>

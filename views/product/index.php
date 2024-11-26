@@ -58,8 +58,6 @@ $products = $productModel->getProducts($selectedCategory);
 </div>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
-
-<script src="/public/js/bootstrap.js"></script>
 </body>
 </html>
 <?php
