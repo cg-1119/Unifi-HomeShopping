@@ -28,7 +28,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] != 1) {
             <label for="category">카테고리</label>
             <select class="form-select" id="category" name="category" required>
                 <option value="" disabled selected hidden>카테고리를 선택해 주세요</option>
+                <option value="switching">랜 스위칭</option>
                 <option value="wifi">와이파이</option>
+                <option value="camera_security">보안 카메라</option>
                 <option value="gateway">게이트웨이</option>
                 <option value="accessories">악세서리</option>
             </select>
