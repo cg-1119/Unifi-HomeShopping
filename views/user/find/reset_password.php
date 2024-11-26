@@ -4,7 +4,7 @@ session_start();
 $pwResetUser = isset($_SESSION['pw_reset_user']) ? $_SESSION['pw_reset_user'] : null;
 
 if (!$pwResetUser || $pwResetUser['status'] !== 'success') {
-    echo "<script>alert('잘못된 접근입니다.'); location.href = '/views/user/find_pw.php';</script>";
+    echo "<script>alert('잘못된 접근입니다.'); location.href = '/views/custom/find_pw.php';</script>";
     exit;
 }
 $id = $pwResetUser['id'];
@@ -43,6 +43,6 @@ $id = $pwResetUser['id'];
     </div>
 </div>
 
-<script src="/public/js/user/inputValidation.js"></script>
+<script src="/public/js/custom/inputValidation.js"></script>
 </body>
 </html>

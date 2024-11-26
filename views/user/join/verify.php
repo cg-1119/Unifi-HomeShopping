@@ -76,6 +76,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
 ?>
 <!-- JavaScript 파일 연결 -->
-<script src="/public/js/user/inputValidation.js"></script>
+<script src="/public/js/custom/inputValidation.js"></script>
 </body>
 </html>

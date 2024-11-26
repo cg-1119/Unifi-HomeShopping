@@ -49,7 +49,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
     </div>
 </div>
 
-<script src="../../public/js/user/validation.js"></script>
+<script src="../../public/js/custom/validation.js"></script>
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
 ?>

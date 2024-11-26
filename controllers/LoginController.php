@@ -20,7 +20,7 @@ class LoginController{
 
         if ($user) {
             session_start();
-            $_SESSION['user'] = $user;
+            $_SESSION['custom'] = $user;
 
             echo "<script>location.href = '/views/home/index.php';</script>";
         } else {

@@ -104,17 +104,10 @@ footer {
 }
 
 /* product */
-.product-header {
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-}
 .product-thumbnail {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+    width: 40%;
+    height: 40%;
     overflow: hidden;
-    border: 1px solid #ddd;
     margin-right: 20px;
 }
 .product-thumbnail img {

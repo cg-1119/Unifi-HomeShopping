@@ -57,10 +57,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
                     </li>
                 </ul>
             </div>
-            <div class="box">
-                <div style="width: 100%; flex-direction: column;">
-                    <input class="form-control btn btn-outline-secondary" type="submit" value="다음으로" disabled>
-                </div>
+            <div class="box" style="width: 40%;">
+                <input class="form-control btn btn-outline-secondary" type="submit" value="다음으로" disabled>
             </div>
         </div>
     </form>
@@ -70,7 +68,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
 ?>
 <!-- JavaScript 파일 연결 -->
-<script src="/public/js/user/buttonChange.js"></script>
+<script src="/public/js/custom/buttonChange.js"></script>
 
 </body>
 

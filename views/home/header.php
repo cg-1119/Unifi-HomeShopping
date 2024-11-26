@@ -1,7 +1,7 @@
 <?php
 if (session_id() == '') {
     session_start();
-    $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+    $user = isset($_SESSION['custom']) ? $_SESSION['custom'] : null;
 }
 ?>
 <!-- connect header.php -->
@@ -12,15 +12,15 @@ if (session_id() == '') {
         <div class="container d-flex justify-content-between align-items-center">
             <a class="nav-link" href="/views/home/index.php" style="font-weight: bold;">Cg1119</a>
             <div class="d-flex gap-3 align-items-center">
-                <?php if (isset($_SESSION['user'])): ?>
-                    <?php if ($_SESSION['user']['is_admin'] == 1): ?>
+                <?php if (isset($_SESSION['custom'])): ?>
+                    <?php if ($_SESSION['custom']['is_admin'] == 1): ?>
                         <!-- 관리자 로그인 -->
                         <span class="nav-link">안녕하세요 관리자님!</span>
                         <a href="/views/admin/index.php" class="nav-link">관리자 페이지</a>
                         <a href="#" id="logout-link" class="nav-link">로그아웃</a>
                     <?php else: ?>
                         <!-- 일반 사용자 로그인 -->
-                        <span class="nav-link text-white">안녕하세요, <?php echo htmlspecialchars($_SESSION['user']['id']); ?>님!</span>
+                        <span class="nav-link text-white">안녕하세요, <?php echo htmlspecialchars($_SESSION['custom']['id']); ?>님!</span>
                         <a href="#" class="nav-link">마이페이지</a>
                         <a href="#" id="logout-link" class="nav-link">로그아웃</a>
                     <?php endif; ?>

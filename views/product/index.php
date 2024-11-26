@@ -24,10 +24,10 @@ $products = $productModel->getProducts($selectedCategory);
 <div class="container mt-5">
     <!-- 카테고리 필터 -->
     <div class="d-flex justify-content-center mb-4">
-        <a href="/product/index.php" class="btn btn-primary mx-2 <?php echo is_null($selectedCategory) ? 'active' : ''; ?>">전체</a>
-        <a href="/product/index.php?category=wifi" class="btn btn-primary mx-2 <?php echo $selectedCategory === 'wifi' ? 'active' : ''; ?>">와이파이</a>
-        <a href="/product/index.php?category=gateway" class="btn btn-primary mx-2 <?php echo $selectedCategory === 'gateway' ? 'active' : ''; ?>">게이트웨이</a>
-        <a href="/product/index.php?category=accessories" class="btn btn-primary mx-2 <?php echo $selectedCategory === 'accessories' ? 'active' : ''; ?>">악세서리</a>
+        <a href="index.php" class="btn btn-primary mx-2 <?php echo is_null($selectedCategory) ? 'active' : ''; ?>">전체</a>
+        <a href="index.php?category=wifi" class="btn btn-primary mx-2 <?php echo $selectedCategory === 'wifi' ? 'active' : ''; ?>">와이파이</a>
+        <a href="index.php?category=gateway" class="btn btn-primary mx-2 <?php echo $selectedCategory === 'gateway' ? 'active' : ''; ?>">게이트웨이</a>
+        <a href="index.php?category=accessories" class="btn btn-primary mx-2 <?php echo $selectedCategory === 'accessories' ? 'active' : ''; ?>">악세서리</a>
     </div>
 
     <!-- 상품 목록 -->

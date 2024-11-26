@@ -9,7 +9,7 @@ class UserController {
         $this->user = new User();
     }
 
-    // views/user/join/input
+    // views/custom/join/input
     public function register() {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         $pw = isset($_POST['pw']) ? trim($_POST['pw']) : '';
@@ -33,7 +33,7 @@ class UserController {
         }
     }
 
-    // views/user/find/find_id_result
+    // views/custom/find/find_id_result
     public function requestFindId() {
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
         $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
@@ -56,11 +56,11 @@ class UserController {
         }
 
         // 결과 페이지로 리다이렉트
-        header("Location: /views/user/find/find_id_result.php");
+        header("Location: /views/custom/find/find_id_result.php");
         exit;
     }
 
-    // views/user/find_pw
+    // views/custom/find_pw
     public function requestPwReset()
     {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
@@ -74,15 +74,15 @@ class UserController {
                 'id' => $id
             );
 
-            header("Location: /views/user/find/reset_password.php");
+            header("Location: /views/custom/find/reset_password.php");
             exit;
         } else {
             echo "<script>alert('일치하는 사용자를 찾을 수 없습니다.'); history.back();</script>";
-            header("Location: /views/user/find/find_pw.php");
+            header("Location: /views/custom/find/find_pw.php");
             exit;
         }
     }
-    // views/user/reset_password
+    // views/custom/reset_password
     public function resetPassword() {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         $newPassword = isset($_POST['newPassword']) ? trim($_POST['newPassword']) : '';
@@ -92,7 +92,7 @@ class UserController {
             session_start();
             unset($_SESSION['pw_reset_user']);
 
-            echo "<script>alert('비밀번호가 성공적으로 재설정되었습니다.'); location.href = '/views/user/login.php';</script>";
+            echo "<script>alert('비밀번호가 성공적으로 재설정되었습니다.'); location.href = '/views/custom/login.php';</script>";
         } else {
             echo "<script>alert('비밀번호 재설정에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
