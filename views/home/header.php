@@ -5,8 +5,8 @@ if (session_id() == '') {
 }
 ?>
 <!-- connect header.php -->
-<link rel="stylesheet" href="/public/css/custom-style.css">
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<script src="/public/js/bootstrap.bundle.js"></script>
 <header>
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container d-flex justify-content-between align-items-center">
@@ -20,9 +20,23 @@ if (session_id() == '') {
                         <a href="#" id="logout-link" class="nav-link">로그아웃</a>
                     <?php else: ?>
                         <!-- 일반 사용자 로그인 -->
-                        <span class="nav-link text-white">안녕하세요, <?php echo htmlspecialchars($_SESSION['custom']['id']); ?>님!</span>
-                        <a href="#" class="nav-link">마이페이지</a>
-                        <a href="#" id="logout-link" class="nav-link">로그아웃</a>
+                        <div class="dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle" style="font-size: 24px;"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="/views/user/mypage.php">마이페이지</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/views/cart/index.php">장바구니</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="#" id="logout-link">로그아웃</a>
+                                </li>
+                            </ul>
+                        </div>
                     <?php endif; ?>
                 <?php else: ?>
                     <!-- 비로그인 상태 -->
