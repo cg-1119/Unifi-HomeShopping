@@ -20,6 +20,7 @@ $id = $pwResetUser['id'];
     <title>비밀번호 재설정</title>
 </head>
 <body>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
 <div class="container">
     <div class="mt-5 d-flex flex-column justify-content-center">
         <div class="border-box">
@@ -42,7 +43,9 @@ $id = $pwResetUser['id'];
         </div>
     </div>
 </div>
-
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
+?>
 <script src="/public/js/custom/inputValidation.js"></script>
 </body>
 </html>
