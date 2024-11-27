@@ -16,12 +16,12 @@ class CartController {
         }
 
         // 로그인 확인
-        if (!isset($_SESSION['custom'])) {
+        if (!isset($_SESSION['user'])) {
             echo "<script>alert('로그인이 필요합니다.'); location.href='/views/user/login.php';</script>";
             exit;
         }
 
-        $userId = $_SESSION['custom']['id'];
+        $uid = $_SESSION['user']['uid'];
         $productId = isset($_POST["product_id"]) ? intval($_POST["product_id"]) : 0;
         $quantity = isset($_POST["quantity"]) ? intval($_POST["quantity"]) : 1;
 
@@ -31,10 +31,10 @@ class CartController {
         }
 
         // 장바구니 추가
-        $result = $this->cartModel->addToCart($userId, $productId, $quantity);
+        $result = $this->cartModel->addToCart($uid, $productId, $quantity);
 
         if ($result) {
-            echo "<script>alert('장바구니에 추가되었습니다.'); location.href='/cart/index.php';</script>";
+            echo "<script>alert('장바구니에 추가되었습니다.'); location.href='/views/cart/index.php';</script>";
         } else {
             echo "<script>alert('장바구니 추가에 실패했습니다.'); history.back();</script>";
         }
@@ -47,13 +47,13 @@ class CartController {
         }
 
         // 로그인 확인
-        if (!isset($_SESSION['custom'])) {
+        if (!isset($_SESSION['user'])) {
             echo "<script>alert('로그인이 필요합니다.'); location.href='/views/user/login.php';</script>";
             exit;
         }
 
-        $userId = $_SESSION['custom']['id'];
-        $cartItems = $this->cartModel->getCartItems($userId);
+        $uid = $_SESSION['user']['uid'];
+        $cartItems = $this->cartModel->getCartItems($uid);
 
         return $cartItems; // 장바구니 데이터를 반환
     }
@@ -65,7 +65,7 @@ class CartController {
         }
 
         // 로그인 확인
-        if (!isset($_SESSION['custom'])) {
+        if (!isset($_SESSION['user'])) {
             echo "<script>alert('로그인이 필요합니다.'); location.href='/views/user/login.php';</script>";
             exit;
         }
@@ -93,13 +93,13 @@ class CartController {
         }
 
         // 로그인 확인
-        if (!isset($_SESSION['custom'])) {
+        if (!isset($_SESSION['user'])) {
             echo "<script>alert('로그인이 필요합니다.'); location.href='/views/user/login.php';</script>";
             exit;
         }
 
-        $userId = $_SESSION['custom']['id'];
-        $result = $this->cartModel->clearCart($userId);
+        $uid = $_SESSION['user']['uid'];
+        $result = $this->cartModel->clearCart($uid);
 
         if ($result) {
             echo "<script>alert('장바구니가 비워졌습니다.'); location.href='/cart/index.php';</script>";
