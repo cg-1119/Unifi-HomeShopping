@@ -9,7 +9,7 @@ class UserController {
         $this->user = new User();
     }
 
-    // 사용자 등록
+    // views/custom/join/input
     public function register() {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         $pw = isset($_POST['pw']) ? trim($_POST['pw']) : '';
@@ -26,7 +26,6 @@ class UserController {
         // 비밀번호 암호화
         $hashed_pw = hash('sha256', $pw);
 
-        // 사용자 등록
         if ($this->user->registerUser($id, $hashed_pw, $name, $email, $phone)) {
             echo "<script>alert('회원가입이 완료되었습니다!'); location.href = '/views/home/index.php';</script>";
         } else {
@@ -34,11 +33,10 @@ class UserController {
         }
     }
 
-    // 아이디 찾기
+    // views/custom/find/find_id_result
     public function requestFindId() {
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
         $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
-
         $result = $this->user->queryToFindId($name, $phone);
 
         if ($result) {
@@ -58,32 +56,32 @@ class UserController {
         }
 
         // 결과 페이지로 리다이렉트
-        header("Location: /views/custom/find/find_id_result.php");
+        header("Location: /views/user/find/find_id_result.php");
         exit;
     }
 
-    // 비밀번호 찾기 요청
-    public function requestPwReset() {
+    // views/custom/find_pw
+    public function requestPwReset()
+    {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
 
         // 사용자 확인
-        $user = $this->user->queryToResetPw($id, $name);
-        if ($user) {
+        if ($this->user->queryToResetPw($id, $name)) {
             session_start();
             $_SESSION['pw_reset_user'] = array(
                 'status' => 'success',
                 'id' => $id
             );
 
-            header("Location: /views/custom/find/reset_password.php");
+            header("Location: /views/user/find/reset_password.php");
             exit;
         } else {
             echo "<script>alert('일치하는 사용자를 찾을 수 없습니다.'); history.back();</script>";
+            exit;
         }
     }
-
-    // 비밀번호 재설정
+    // views/custom/reset_password
     public function resetPassword() {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         $newPassword = isset($_POST['newPassword']) ? trim($_POST['newPassword']) : '';
@@ -93,7 +91,7 @@ class UserController {
             session_start();
             unset($_SESSION['pw_reset_user']);
 
-            echo "<script>alert('비밀번호가 성공적으로 재설정되었습니다.'); location.href = '/views/custom/login.php';</script>";
+            echo "<script>alert('비밀번호가 성공적으로 재설정되었습니다.'); location.href = '/views/user/login.php';</script>";
         } else {
             echo "<script>alert('비밀번호 재설정에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
@@ -104,15 +102,15 @@ class UserController {
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
     $controller = new UserController();
 
-    if ($_POST['action'] === 'register') {
+    if ($_POST['action'] === 'register')
         $controller->register();
-    } else if ($_POST['action'] === 'requestFindId') {
+    else if ($_POST['action'] === 'requestFindId')
         $controller->requestFindId();
-    } else if ($_POST['action'] === 'requestPwReset') {
+    else if ($_POST['action'] === 'requestPwReset')
         $controller->requestPwReset();
-    } else if ($_POST['action'] === 'resetPassword') {
+    else if ($_POST['action'] === 'resetPassword')
         $controller->resetPassword();
-    }
+
 } else if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action'])) {
     $controller = new UserController();
 }
