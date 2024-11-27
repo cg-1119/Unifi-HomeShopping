@@ -36,7 +36,7 @@ $products = $productModel->getProducts($selectedCategory);
             <?php foreach ($products as $product): ?>
                 <div class="col">
                     <div class="card product-card"
-                         onclick="location.href='/views/product/detail.php?id=<?php echo htmlspecialchars($product['product_id']); ?>'">
+                         onclick="location.href='/views/product/detail.php?id=<?php echo htmlspecialchars($product['id']); ?>'">
                         <img src="<?php echo htmlspecialchars($product['image_url']); ?>"
                              class="card-img-top"
                              alt="<?php echo htmlspecialchars($product['name']); ?>">

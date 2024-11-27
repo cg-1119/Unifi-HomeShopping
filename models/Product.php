@@ -15,7 +15,7 @@ class Product
         $pdo = $this->db->connect();
 
         try {
-            $stmt = $pdo->prepare("SELECT product_id, name, price, category, description FROM products WHERE product_id = :product_id");
+            $stmt = $pdo->prepare("SELECT id, name, price, category, description FROM products WHERE id = :product_id");
             $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
@@ -33,7 +33,7 @@ class Product
             if ($category) {
                 $stmt = $pdo->prepare("
                 SELECT 
-                    p.product_id, 
+                    p.id, 
                     p.name, 
                     p.price, 
                     pi.file_path AS image_url
@@ -42,7 +42,7 @@ class Product
                 LEFT JOIN 
                     product_images pi
                 ON 
-                    p.product_id = pi.product_id AND pi.is_thumbnail = 1
+                    p.id = pi.product_id AND pi.is_thumbnail = 1
                 WHERE 
                     p.category = :category
             ");
@@ -50,7 +50,7 @@ class Product
             } else {
                 $stmt = $pdo->prepare("
                 SELECT 
-                    p.product_id, 
+                    p.id, 
                     p.name, 
                     p.price, 
                     pi.file_path AS image_url
@@ -59,7 +59,7 @@ class Product
                 LEFT JOIN 
                     product_images pi
                 ON 
-                    p.product_id = pi.product_id AND pi.is_thumbnail = 1
+                    p.id = pi.product_id AND pi.is_thumbnail = 1
             ");
             }
 
@@ -76,7 +76,7 @@ class Product
             return $products;
         } catch (PDOException $e) {
             error_log("Get Products Error: " . $e->getMessage());
-            return [];
+            return null;
         }
     }
 
@@ -99,7 +99,7 @@ class Product
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Get Product Images Error: " . $e->getMessage());
-            return [];
+            return null;
         }
     }
 
