@@ -26,7 +26,7 @@ class User {
         $con = $this->db->connect();
 
         $stmt = $con->prepare("SELECT phone FROM users WHERE phone = ?");
-        $stmt->bind_param("s", $phone); // 파라미터 바인딩
+        $stmt->bind_param("s", $phone);
         $stmt->execute();
 
         $stmt->bind_result($retrievedPhone);
