@@ -4,28 +4,28 @@ class Database {
     private $user = "root";
     private $password = "apmsetup";
     private $dbname = "shopmall";
-    private $con;
+    private $pdo;
 
     public function connect() {
-        $this->con = new mysqli($this->host, $this->user, $this->password, $this->dbname);
+        if (!$this->pdo) {
+            try {
+                $dsn = "mysql:host={$this->host};dbname={$this->dbname};charset=utf8";
+                $this->pdo = new PDO($dsn, $this->user, $this->password);
 
-        // 연결 오류 확인
-        if ($this->con->connect_error) {
-            die("Database connection failed: " . $this->con->connect_error);
+                // PDO 에러 모드 설정 (예외 처리 활성화)
+                $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                // 기본 페치 모드 설정 (연관 배열로 결과 반환)
+                $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                die("Database connection failed: " . $e->getMessage());
+            }
         }
-
-        // UTF-8 설정
-        if (!$this->con->set_charset("utf8")) {
-            die("Failed to set charset to utf8: " . $this->con->error);
-        }
-
-        return $this->con;
+        return $this->pdo;
     }
 
     public function close() {
-        if ($this->con) {
-            $this->con->close();
-        }
+        $this->pdo = null; // PDO 연결 해제
     }
 }
 ?>

@@ -12,165 +12,129 @@ class Product
 
     public function getProductById($productId)
     {
-        $con = $this->db->connect();
-        $stmt = $con->prepare("SELECT product_id, name, price, category, description FROM products WHERE product_id = ?");
-        $stmt->bind_param("i", $productId);
-        $stmt->execute();
-        $stmt->store_result();
-        $stmt->bind_result($productId, $productName, $productPrice, $productCategory, $productDescription);
-        if ($stmt->fetch()) {
-            $product = array(
-                'product_id' => $productId,
-                'name' => $productName,
-                'price' => $productPrice,
-                'category' => $productCategory,
-                'description' => $productDescription,
-            );
-        } else {
-            $product = null;
+        $pdo = $this->db->connect();
+
+        try {
+            $stmt = $pdo->prepare("SELECT product_id, name, price, category, description FROM products WHERE product_id = :product_id");
+            $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+        } catch (PDOException $e) {
+            error_log("Get Product By ID Error: " . $e->getMessage());
+            return null;
         }
-        $stmt->close();
-        $con->close();
-        return $product;
     }
+
     public function getProducts($category = null)
     {
-        $con = $this->db->connect();
+        $pdo = $this->db->connect();
 
-        if ($category) {
-            $stmt = $con->prepare("
-            SELECT 
-                p.product_id, 
-                p.name, 
-                p.price, 
-                pi.file_path AS image_url
-            FROM 
-                products p
-            LEFT JOIN 
-                product_images pi
-            ON 
-                p.product_id = pi.product_id AND pi.is_thumbnail = 1
-            WHERE 
-                p.category = ?
-        ");
-            $stmt->bind_param("s", $category);
-        } else {
-            $stmt = $con->prepare("
-            SELECT 
-                p.product_id, 
-                p.name, 
-                p.price, 
-                pi.file_path AS image_url
-            FROM 
-                products p
-            LEFT JOIN 
-                product_images pi
-            ON 
-                p.product_id = pi.product_id AND pi.is_thumbnail = 1
-        ");
-        }
-
-        $stmt->execute();
-        $stmt->store_result();
-        $products = array();
-
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($productId, $name, $price, $imageUrl);
-            while ($stmt->fetch()) {
-                $products[] = array(
-                    'product_id' => $productId,
-                    'name' => $name,
-                    'price' => $price,
-                    'image_url' => $imageUrl ?: '/public/images/default.png'
-                );
+        try {
+            if ($category) {
+                $stmt = $pdo->prepare("
+                SELECT 
+                    p.product_id, 
+                    p.name, 
+                    p.price, 
+                    pi.file_path AS image_url
+                FROM 
+                    products p
+                LEFT JOIN 
+                    product_images pi
+                ON 
+                    p.product_id = pi.product_id AND pi.is_thumbnail = 1
+                WHERE 
+                    p.category = :category
+            ");
+                $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+            } else {
+                $stmt = $pdo->prepare("
+                SELECT 
+                    p.product_id, 
+                    p.name, 
+                    p.price, 
+                    pi.file_path AS image_url
+                FROM 
+                    products p
+                LEFT JOIN 
+                    product_images pi
+                ON 
+                    p.product_id = pi.product_id AND pi.is_thumbnail = 1
+            ");
             }
-        }
 
-        $stmt->close();
-        $con->close();
-        return $products;
+            $stmt->execute();
+            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // 기본 이미지 처리
+            foreach ($products as &$product) {
+                if (!$product['image_url']) {
+                    $product['image_url'] = '/public/images/default.png';
+                }
+            }
+
+            return $products;
+        } catch (PDOException $e) {
+            error_log("Get Products Error: " . $e->getMessage());
+            return [];
+        }
     }
+
     public function getProductImages($productId)
     {
-        // 데이터베이스 연결
-        $con = $this->db->connect();
+        $pdo = $this->db->connect();
 
-        // SQL 쿼리: 특정 product_id에 연결된 이미지 목록 가져오기
-        $stmt = $con->prepare("
-        SELECT 
-            file_path AS image_url, 
-            is_thumbnail 
-        FROM 
-            product_images 
-        WHERE 
-            product_id = ?
-    ");
-        if (!$stmt) {
-            die("Prepare failed: " . $con->error);
+        try {
+            $stmt = $pdo->prepare("
+            SELECT 
+                file_path AS image_url, 
+                is_thumbnail 
+            FROM 
+                product_images 
+            WHERE 
+                product_id = :product_id
+        ");
+            $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Get Product Images Error: " . $e->getMessage());
+            return [];
         }
-
-        // 상품 ID 바인딩
-        $stmt->bind_param("i", $productId);
-
-        // 쿼리 실행
-        $stmt->execute();
-
-        // 결과 저장
-        $stmt->store_result();
-        $stmt->bind_result($imageUrl, $isThumbnail);
-
-        // 결과를 배열로 변환
-        $images = array();
-        while ($stmt->fetch()) {
-            $images[] = array(
-                'image_url' => $imageUrl,
-                'is_thumbnail' => $isThumbnail
-            );
-        }
-
-        // 리소스 해제 및 연결 종료
-        $stmt->close();
-        $con->close();
-
-        return $images;
     }
-
-
 
     public function addProduct($category, $name, $price, $description)
     {
-        $con = $this->db->connect();
-        $stmt = $con->prepare("INSERT INTO products (category, name, price, description) VALUES (?, ?, ?, ?)");
-        if (!$stmt) {
-            die("Prepare failed: " . $con->error);
+        $pdo = $this->db->connect();
+
+        try {
+            $stmt = $pdo->prepare("INSERT INTO products (category, name, price, description) VALUES (:category, :name, :price, :description)");
+            $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+            $stmt->bindParam(':price', $price, PDO::PARAM_STR);
+            $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+            $stmt->execute();
+            return $pdo->lastInsertId(); // 삽입된 ID 반환
+        } catch (PDOException $e) {
+            error_log("Add Product Error: " . $e->getMessage());
+            return null;
         }
-        $stmt->bind_param("ssds", $category, $name, $price, $description);
-        $stmt->execute();
-        if (!$stmt->affected_rows) {
-            die("Execute failed: " . $stmt->error);
-        }
-        $productId = $stmt->insert_id;
-        $stmt->close();
-        $con->close();
-        return $productId;
     }
 
     public function addProductImage($productId, $filePath, $isThumbnail = false)
     {
-        $con = $this->db->connect();
-        $stmt = $con->prepare("INSERT INTO product_images (product_id, file_path, is_thumbnail) VALUES (?, ?, ?)");
-        if (!$stmt) {
-            die("Prepare failed: " . $con->error);
-        }
+        $pdo = $this->db->connect();
 
-        $stmt->bind_param("isi", $productId, $filePath, $isThumbnail);
-        if (!$stmt->execute()) {
-            die("Execute failed: " . $stmt->error);
+        try {
+            $stmt = $pdo->prepare("INSERT INTO product_images (product_id, file_path, is_thumbnail) VALUES (:product_id, :file_path, :is_thumbnail)");
+            $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
+            $stmt->bindParam(':file_path', $filePath, PDO::PARAM_STR);
+            $stmt->bindParam(':is_thumbnail', $isThumbnail, PDO::PARAM_BOOL);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Add Product Image Error: " . $e->getMessage());
+            return false;
         }
-
-        $stmt->close();
-        $con->close();
-        return true;
     }
 }
 ?>

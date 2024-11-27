@@ -27,7 +27,7 @@ class UserController {
         $hashed_pw = hash('sha256', $pw);
 
         if ($this->user->registerUser($id, $hashed_pw, $name, $email, $phone)) {
-            echo "<script>alert('회원가입이 완료되었습니다!'); location.href = '/views/home/index.php';</script>";
+            echo "<script>alert('회원가입이 완료되었습니다!'); location.href = '/views/home/login.php';</script>";
         } else {
             echo "<script>alert('회원가입에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
@@ -40,14 +40,12 @@ class UserController {
         $result = $this->user->queryToFindId($name, $phone);
 
         if ($result) {
-            // 결과를 세션에 저장
             session_start();
             $_SESSION['find_id_result'] = array(
                 'status' => 'success',
                 'id' => $result['id']
             );
         } else {
-            // 실패 메시지를 세션에 저장
             session_start();
             $_SESSION['find_id_result'] = array(
                 'status' => 'error',
@@ -55,7 +53,6 @@ class UserController {
             );
         }
 
-        // 결과 페이지로 리다이렉트
         header("Location: /views/user/find/find_id_result.php");
         exit;
     }

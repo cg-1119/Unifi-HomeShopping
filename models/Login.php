@@ -1,5 +1,6 @@
 <?php
-require_once$_SERVER['DOCUMENT_ROOT'] . "/config/database.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/config/Database.php";
+
 class Login
 {
     private $db;
@@ -9,33 +10,19 @@ class Login
     }
 
     public function login($id, $password) {
-        $con = $this->db->connect();
+        $pdo = $this->db->connect();
 
-        $hashedPassword = hash('sha256', $password);
-        $stmt = $con->prepare("SELECT id, name, phone, is_admin FROM users WHERE id = ? AND pw = ?");
-        $stmt->bind_param("ss", $id, $hashedPassword);
+        try {
+            $hashedPassword = hash('sha256', $password); // 비밀번호 해싱 (SHA-256)
+            $stmt = $pdo->prepare("SELECT id, name, phone, is_admin FROM users WHERE id = :id AND pw = :pw");
+            $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+            $stmt->bindParam(':pw', $hashedPassword, PDO::PARAM_STR);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC); // 사용자 정보 가져오기
+            return $user ?: null;
 
-        $stmt->execute();
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($retrievedId, $retrievedName, $retrievedPhone, $retrievedIsAdmin);
-            $stmt->fetch();
-
-            // 사용자 정보 배열 생성
-            $user = array(
-                'id' => $retrievedId,
-                'name' => $retrievedName,
-                'phone' => $retrievedPhone,
-                'is_admin' => $retrievedIsAdmin
-            );
-            $stmt->close();
-            $this->db->close();
-
-            return $user;
-        } else {
-            $stmt->close();
-            $this->db->close();
+        } catch (PDOException $e) {
+            error_log("Login error: " . $e->getMessage());
             return null;
         }
     }

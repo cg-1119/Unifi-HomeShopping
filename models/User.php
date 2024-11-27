@@ -1,5 +1,5 @@
 <?php
-require_once$_SERVER['DOCUMENT_ROOT'] . "/config/database.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/config/database.php";
 
 class User {
     private $db;
@@ -10,95 +10,86 @@ class User {
 
     // 사용자 등록
     public function registerUser($id, $pw, $name, $email, $phone) {
-        $con = $this->db->connect();
+        $pdo = $this->db->connect();
 
-        $stmt = $con->prepare("INSERT INTO users (id, pw, name, email, phone) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $id, $pw, $name, $email, $phone);
-        $result = $stmt->execute();
-
-        $stmt->close();
-        $this->db->close();
-
-        return $result;
+        try {
+            $stmt = $pdo->prepare("INSERT INTO users (id, pw, name, email, phone) VALUES (:id, :pw, :name, :email, :phone)");
+            $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+            $stmt->bindParam(':pw', $pw, PDO::PARAM_STR);
+            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Register User Error: " . $e->getMessage());
+            return false;
+        }
     }
+
     // 전화번호 중복 체크
     public function checkDuplicatePhone($phone) {
-        $con = $this->db->connect();
+        $pdo = $this->db->connect();
 
-        $stmt = $con->prepare("SELECT phone FROM users WHERE phone = ?");
-        $stmt->bind_param("s", $phone);
-        $stmt->execute();
-
-        $stmt->bind_result($retrievedPhone);
-        $isDuplicate = false;
-
-        if ($stmt->fetch()) {
-            $isDuplicate = true;
+        try {
+            $stmt = $pdo->prepare("SELECT phone FROM users WHERE phone = :phone");
+            $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC) ? true : false;
+        } catch (PDOException $e) {
+            error_log("Check Duplicate Phone Error: " . $e->getMessage());
+            return false;
         }
-
-        $stmt->close();
-        $this->db->close();
-
-        return $isDuplicate;
     }
 
     // 아이디 찾기
     public function queryToFindId($name, $phone) {
-        $con = $this->db->connect();
+        $pdo = $this->db->connect();
 
-        $stmt = $con->prepare("SELECT id FROM users WHERE name = ? AND phone = ?");
-        $stmt->bind_param("ss", $name, $phone);
-        $stmt->execute();
-
-        $stmt->bind_result($id);
-        $result = null;
-
-        if ($stmt->fetch()) {
-            $result = array('id' => $id);
+        try {
+            $stmt = $pdo->prepare("SELECT id FROM users WHERE name = :name AND phone = :phone");
+            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+            $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Query To Find ID Error: " . $e->getMessage());
+            return null;
         }
-
-        $stmt->close();
-        $this->db->close();
-
-        return $result;
     }
 
     // 비밀번호 찾기
     public function queryToResetPw($id, $name) {
-        $con = $this->db->connect();
+        $pdo = $this->db->connect();
 
-        $stmt = $con->prepare("SELECT id FROM users WHERE id = ? AND name = ?");
-        $stmt->bind_param("ss", $id, $name);
-        $stmt->execute();
-
-        $stmt->bind_result($retrievedId);
-        $result = null;
-
-        if ($stmt->fetch()) {
-            $result = array('id' => $retrievedId);
+        try {
+            $stmt = $pdo->prepare("SELECT id FROM users WHERE id = :id AND name = :name");
+            $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ? $result : null;
+        } catch (PDOException $e) {
+            error_log("Query To Reset Password Error: " . $e->getMessage());
+            return null;
         }
-
-        $stmt->close();
-        $this->db->close();
-
-        return $result;
     }
 
+    // 비밀번호 업데이트
     public function updatePassword($id, $newPassword) {
-        $con = $this->db->connect();
+        $pdo = $this->db->connect();
 
-        // 비밀번호 해싱 (SHA-256)
-        $hashedPassword = hash('sha256', $newPassword);
+        try {
+            // 비밀번호 해싱 (SHA-256)
+            $hashedPassword = hash('sha256', $newPassword);
 
-        // 비밀번호 업데이트
-        $stmt = $con->prepare("UPDATE users SET pw = ? WHERE id = ?");
-        $stmt->bind_param("ss", $hashedPassword, $id);
-        $result = $stmt->execute();
-
-        $stmt->close();
-        $this->db->close();
-
-        return $result;
+            $stmt = $pdo->prepare("UPDATE users SET pw = :pw WHERE id = :id");
+            $stmt->bindParam(':pw', $hashedPassword, PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Update Password Error: " . $e->getMessage());
+            return false;
+        }
     }
 }
 ?>
