@@ -59,8 +59,13 @@ foreach ($productImages as $image) {
                 </button>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary btn-lg w-50 me-1">찜하기</button>
-                <button type="submit" class="btn btn-primary btn-lg w-50 ms-1">장바구니</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg">찜하기</button>
+                <form method="POST" action="/controllers/CartController.php">
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="product_id" value="<?= $productId ?>">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="btn btn-primary btn-lg">장바구니</button>
+                </form>
             </div>
         </div>
     </div>
