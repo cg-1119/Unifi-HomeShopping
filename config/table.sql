@@ -5,7 +5,7 @@ CREATE TABLE users (
     name VARCHAR(10) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     phone VARCHAR(20) NOT NULL UNIQUE,
-    is_admin TINYINT(1) DEFAULT 0;
+    is_admin BOOLEAN DEFAULT 0
 ) DEFAULT CHARSET=utf8;
 
 
@@ -23,7 +23,7 @@ CREATE TABLE product_images (
     file_path VARCHAR(255) NOT NULL,
     img_url VARCHAR(255),
     is_thumbnail TINYINT(1) DEFAULT 0,
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
 CREATE TABLE cart (
@@ -31,7 +31,6 @@ CREATE TABLE cart (
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (user_id) REFERENCES users(uid),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );

@@ -1,9 +1,3 @@
-<?php
-ob_start();
-if (session_id() == '') {
-    session_start();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,10 +10,7 @@ if (session_id() == '') {
 </head>
 
 <body>
-
-    <?php
-    include 'header.php';
-    ?>
+    <?php include 'header.php'; ?>
     <div class="container my-3">
         <div class="row justify-content-end">
             <div class="col-md-6">

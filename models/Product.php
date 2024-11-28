@@ -18,7 +18,7 @@ class Product
             $stmt = $pdo->prepare("SELECT id, name, price, category, description FROM products WHERE id = :product_id");
             $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Get Product By ID Error: " . $e->getMessage());
             return null;

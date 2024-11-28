@@ -79,7 +79,7 @@ foreach ($productImages as $image) {
     </div>
     <!-- 상품 설명을 구매 섹션 아래로 이동 -->
     <div class="mt-5">
-        <div class="description-content">
+        <div class="">
             <?php echo $product['description']; // HTML 태그 유지 ?>
         </div>
     </div>

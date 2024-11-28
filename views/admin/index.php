@@ -1,11 +1,5 @@
 <?php
 session_start();
-
-// 관리자 로그인 여부 확인
-if (!isset($_SESSION['custom']) || $_SESSION['custom']['is_admin'] != 1) {
-    echo "<script>alert('관리자만 접근할 수 있습니다.'); location.href = '../home/index.php';</script>";
-    exit;
-}
 ?>
 
 <!DOCTYPE html>

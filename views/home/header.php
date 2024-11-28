@@ -1,7 +1,7 @@
 <?php
 if (session_id() == '') {
     session_start();
-    $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+    $user = $_SESSION['user'] ?? null;
 }
 ?>
 <!-- connect header.php -->
@@ -50,9 +50,6 @@ if (session_id() == '') {
         </div>
     </nav>
 </header>
-<?php
-ob_end_flush(); // 버퍼에 있는 내용을 출력
-?>
 
 <script>
     document.getElementById('logout-link').addEventListener('click', function (event) {

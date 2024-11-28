@@ -26,7 +26,7 @@ class CartController {
         $result = $this->cartModel->addToCart($uid, $productId, $quantity);
 
         if ($result) {
-            echo "<script>alert('장바구니에 추가되었습니다.'); location.href='../views/user/cart/index.php';</script>";
+            echo "<script>alert('장바구니에 추가되었습니다.'); history.back();</script>";
         } else {
             echo "<script>alert('장바구니 추가에 실패했습니다.'); history.back();</script>";
         }

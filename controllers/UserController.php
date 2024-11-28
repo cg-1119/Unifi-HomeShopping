@@ -27,7 +27,7 @@ class UserController {
         $hashed_pw = hash('sha256', $pw);
 
         if ($this->user->registerUser($id, $hashed_pw, $name, $email, $phone)) {
-            echo "<script>alert('회원가입이 완료되었습니다!'); location.href = '/views/home/login.php';</script>";
+            echo "<script>alert('회원가입이 완료되었습니다!'); location.href = '/views/user/login.php';</script>";
         } else {
             echo "<script>alert('회원가입에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
