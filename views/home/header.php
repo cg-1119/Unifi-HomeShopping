@@ -25,23 +25,26 @@ if (session_id() == '') {
                                 <i class="bi bi-person-circle" style="font-size: 24px;"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li>
-                                    <a class="dropdown-item" href="/views/user/mypage.php">마이페이지</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="/views/cart/index.php">장바구니</a>
-                                </li>
+                                <li><span class="dropdown-item-text"><?php echo $_SESSION['user']['id'] ?>님</li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item" href="#" id="logout-link">로그아웃</a>
-                                </li>
+                                <li><a class="dropdown-item" href="/views/user/mypage.php">마이페이지</a></li>
+                                <li><a class="dropdown-item" href="/views/user/cart/index.php">장바구니</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logout-link">로그아웃</a></li>
                             </ul>
                         </div>
                     <?php endif; ?>
                 <?php else: ?>
                     <!-- 비로그인 상태 -->
-                    <a class="nav-link" href="/views/user/login.php">로그인</a>
-                    <a class="nav-link" href="/views/user/join/agree.php">회원가입</a>
+                    <div class="dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle" style="font-size: 24px;"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="/views/user/login.php">로그인</a></li>
+                            <li><a class="dropdown-item" href="/views/user/join/agree.php">회원가입</a></li>
+                        </ul>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

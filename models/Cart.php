@@ -39,12 +39,18 @@ class Cart
     public function getCartItems($userId)
     {
         $query = "
-            SELECT 
-                cart.id, cart.product_id, cart.quantity, 
-                products.name AS product_name, products.price 
-            FROM cart 
-            INNER JOIN products ON cart.product_id = products.id 
-            WHERE cart.user_id = :user_id";
+        SELECT 
+            cart.id, 
+            cart.product_id, 
+            cart.quantity,
+            products.name AS product_name, 
+            products.price, 
+            product_images.file_path AS image_url
+        FROM cart 
+        INNER JOIN products ON cart.product_id = products.id
+        LEFT JOIN product_images ON products.id = product_images.product_id AND product_images.is_thumbnail = 1
+        WHERE cart.user_id = :user_id
+        ";
         $stmt = $this->db->connect()->prepare($query);
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
         $stmt->execute();

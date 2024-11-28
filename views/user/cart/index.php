@@ -3,7 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/CartController.php';
 session_start();
 
 // 로그인 확인
-if (!isset($_SESSION['custom'])) {
+if (!isset($_SESSION['user'])) {
     echo "<script>alert('로그인이 필요합니다.'); location.href='/views/user/login.php';</script>";
     exit;
 }
@@ -45,7 +45,8 @@ $cartItems = $cartController->viewCart();
             <tbody>
             <?php foreach ($cartItems as $item): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($item['product_name']); ?></td>
+                    <td><?php echo htmlspecialchars($item['product_name']); ?>
+                        <img src="<?php echo $item['image_url']?>" style="width: 50px; height: auto;"></td>
                     <td><?php echo number_format($item['price']); ?>원</td>
                     <td>
                         <form action="/controllers/CartController.php" method="POST" class="d-flex">
@@ -92,6 +93,5 @@ $cartItems = $cartController->viewCart();
 </div>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
-<script src="/public/js/bootstrap.js"></script>
 </body>
 </html>
