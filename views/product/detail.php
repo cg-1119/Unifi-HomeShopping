@@ -44,13 +44,13 @@ foreach ($productImages as $image) {
         </div>
         <!-- 오른쪽: 상품 정보 및 구매 -->
         <div class="border-box" style="padding: 20px; background-color: #f9f9f9;">
-            <div class="mb-3">
-                <h4><?php echo htmlspecialchars($product['name']); ?></h4>
+            <div class="mb-1">
+                <h4><?php echo htmlspecialchars($product['name']); ?></h4><br>
                 <p>가격: <strong><?php echo number_format($product['price']); ?>원</strong></p>
             </div>
             <div class="mb-3">
                 <label for="quantity">수량</label>
-                <input type="number" id="quantity" class="form-control" min="1" value="1" style="width: 100px;" oninput="updateTotal(<?php echo $product['price']; ?>)">
+                <input type="number" id="quantity" name="quantity" class="form-control" min="1" value="1" style="width: 100px;" oninput="updateInfo(<?php echo $product['price']; ?>)">
                 <p class="mt-2">총 상품 금액: <span id="total-amount" class="text-danger">0원</span></p>
             </div>
             <div class="d-grid gap-2 mb-3">
@@ -60,12 +60,30 @@ foreach ($productImages as $image) {
             </div>
             <div class="d-flex justify-content-between">
                 <button type="button" class="btn btn-outline-secondary btn-lg">찜하기</button>
-                <form method="POST" action="/controllers/CartController.php">
+                <form id="cart-form" method="POST" action="/controllers/CartController.php">
                     <input type="hidden" name="action" value="add">
                     <input type="hidden" name="product_id" value="<?= $productId ?>">
-                    <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" id="total-quantity" name="quantity" value="1">
                     <button type="submit" class="btn btn-primary btn-lg">장바구니</button>
                 </form>
+            </div>
+        </div>
+        <!-- 모달 -->
+        <div id="cart-modal" class="modal" style="display: none;">
+            <div class="modal-dialog-centered modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">알림</h5>
+                        <button type="button" class="btn-close" onclick="closeModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>장바구니에 상품을 담았습니다.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="continueShopping()">계속 쇼핑</button>
+                        <a href="/views/user/cart/index.php" class="btn btn-primary">장바구니로</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

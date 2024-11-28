@@ -47,7 +47,6 @@ class CartController {
         if (!isset($_SESSION)) session_start();
 
         $cartId = isset($_POST['cart_id']) ? intval($_POST['cart_id']) : 0;
-
         if ($cartId <= 0) {
             echo "<script>alert('잘못된 요청입니다.'); history.back();</script>";
             exit;

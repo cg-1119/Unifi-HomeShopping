@@ -69,8 +69,7 @@ if (session_id() == '') {
             })
                 .then(response => {
                     if (response.ok) {
-                        // 로그아웃 후 메인 페이지로 리다이렉트
-                        window.location.href = '/views/home/index.php';
+                        location.reload()
                     } else {
                         alert("로그아웃 처리에 실패했습니다. 다시 시도해주세요.");
                     }
