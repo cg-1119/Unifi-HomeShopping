@@ -46,7 +46,7 @@ foreach ($productImages as $image) {
         <div class="border-box" style="padding: 20px; background-color: #f9f9f9;">
             <div class="mb-1">
                 <h4><?php echo htmlspecialchars($product['name']); ?></h4><br>
-                <p>가격: <strong><?php echo number_format($product['price']); ?>원</strong></p>
+                <p class="price">가격: <strong><?php echo number_format($product['price']); ?>원</strong></p>
             </div>
             <div class="mb-3">
                 <label for="quantity">수량</label>
@@ -59,7 +59,7 @@ foreach ($productImages as $image) {
                         value="1"
                         style="width: 100px;"
                         oninput="updateTotal(<?php echo $product['price']; ?>)">
-                <p class="mt-2">총 상품 금액: <span id="total-amount" class="text-danger"><?php echo $product['price']; ?>원</span></p>
+                <p class="mt-2">총 상품 금액: <span id="total-price" class="text-danger"><?php echo $product['price']; ?>원</span></p>
             </div>
             <div class="d-grid gap-2 mb-3">
                 <button type="button" class="btn btn-success btn-lg" onclick="location.href='/order/checkout.php?id=<?php echo $productId; ?>'">

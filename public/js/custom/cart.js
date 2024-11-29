@@ -3,20 +3,25 @@
 // 상품 정보 업데이트
 function updateTotal(price) {
     const quantityInput = document.getElementById('quantity');
-    const totalAmountElement = document.getElementById('total-amount');
+    const totalPriceElement = document.getElementById('total-price');
 
     const quantity = parseInt(quantityInput.value) || 0; // 수량 가져오기
-    const totalAmount = price * quantity; // 총 금액 계산
+    const totalPrice = price * quantity; // 총 금액 계산
 
     // 총 금액 업데이트
-    totalAmountElement.textContent = `${totalAmount.toLocaleString()}원`;
-    }
+    totalPriceElement.textContent = `${totalPrice.toLocaleString()}원`;
+}
+
 // 장바구니에 상품 추가
 function addToCart(productId, quantity) {
     if (!productId || quantity <= 0) {
         alert("올바른 상품 정보가 필요합니다.");
         return;
     }
+
+    const productName = document.querySelector("h4").innerText;
+    const productPrice = parseInt(document.querySelector(".price strong").innerText.replace(/[^0-9]/g, ""), 10);
+    const thumbnailImage = document.getElementById("main-image").src.split('localhost:8080')[1];
 
     let cart = JSON.parse(localStorage.getItem('cart')) || {};
 
@@ -26,18 +31,14 @@ function addToCart(productId, quantity) {
     } else {
         cart[productId] = {
             id: productId,
-            name: document.querySelector("h4").innerText,
-            price: parseInt(document.getElementById('total-amount').dataset.price, 10),
+            name: productName,
+            price: productPrice,
+            thumbnail: thumbnailImage,
             quantity: quantity,
         };
     }
 
-    // localStorage에 업데이트된 장바구니 저장
-    localStorage.setItem('cart', JSON.stringify(cart));
-
-    console.log("After saving to localStorage:", localStorage.getItem('cart'));
-
-    // 서버로 AJAX 요청 보내기
+    // AJAX 요청
     fetch('/controllers/CartController.php', {
         method: 'POST',
         headers: {
@@ -45,16 +46,17 @@ function addToCart(productId, quantity) {
         },
         body: JSON.stringify({ action: 'updateCart', cart: cart }),
     })
-        .then((response) => {
-            if (response.ok) {
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                // 세션 데이터로 로컬스토리지 동기화
+                localStorage.setItem('cart', JSON.stringify(data.cart));
                 openModal();
             } else {
                 alert('서버와의 통신에 실패했습니다.');
             }
         })
-        .catch((error) => {
-            console.error('AJAX 요청 오류:', error);
-        });
+        .catch((error) => console.error('AJAX 요청 오류:', error));
 }
 
 
@@ -76,13 +78,79 @@ function continueShopping() {
 }
 
 // cart/index.php
-// 로컬스토리지에서 장바구니 데이터 가져오기
-function getCart() {
-    const cart = localStorage.getItem('cart');
-    return cart ? JSON.parse(cart) : {}; // 데이터가 없으면 빈 객체 반환
+function updateQuantity(productId, quantity) {
+    if (quantity < 1) {
+        alert("수량은 1개 이상이어야 합니다.");
+        return;
+    }
+
+    fetch("/controllers/CartController.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            action: "updateQuantity",
+            product_id: productId,
+            quantity: quantity,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                // 세션 데이터로 로컬스토리지 동기화
+                localStorage.setItem('cart', JSON.stringify(data.cart));
+                location.reload();
+            } else {
+                alert("수량 업데이트 실패");
+            }
+        })
+        .catch((error) => console.error("Error:", error));
 }
-// 장바구니가 비어있는지 확인
-function isCartEmpty() {
-    const cart = getCart();
-    return Object.keys(cart).length === 0; // 데이터가 없으면 true 반환
+
+function removeFromCart(productId) {
+    fetch("/controllers/CartController.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            action: "remove",
+            product_id: productId,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                // 세션 데이터로 로컬스토리지 동기화
+                localStorage.setItem('cart', JSON.stringify(data.cart));
+                location.reload();
+            } else {
+                alert("상품 삭제 실패");
+            }
+        })
+        .catch((error) => console.error("Error:", error));
+}
+
+function clearCart() {
+    fetch("/controllers/CartController.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            action: "clear",
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                // 세션 데이터로 로컬스토리지 동기화
+                localStorage.setItem('cart', JSON.stringify(data.cart));
+                location.reload();
+            } else {
+                alert("장바구니 비우기 실패");
+            }
+        })
+        .catch((error) => console.error("Error:", error));
 }
