@@ -50,8 +50,16 @@ foreach ($productImages as $image) {
             </div>
             <div class="mb-3">
                 <label for="quantity">수량</label>
-                <input type="number" id="quantity" name="quantity" class="form-control" min="1" value="1" style="width: 100px;" oninput="updateInfo(<?php echo $product['price']; ?>)">
-                <p class="mt-2">총 상품 금액: <span id="total-amount" class="text-danger">0원</span></p>
+                <input
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        class="form-control"
+                        min="1"
+                        value="1"
+                        style="width: 100px;"
+                        oninput="updateTotal(<?php echo $product['price']; ?>)">
+                <p class="mt-2">총 상품 금액: <span id="total-amount" class="text-danger"><?php echo $product['price']; ?>원</span></p>
             </div>
             <div class="d-grid gap-2 mb-3">
                 <button type="button" class="btn btn-success btn-lg" onclick="location.href='/order/checkout.php?id=<?php echo $productId; ?>'">
@@ -60,12 +68,12 @@ foreach ($productImages as $image) {
             </div>
             <div class="d-flex justify-content-between">
                 <button type="button" class="btn btn-outline-secondary btn-lg">찜하기</button>
-                <form id="cart-form" method="POST" action="/controllers/CartController.php">
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="product_id" value="<?= $productId ?>">
-                    <input type="hidden" id="total-quantity" name="quantity" value="1">
-                    <button type="submit" class="btn btn-primary btn-lg">장바구니</button>
-                </form>
+                <button
+                        type="button"
+                        class="btn btn-primary btn-lg"
+                        onclick="addToCart(<?php echo $product['id']; ?>, parseInt(document.getElementById('quantity').value || 1))">
+                    장바구니에 추가
+                </button>
             </div>
         </div>
         <!-- 모달 -->
@@ -104,6 +112,13 @@ foreach ($productImages as $image) {
 </div>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
-<script src="/public/js/custom/product.js"></script>
+<script src="/public/js/custom/cart.js"></script>
+<script>
+    // 대표 이미지 변경 함수
+    function changeImage(newImageUrl) {
+        const mainImage = document.getElementById('main-image');
+        mainImage.src = newImageUrl;
+    }
+</script>
 </body>
 </html>
