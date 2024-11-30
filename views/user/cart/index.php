@@ -66,12 +66,12 @@ foreach ($cart as $item) {
         <table class="table">
             <thead>
             <tr>
-                <th>썸네일</th>
+                <th></th>
                 <th>상품명</th>
                 <th>가격</th>
                 <th>수량</th>
                 <th>합계</th>
-                <th>작업</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
