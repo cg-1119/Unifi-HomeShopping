@@ -62,6 +62,11 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
                                aria-describedby="phoneValidationFeedback" placeholder="전화번호" required>
                         <div id="phoneValidationFeedback" class="invalid-feedback">전화번호를 입력하세요.</div>
                     </li>
+                    <li class="list-group mb-3">
+                        <label for="addressValidation" class="form-label"></label>
+                        <input type="text" name="address" class="form-control" id="addressValidation"
+                               placeholder="주소(선택사항)">
+                    </li>
                 </ul>
             </div>
             <div class="box">

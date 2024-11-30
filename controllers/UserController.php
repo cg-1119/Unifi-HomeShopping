@@ -16,17 +16,18 @@ class UserController {
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
         $email = isset($_POST['email']) ? trim($_POST['email']) : '';
         $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
+        $address = isset($_POST['address']) ? trim($_POST['address']) : '';
 
-        // 전화번호 중복 확인
-        if ($this->user->checkDuplicatePhone($phone)) {
-            echo "<script>alert('이미 등록된 전화번호입니다.'); history.back();</script>";
+        // 개인정보 중복 확인
+        if ($this->user->checkDuplicate($id, $phone)) {
+            echo "<script>alert('아이디나 전화번호가 중복됩니다! 다시 입력해 주세요.'); history.back();</script>";
             return;
         }
 
         // 비밀번호 암호화
         $hashed_pw = hash('sha256', $pw);
 
-        if ($this->user->registerUser($id, $hashed_pw, $name, $email, $phone)) {
+        if ($this->user->registerUser($id, $hashed_pw, $name, $email, $phone,  $address)) {
             echo "<script>alert('회원가입이 완료되었습니다!'); location.href = '/views/user/login.php';</script>";
         } else {
             echo "<script>alert('회원가입에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";

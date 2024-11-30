@@ -9,16 +9,17 @@ class User {
     }
 
     // 사용자 등록
-    public function registerUser($id, $pw, $name, $email, $phone) {
+    public function registerUser($id, $pw, $name, $email, $phone, $address) {
         $pdo = $this->db->connect();
 
         try {
-            $stmt = $pdo->prepare("INSERT INTO users (id, pw, name, email, phone) VALUES (:id, :pw, :name, :email, :phone)");
+            $stmt = $pdo->prepare("INSERT INTO users (id, pw, name, email, phone, address) VALUES (:id, :pw, :name, :email, :phone :address)");
             $stmt->bindParam(':id', $id, PDO::PARAM_STR);
             $stmt->bindParam(':pw', $pw, PDO::PARAM_STR);
             $stmt->bindParam(':name', $name, PDO::PARAM_STR);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+            $stmt->bindParam(':address', $address, PDO::PARAM_STR);
             return $stmt->execute();
         } catch (PDOException $e) {
             error_log("Register User Error: " . $e->getMessage());
@@ -26,17 +27,18 @@ class User {
         }
     }
 
-    // 전화번호 중복 체크
-    public function checkDuplicatePhone($phone) {
+    // 개인정보 중복 체크
+    public function checkDuplicate($id, $phone) {
         $pdo = $this->db->connect();
 
         try {
-            $stmt = $pdo->prepare("SELECT phone FROM users WHERE phone = :phone");
+            $stmt = $pdo->prepare("SELECT phone FROM users WHERE id = :id AND phone = :phone");
+            $stmt->bindParam(':id', $id, PDO::PARAM_STR);
             $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC) ? true : false;
         } catch (PDOException $e) {
-            error_log("Check Duplicate Phone Error: " . $e->getMessage());
+            error_log("Check Duplicate Error: " . $e->getMessage());
             return false;
         }
     }
