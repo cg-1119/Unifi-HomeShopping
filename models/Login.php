@@ -14,7 +14,7 @@ class Login
 
         try {
             $hashedPassword = hash('sha256', $password); // 비밀번호 해싱 (SHA-256)
-            $stmt = $pdo->prepare("SELECT uid, id, name, email, phone, is_admin FROM users WHERE id = :id AND pw = :pw");
+            $stmt = $pdo->prepare("SELECT uid, id, name, email, phone, address, point, is_admin FROM users WHERE id = :id AND pw = :pw");
             $stmt->bindParam(':id', $id, PDO::PARAM_STR);
             $stmt->bindParam(':pw', $hashedPassword, PDO::PARAM_STR);
             $stmt->execute();
