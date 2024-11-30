@@ -109,6 +109,25 @@ foreach ($productImages as $image) {
             <?php echo $product['description']; // HTML 태그 유지 ?>
         </div>
     </div>
+    <!-- 댓글 작성할 예정
+    <div class="mt-4">
+        <h5>댓글 <//?php echo count($comments); ?>개</h5>
+        <//?php if (!empty($comments)): ?>
+            <ul class="list-group mb-4">
+                <//?php foreach ($comments as $comment): ?>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <strong><//?php echo htmlspecialchars($comment['username']); ?></strong><br>
+                            <span><//?php echo htmlspecialchars($comment['content']); ?></span><br>
+                            <small class="text-muted">작성일: <//?php echo $comment['created_at']; ?></small>
+                        </div>
+                    </li>
+                <//?php endforeach; ?>
+            </ul>
+        <//?php else: ?>
+            <p>댓글이 없습니다.</p>
+        <//?php endif; ?>
+    </div>-->
 </div>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
