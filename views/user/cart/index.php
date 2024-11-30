@@ -1,8 +1,21 @@
 <?php
 session_start();
 
+// updateCart
+$data = json_decode(file_get_contents('php://input'), true);
 $cart = $_SESSION['cart'] ?? [];
 $totalPrice = 0;
+if ($data) {
+    foreach ($data['cart'] as $productId => $item) {
+        $cart[$productId] = [
+            'id' => $item['id'],
+            'name' => htmlspecialchars($item['name']),
+            'price' => floatval($item['price']),
+            'thumbnail' => htmlspecialchars($item['thumbnail']),
+            'quantity' => intval($item['quantity']),
+        ];
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? null;
@@ -14,8 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($cart[$productId]) && $quantity > 0) {
             $cart[$productId]['quantity'] = $quantity;
         }
-    }
-    // 상품 삭제
+    } // 상품 삭제
     elseif ($action === 'remove' && $productId) unset($cart[$productId]);
     // 장바구니 비우기
     elseif ($action === 'clear') $cart = [];
@@ -65,7 +77,8 @@ foreach ($cart as $item) {
             <tbody>
             <?php foreach ($cart as $id => $item): ?>
                 <tr>
-                    <td><img src="<?php echo htmlspecialchars($item['thumbnail']); ?>" alt="썸네일" style="width: 60px; height: 60px;"></td>
+                    <td><img src="<?php echo htmlspecialchars($item['thumbnail']); ?>" alt="썸네일"
+                             style="width: 60px; height: 60px;"></td>
                     <td><?php echo htmlspecialchars($item['name']); ?></td>
                     <td><?php echo number_format($item['price']); ?>원</td>
                     <td>
@@ -80,7 +93,9 @@ foreach ($cart as $item) {
                     </td>
                     <td><?php echo number_format($item['price'] * $item['quantity']); ?>원</td>
                     <td>
-                        <button class="btn btn-sm btn-danger" onclick="removeFromCart(<?php echo htmlspecialchars($id); ?>)">삭제</button>
+                        <button class="btn btn-sm btn-danger"
+                                onclick="removeFromCart(<?php echo htmlspecialchars($id); ?>)">삭제
+                        </button>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -93,7 +108,7 @@ foreach ($cart as $item) {
         </div>
 
         <div class="mt-3">
-            <a href="/order/checkout.php" class="btn btn-success w-100">주문하기</a>
+            <a href="/views/order/checkout.php" class="btn btn-success w-100">주문하기</a>
         </div>
     <?php endif; ?>
 </div>

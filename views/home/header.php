@@ -7,6 +7,7 @@ if (session_id() == '') {
 <!-- connect header.php -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 <script src="/public/js/bootstrap.bundle.js"></script>
+<script src="/public/js/custom/cart.js"></script>
 <header>
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container d-flex justify-content-between align-items-center">
@@ -20,15 +21,14 @@ if (session_id() == '') {
                         <a href="#" id="logout-link" class="nav-link">로그아웃</a>
                     <?php else: ?>
                         <!-- 일반 사용자 로그인 -->
+                        <div class="dropdown-item-text">환영합니다! <?php echo $_SESSION['user']['id'] ?>님</div>
                         <div class="dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle" style="font-size: 24px;"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><span class="dropdown-item-text"><?php echo $_SESSION['user']['id'] ?>님</li>
-                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/views/user/mypage.php">마이페이지</a></li>
-                                <li><a class="dropdown-item" href="/views/user/cart/index.php">장바구니</a></li>
+                                <li><a class="dropdown-item" href="/views/user/cart/index.php" onclick="updateCart()">장바구니</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#" id="logout-link">로그아웃</a></li>
                             </ul>

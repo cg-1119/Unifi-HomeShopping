@@ -154,3 +154,25 @@ function clearCart() {
         })
         .catch((error) => console.error("Error:", error));
 }
+
+//views/home/header.php
+
+function updateCart() {
+    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+
+    fetch('/views/user/cart/index.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cart: cartData })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Cart synced with server:', data.cart);
+            } else {
+                console.error('Error syncing cart:', data.error);
+            }
+        });
+}
