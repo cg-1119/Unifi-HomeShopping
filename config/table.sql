@@ -30,7 +30,6 @@ CREATE TABLE orders (
                         user_id INT NOT NULL,
                         address TEXT DEFAULT NULL,
                         phone VARCHAR(20) DEFAULT NULL,
-                        total_price INT NOT NULL,
                         order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
                         status ENUM('pending', 'completed', 'cancelled') DEFAULT 'pending', -- 주문 상태
                         delivery_status ENUM('pending', 'shipped', 'delivered') DEFAULT 'pending', -- 배달 상태
@@ -47,7 +46,7 @@ CREATE TABLE order_details (
 );
 CREATE TABLE payments (
                           id INT AUTO_INCREMENT PRIMARY KEY,
-                          order_id INT NOT NULL,
+                          order_id INT,
                           payment_method VARCHAR(50) NOT NULL, -- 결제 방식
                           payment_info VARCHAR(255), -- > 결제 정보 구현x
                           payment_price INT NOT NULL,    -- 결제 금액
