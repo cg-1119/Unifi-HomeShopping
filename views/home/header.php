@@ -42,6 +42,7 @@ if (session_id() == '') {
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="/views/user/login.php">로그인</a></li>
+                            <li><a class="dropdown-item" href="/views/user/cart/index.php" onclick="updateCart()">장바구니</a></li>
                             <li><a class="dropdown-item" href="/views/user/join/agree.php">회원가입</a></li>
                         </ul>
                     </div>
