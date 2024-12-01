@@ -9,21 +9,21 @@ class Order
         $this->db = new Database();
     }
 
-    // 1. 주문 생성
-    public function createOrder($userId, $address, $phone)
+    // 주문 생성
+    public function createOrder($uid, $address, $phone)
     {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("INSERT INTO orders (user_id, address, phone) 
                 VALUES (:user_id, :address, :phone)");
         $stmt->execute([
-            'user_id' => $userId,
+            'user_id' => $uid,
             'address' => $address,
             'phone' => $phone,
         ]);
         return $pdo->lastInsertId(); // 생성된 주문 ID 반환
     }
 
-    // 2. 주문 상태 업데이트
+    // 주문 상태 업데이트
     public function updateOrderStatus($orderId, $status)
     {
         $pdo = $this->db->connect();
@@ -34,7 +34,7 @@ class Order
         ]);
     }
 
-    // 3. 배송 상태 업데이트
+    // 배송 상태 업데이트
     public function updateDeliveryStatus($orderId, $deliveryStatus)
     {
         $pdo = $this->db->connect();
@@ -45,7 +45,7 @@ class Order
         ]);
     }
 
-    // 4. 특정 사용자의 주문 조회
+    // 특정 사용자의 주문 조회
     public function getOrdersByUserId($userId)
     {
         $pdo = $this->db->connect();

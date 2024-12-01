@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+if (!$_SESSION['user']){
+    echo "<script>alert('로그인 후 사용 가능합니다.'); location.href = '/views/user/login.php';</script>";
+}
 // updateCart
 $data = json_decode(file_get_contents('php://input'), true);
 $cart = $_SESSION['cart'] ?? [];
@@ -32,32 +35,15 @@ $user = $_SESSION['user'] ?? null;
     <title>주문 페이지</title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom-style.css">
-    <style>
-        .order-container {
-            display: flex;
-            gap: 20px;
-        }
-        .order-left {
-            flex: 2;
-        }
-        .order-right {
-            flex: 1;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-        .order-right h3 {
-            margin-top: 0;
-        }
-    </style>
+    <script src="/public/js/custom/order.js" defer></script>
 </head>
 <body>
+<!-- 결제 모달 -->
+
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
 <div class="container mt-5">
     <h1 class="text-center mb-4">주문하기</h1>
     <div class="order-container">
-
         <!-- 왼쪽 영역 -->
         <div class="order-left">
             <!-- 상품 정보 -->
@@ -91,14 +77,14 @@ $user = $_SESSION['user'] ?? null;
                 <h2>배송지 정보</h2>
                 <form>
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="use_default" value="1" checked>
+                        <input type="radio" class="form-check-input" name="address" value="1" checked>
                         <label class="form-check-label">
-                            기본 배송지 사용: <?= htmlspecialchars($user['address'] ?? "없음") ?>,
-                            <?= htmlspecialchars($user['phone']) ?>
+                            기본 배송지 사용: <span id="default-address"><?= htmlspecialchars($user['address']) ?></span>,
+                            <span id="default-phone"><?= htmlspecialchars($user['phone']) ?></span>
                         </label>
                     </div>
                     <div class="form-check mt-3">
-                        <input type="radio" class="form-check-input" name="use_default" value="0">
+                        <input type="radio" class="form-check-input" name="address" value="0">
                         <label class="form-check-label">새 배송지 입력:</label>
                         <div id="new-address-fields" class="mt-3">
                             <input type="text" name="address" class="form-control mb-2" placeholder="주소">
@@ -113,10 +99,8 @@ $user = $_SESSION['user'] ?? null;
         <div class="order-right">
             <h3>결제 상세</h3>
             <div class="mb-4">
-                <p>총 주문 금액: <strong><?= number_format($totalPrice) ?> 원</strong></p>
-                <p>배송비: <strong>3,000 원</strong></p>
+                <p id="totalPrice">총 주문 금액: <strong><?= number_format($totalPrice) ?> 원</strong></p>
                 <hr>
-                <p>최종 결제 금액: <strong class="text-success"><?= number_format($totalPrice + 3000) ?> 원</strong></p>
             </div>
             <h3>포인트 혜택</h3>
             <div class="mb-4">
@@ -124,14 +108,31 @@ $user = $_SESSION['user'] ?? null;
                 <label class="form-check-label">사용 포인트</label>
                 <input type="number" name="point" class="form-control mb-2"
                        placeholder="사용할 포인트" min="0" max="<?= htmlspecialchars($user['point']) ?>"
-                       oninput="validatePointInput(this)">
-                <p id="point">적립 예정 포인트: <strong class="text-primary"><?= number_format(ceil(($totalPrice + 3000) / 100)) ?> 원</strong>(최종 결제 금액의 1%)</p>
+                       oninput="pointInputChange(this)">
+                <p id="point">적립 예정 포인트: <strong class="text-primary"><?= number_format(ceil(($totalPrice) / 100)) ?> 원</strong>(총 주문 금액의 1%)</p>
             </div>
-            <button type="submit" class="btn btn-primary w-100" onclick="openPaymentPage()">주문하기</button>
+            <div>
+                <hr>
+                <p>최종 결제 금액: <strong class="text-success" id="finalPrice"><?= number_format($totalPrice) ?> 원</strong></p>
+            </div>
+            <button type="button" class="btn btn-primary w-100"
+                    data-user="<?= htmlspecialchars($user['uid']) ?>"
+                    data-cart="<?= htmlspecialchars(json_encode($cart), ENT_QUOTES, 'UTF-8') ?>"
+                    data-finalPrice="<?= number_format($totalPrice) ?>"
+                    onclick="createOrder(this)">주문하기
+            </button>
         </div>
     </div>
 </div>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
-<script src="/public/js/custom/order.js"></script>
+<script>
+    // 모달 열기
+    var myModal = document.getElementById('staticBackdrop')
+    var myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', function () {
+        myInput.focus()
+    })
+</script>
 </body>
 </html>

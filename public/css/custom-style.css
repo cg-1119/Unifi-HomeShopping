@@ -137,3 +137,22 @@ footer {
     height: 100%;
     object-fit: cover;
 }
+
+/* order */
+.order-container {
+    display: flex;
+    gap: 20px;
+}
+.order-left {
+    flex: 2;
+}
+.order-right {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+.order-right h3 {
+    margin-top: 0;
+}

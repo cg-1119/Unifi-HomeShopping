@@ -11,25 +11,27 @@ class PaymentController
 
     public function addPayment()
     {
-        try
-        {
+        try {
             $orderId = $_POST["orderId"] ?? null;
             $paymentMethod = $_POST["paymentMethod"] ?? null;
             $paymentPrice = $_POST["paymentPrice"] ?? null;
+            $paymentPrice = preg_replace('/[^\d]/', '', $paymentPrice); // 숫자가 아닌 문자는 제거
+            $paymentPrice = (int) $paymentPrice;
             $paymentInfo = $_POST["paymentInfo"] ?? null;
 
-            $this->paymentModel->addPayment($orderId, $paymentMethod, $paymentPrice, $paymentInfo);
-            return ['success' => true, 'message' => '결제가 성공적으로 처리되었습니다.'];
+            $this->paymentModel->addPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice);
+            echo json_encode(['success' => true]);
+            exit;
 
         }catch (Exception $e){
             error_log("addPayment error: " . $e->getMessage());
-            return ['success' => false, 'message' => '결제 처리 중 오류가 발생했습니다.'];
+            echo json_encode(['success' => false, 'message' => '결제 처리 중 오류가 발생했습니다.']);
+            exit;
         }
     }
     public function getPaymentByOrderId($orderId)
     {
-        try
-        {
+        try {
             return $this->paymentModel->getPaymentByOrderId($orderId);
         } catch (Exception $e){
             error_log("getPaymentByOrderId error: " . $e->getMessage());
@@ -38,8 +40,7 @@ class PaymentController
     }
     public function getAllPayments()
     {
-        try
-        {
+        try {
             $payments = $this->paymentModel->getAllPayments();
             return $payments;
         } catch (Exception $e){
@@ -53,7 +54,12 @@ class PaymentController
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $controller = new PaymentController();
 
-    if ($_POST["action"] === "addPayment") $controller->addPayment();
-    else if ($_POST["action"] === "getPaymentByOrderId") $controller->getPaymentByOrderId($_POST["orderId"]);
-    else if ($_POST["action"] === "getAllPayments") $controller->getAllPayments();
+    if ($_POST["action"] === "addPayment") {
+        $controller->addPayment();
+    } else if ($_POST["action"] === "getPaymentByOrderId") {
+        $orderId = $_POST["orderId"] ?? null;
+        echo json_encode($controller->getPaymentByOrderId($orderId));
+    } else if ($_POST["action"] === "getAllPayments") {
+        echo json_encode($controller->getAllPayments());
+    }
 }

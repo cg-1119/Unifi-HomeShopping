@@ -10,21 +10,22 @@ class Payment
         $this->db = new Database();
     }
 
-    // 1. 결제 데이터 추가
-    public function addPayment($orderId, $paymentMethod, $paymentPrice, $paymentInfo = null)
+    // 결제 데이터 추가
+    public function addPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice)
     {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("INSERT INTO payments (order_id, payment_method, payment_price, payment_info) 
-                VALUES (:order_id, :payment_method, :payment_price, :payment_info)");
+        $stmt = $pdo->prepare("INSERT INTO payments (order_id, payment_method, payment_info, payment_price) 
+                VALUES (:order_id, :payment_method, :payment_info, :payment_price)");
         $stmt->execute([
             'order_id' => $orderId,
             'payment_method' => $paymentMethod,
-            'payment_price' => $paymentPrice,
-            'payment_info' => $paymentInfo
+            'payment_info' => $paymentInfo,
+            'payment_price' => $paymentPrice
         ]);
+        return $pdo->lastInsertId();
     }
 
-    // 2. 특정 주문의 결제 정보 조회
+    // 특정 주문의 결제 정보 조회
     public function getPaymentByOrderId($orderId)
     {
         $pdo = $this->db->connect();
@@ -33,7 +34,7 @@ class Payment
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // 3. 모든 결제 데이터 조회 (관리자용)
+    // 모든 결제 데이터 조회 (관리자용)
     public function getAllPayments()
     {
         $pdo = $this->db->connect();
