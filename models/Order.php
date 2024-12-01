@@ -10,16 +10,15 @@ class Order
     }
 
     // 1. 주문 생성
-    public function createOrder($userId, $address, $phone, $totalPrice)
+    public function createOrder($userId, $address, $phone)
     {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("INSERT INTO orders (user_id, address, phone, total_price) 
-                VALUES (:user_id, :address, :phone, :total_price)");
+        $stmt = $pdo->prepare("INSERT INTO orders (user_id, address, phone) 
+                VALUES (:user_id, :address, :phone)");
         $stmt->execute([
             'user_id' => $userId,
             'address' => $address,
             'phone' => $phone,
-            'total_price' => $totalPrice
         ]);
         return $pdo->lastInsertId(); // 생성된 주문 ID 반환
     }
