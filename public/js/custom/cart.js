@@ -59,24 +59,6 @@ function addToCart(productId, quantity) {
         .catch((error) => console.error('AJAX 요청 오류:', error));
 }
 
-
-// 모달 열기
-function openModal() {
-    const modal = document.getElementById('cart-modal');
-    modal.style.display = 'block';
-}
-
-// 모달 닫기
-function closeModal() {
-    const modal = document.getElementById('cart-modal');
-    modal.style.display = 'none';
-}
-
-// "계속 쇼핑" 버튼 클릭 시
-function continueShopping() {
-    closeModal();
-}
-
 // cart/index.php
 function updateQuantity(productId, quantity) {
     if (quantity < 1) {

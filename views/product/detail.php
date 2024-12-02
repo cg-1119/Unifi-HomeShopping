@@ -34,6 +34,23 @@ foreach ($productImages as $image) {
 </head>
 <body>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">알림</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>장바구니에 상품을 담았습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">계속 쇼핑</button>
+                <a href="/views/user/cart/index.php" class="btn btn-primary">장바구니로</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <a href="/views/product/index.php" class="text-decoration-none text-black">상품 리스트</a>
@@ -71,27 +88,10 @@ foreach ($productImages as $image) {
                 <button
                         type="button"
                         class="btn btn-primary btn-lg"
+                        data-bs-toggle="modal" data-bs-target="#cartModal"
                         onclick="addToCart(<?php echo $product['id']; ?>, parseInt(document.getElementById('quantity').value || 1))">
                     장바구니에 추가
                 </button>
-            </div>
-        </div>
-        <!-- 모달 -->
-        <div id="cart-modal" class="modal" style="display: none;">
-            <div class="modal-dialog-centered modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">알림</h5>
-                        <button type="button" class="btn-close" onclick="closeModal()"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>장바구니에 상품을 담았습니다.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" onclick="continueShopping()">계속 쇼핑</button>
-                        <a href="/views/user/cart/index.php" class="btn btn-primary">장바구니로</a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
