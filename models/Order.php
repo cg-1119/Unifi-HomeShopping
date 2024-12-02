@@ -10,7 +10,7 @@ class Order
     }
 
     // 주문 생성
-    public function createOrder($uid, $address, $phone)
+    public function setOrder($uid, $address, $phone)
     {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("INSERT INTO orders (user_id, address, phone) 
@@ -24,7 +24,7 @@ class Order
     }
 
     // 주문 상태 업데이트
-    public function updateOrderStatus($orderId, $status)
+    public function getOrderStatus($orderId, $status)
     {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("UPDATE orders SET status = :status WHERE id = :order_id");

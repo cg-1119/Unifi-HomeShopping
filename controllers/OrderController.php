@@ -23,9 +23,9 @@ class OrderController
             $finalPrice = $_POST["finalPrice"] ?? 0;
 
 
-            $orderId = $this->orderModel->createOrder($uid, $address, $phone);
+            $orderId = $this->orderModel->setOrder($uid, $address, $phone);
 
-            foreach ($cart as $item) $this->orderDetailModel->addOrderDetail($orderId, $item['id'], $item['quantity'], $item['price']);
+            foreach ($cart as $item) $this->orderDetailModel->setOrderDetail($orderId, $item['id'], $item['quantity'], $item['price']);
 
             $_SESSION['order_id'] = $orderId;
             echo json_encode(['success' => true, 'orderId' => $orderId, 'finalPrice' => $finalPrice], );
@@ -39,7 +39,7 @@ class OrderController
     {
         try {
             $orderId = $_POST['orderId'];
-            $this->orderModel->updateOrderStatus($orderId, 'cancelled');
+            $this->orderModel->getOrderStatus($orderId, 'cancelled');
             echo json_encode(['success' => true, 'message' => '주문이 취소되었습니다.']);
         } catch (PDOException $e) {
             error_log("주문 취소 오류" . $e->getMessage());
@@ -61,12 +61,28 @@ class OrderController
             }
 
             // Order 모델에서 상태 업데이트
-            $this->orderModel->updateOrderStatus($orderId, $orderStatus);
+            $this->orderModel->getOrderStatus($orderId, $orderStatus);
 
             echo json_encode(['success' => true, 'message' => '주문 상태가 업데이트되었습니다.']);
         } catch (Exception $e) {
             error_log("주문 상태 업데이트 오류: " . $e->getMessage());
             echo json_encode(['success' => false, 'message' => '주문 상태 업데이트 중 오류가 발생했습니다.']);
+        }
+    }
+
+    public function showOrderDetailsById($orderId)
+    {
+        try {
+            $orderId = $_GET['order_id'] ?? $_SESSION['last_order_id'] ?? null;
+            if (!$orderId) {
+                header('Location: /views/home/index.php');
+                exit;
+            };
+            $orderDetails = $this->orderDetailModel->getOrderDetailsByOrderId($orderId);
+
+            include $_SERVER['DOCUMENT_ROOT'] . '/views/order/order_complete.php';
+        } catch (PDOException $e) {
+            error_log("showOrderDetailsById error", $e->getMessage());
         }
     }
 }
@@ -80,6 +96,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
     if ($inputData && $inputData['action'] === 'updateOrderStatus' ){
         $controller->updateOrderStatus();
     }
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "GET") {
+    $controller = new OrderController();
+    if($_GET["action"] === "showOrderDetailsById") $controller->showOrderDetailsById($_GET['orderId']);
 }
 
 ?>

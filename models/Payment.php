@@ -11,7 +11,7 @@ class Payment
     }
 
     // 결제 데이터 추가
-    public function addPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice)
+    public function setPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice)
     {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("INSERT INTO payments (order_id, payment_method, payment_info, payment_price) 
