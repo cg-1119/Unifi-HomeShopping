@@ -38,9 +38,58 @@ $user = $_SESSION['user'] ?? null;
     <script src="/public/js/custom/order.js" defer></script>
 </head>
 <body>
-<!-- 결제 모달 -->
-
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<!-- 결제 모달 -->
+<div class="modal fade" id="checkoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="checkoutModalLabel">결제 정보</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 결제 수단 선택 -->
+                <h6>결제 수단</h6>
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCard" value="card" checked onclick="togglePaymentFields('card')">
+                        <label class="form-check-label" for="paymentCard">카드 결제</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="paymentPhone" value="phone" onclick="togglePaymentFields('phone')">
+                        <label class="form-check-label" for="paymentPhone">휴대폰 결제</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="paymentAccount" value="account" onclick="togglePaymentFields('account')">
+                        <label class="form-check-label" for="paymentAccount">계좌 결제</label>
+                    </div>
+                </div>
+
+                <!-- 결제 필드 -->
+                <div id="cardFields" class="payment-fields">
+                    <label for="cardNumber" class="form-label">카드 번호</label>
+                    <input type="text" id="cardNumber" class="form-control" placeholder="카드 번호를 입력하세요">
+                </div>
+                <div id="phoneFields" class="payment-fields d-none">
+                    <label for="phoneNumber" class="form-label">휴대폰 번호</label>
+                    <input type="text" id="phoneNumber" class="form-control" placeholder="휴대폰 번호를 입력하세요">
+                </div>
+                <div id="accountFields" class="payment-fields d-none">
+                    <label for="accountNumber" class="form-label">계좌 번호</label>
+                    <input type="text" id="accountNumber" class="form-control" placeholder="계좌 번호를 입력하세요">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" onclick="submitCheckout()">결제 완료</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 주문 데이터를 저장하는 숨겨진 요소 -->
+<div id="orderData" style="display: none;"></div>
+
 <div class="container mt-5">
     <h1 class="text-center mb-4">주문하기</h1>
     <div class="order-container">
@@ -116,6 +165,7 @@ $user = $_SESSION['user'] ?? null;
                 <p>최종 결제 금액: <strong class="text-success" id="finalPrice"><?= number_format($totalPrice) ?> 원</strong></p>
             </div>
             <button type="button" class="btn btn-primary w-100"
+                    data-bs-toggle="modal" data-bs-target="#checkoutModal"
                     data-user="<?= htmlspecialchars($user['uid']) ?>"
                     data-cart="<?= htmlspecialchars(json_encode($cart), ENT_QUOTES, 'UTF-8') ?>"
                     data-finalPrice="<?= number_format($totalPrice) ?>"
@@ -125,14 +175,5 @@ $user = $_SESSION['user'] ?? null;
     </div>
 </div>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
-<script>
-    // 모달 열기
-    var myModal = document.getElementById('staticBackdrop')
-    var myInput = document.getElementById('myInput')
-
-    myModal.addEventListener('shown.bs.modal', function () {
-        myInput.focus()
-    })
-</script>
 </body>
 </html>
