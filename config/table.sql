@@ -42,7 +42,7 @@ CREATE TABLE order_details (
                                quantity INT NOT NULL,
                                price INT NOT NULL,
                                FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-                               FOREIGN KEY (product_id) REFERENCES products(id)
+                               FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 CREATE TABLE payments (
                           id INT AUTO_INCREMENT PRIMARY KEY,
