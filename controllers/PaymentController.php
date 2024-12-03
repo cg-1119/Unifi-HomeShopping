@@ -18,7 +18,6 @@ class PaymentController
                 echo json_encode(['success' => false, 'message' => '요청 데이터가 잘못되었습니다.']);
             }
 
-            // 요청 데이터 추출
             $orderId = $inputData["orderId"] ?? null;
             $paymentMethod = $inputData["paymentMethod"] ?? null;
             $paymentPrice = $inputData["paymentPrice"] ?? null;
@@ -32,15 +31,13 @@ class PaymentController
                 echo json_encode(['success' => false, 'message' => '유효하지 않은 결제 금액입니다.']);
             }
 
-            // 결제 데이터 삽입
             $this->paymentModel->setPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice);
-
-            // 성공 응답 반환
+            $this->paymentModel->setUserPoint($orderId, $paymentPrice);
+            
             $_SESSION['cart'] = '';
             echo json_encode(['success' => true, 'orderId' => $orderId, 'message' => '결제가 성공적으로 처리되었습니다.']);
 
         } catch (Exception $e) {
-            // 예외 처리
             error_log("addPayment error: " . $e->getMessage());
             echo json_encode(['success' => false, 'message' => '결제 처리 중 오류가 발생했습니다.']);
         }

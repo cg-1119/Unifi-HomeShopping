@@ -25,6 +25,30 @@ class Payment
         return $pdo->lastInsertId();
     }
 
+    // 포인트 추가
+    public function setUserPoint($orderId, $paymentPrice)
+    {
+        $pdo = $this->db->connect();
+        $stmt = $pdo->prepare("
+        UPDATE users
+        SET points = points + (:payment_price * 0.01)
+        WHERE uid = (
+            SELECT user_id 
+            FROM orders
+            WHERE id = (
+                SELECT order_id
+                FROM payments
+                WHERE id = :order_id
+            )
+        )
+    ");
+        $stmt->execute([
+            'order_id' => $orderId,
+            'payment_price' => $paymentPrice
+        ]);
+    }
+
+
     // 특정 주문의 결제 정보 조회
     public function getPaymentByOrderId($orderId)
     {
