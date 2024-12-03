@@ -65,8 +65,7 @@ foreach ($cart as $item) {
     <?php else: ?>
         <table class="table">
             <thead>
-            <tr>
-                <th></th>
+            <tr class="text-center">
                 <th>상품명</th>
                 <th>가격</th>
                 <th>수량</th>
@@ -77,11 +76,16 @@ foreach ($cart as $item) {
             <tbody>
             <?php foreach ($cart as $id => $item): ?>
                 <tr>
-                    <td><img src="<?php echo htmlspecialchars($item['thumbnail']); ?>" alt="썸네일"
-                             style="width: 60px; height: 60px;"></td>
-                    <td><?php echo htmlspecialchars($item['name']); ?></td>
-                    <td><?php echo number_format($item['price']); ?>원</td>
-                    <td>
+                    <td class="border-end">
+                        <a href="/views/product/detail.php?id=<?php echo htmlspecialchars($item['id']); ?>"
+                           style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                            <img src="<?php echo htmlspecialchars($item['thumbnail']); ?>" alt="썸네일"
+                                 style="width: 60px; height: 60px; margin-right: 10px;">
+                            <span><?php echo htmlspecialchars($item['name']); ?></span>
+                        </a>
+                    </td>
+                    <td class="text-center align-middle border-end"><?php echo number_format($item['price']); ?>원</td>
+                    <td class="align-middle border-end">
                         <input
                                 type="number"
                                 value="<?php echo htmlspecialchars($item['quantity']); ?>"
@@ -91,8 +95,8 @@ foreach ($cart as $item) {
                                 onchange="updateQuantity(<?php echo htmlspecialchars($id); ?>, this.value)"
                         >
                     </td>
-                    <td><?php echo number_format($item['price'] * $item['quantity']); ?>원</td>
-                    <td>
+                    <td class="text-center align-middle"><?php echo number_format($item['price'] * $item['quantity']); ?>원</td>
+                    <td class="text-center align-middle">
                         <button class="btn btn-sm btn-danger"
                                 onclick="removeFromCart(<?php echo htmlspecialchars($id); ?>)">삭제
                         </button>
