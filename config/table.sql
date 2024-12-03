@@ -6,16 +6,16 @@ CREATE TABLE users (
     email VARCHAR(50) NOT NULL UNIQUE,
     phone VARCHAR(20) NOT NULL UNIQUE,
     address TEXT,
-    point INT,
+    point INT DEFAULT 0,
     is_admin BOOLEAN DEFAULT 0
-)
+);
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     price DECIMAL(10) NOT NULL,
     category VARCHAR(100) DEFAULT NULL,
     description TEXT DEFAULT NULL
-)
+);
 
 CREATE TABLE product_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
