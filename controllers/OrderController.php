@@ -89,7 +89,7 @@ class OrderController
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
     $controller = new OrderController();
-    if ($_POST["action"] === "createOrder") $controller->createOrder();
+    if ($_POST["action"] === "createOrder") $controller-> createOrder();
     else if ($_POST["action"] === "cancelOrder") $controller->cancelOrder();
 
     $inputData = json_decode(file_get_contents('php://input'), true);
