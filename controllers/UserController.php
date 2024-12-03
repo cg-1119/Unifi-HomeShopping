@@ -3,10 +3,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
 header('Content-Type: text/html; charset=utf-8');
 
 class UserController {
-    private $user;
+    private $userModel;
 
     public function __construct() {
-        $this->user = new User();
+        $this->userModel = new User();
     }
 
     // views/custom/join/input
@@ -19,7 +19,7 @@ class UserController {
         $address = isset($_POST['address']) ? trim($_POST['address']) : '';
 
         // 개인정보 중복 확인
-        if ($this->user->checkDuplicate($id, $phone)) {
+        if ($this->userModel->checkDuplicate($id, $phone)) {
             echo "<script>alert('아이디나 전화번호가 중복됩니다! 다시 입력해 주세요.'); history.back();</script>";
             return;
         }
@@ -27,10 +27,18 @@ class UserController {
         // 비밀번호 암호화
         $hashed_pw = hash('sha256', $pw);
 
-        if ($this->user->registerUser($id, $hashed_pw, $name, $email, $phone, $address)) {
+        if ($this->userModel->setUser($id, $hashed_pw, $name, $email, $phone, $address)) {
             echo "<script>alert('회원가입이 완료되었습니다!'); location.href = '/views/user/login.php';</script>";
         } else {
             echo "<script>alert('회원가입에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
+        }
+    }
+    public function modifyUserAddress($uid, $address)
+    {
+        if($this->userModel->setUserAddressByUid($uid ,$address)) {
+             echo "<script>alert('배송지 수정이 완료되었습니다!'); location.href = '/views/user/mypage.php';</script>";
+        } else {
+            echo "<script>alert('수정에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
     }
 
@@ -38,7 +46,7 @@ class UserController {
     public function requestFindId() {
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
         $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
-        $result = $this->user->queryToFindId($name, $phone);
+        $result = $this->userModel->queryToFindId($name, $phone);
 
         if ($result) {
             session_start();
@@ -65,7 +73,7 @@ class UserController {
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
 
         // 사용자 확인
-        if ($this->user->queryToResetPw($id, $name)) {
+        if ($this->userModel->queryToResetPw($id, $name)) {
             session_start();
             $_SESSION['pw_reset_user'] = array(
                 'status' => 'success',
@@ -85,7 +93,7 @@ class UserController {
         $newPassword = isset($_POST['newPassword']) ? trim($_POST['newPassword']) : '';
 
         // 비밀번호 업데이트
-        if ($this->user->updatePassword($id, $newPassword)) {
+        if ($this->userModel->updatePassword($id, $newPassword)) {
             session_start();
             unset($_SESSION['pw_reset_user']);
 
@@ -108,8 +116,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         $controller->requestPwReset();
     else if ($_POST['action'] === 'resetPassword')
         $controller->resetPassword();
+    else if ($_POST['action'] === 'modifyUserAddress')
+        $controller->modifyUserAddress();
 
 } else if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action'])) {
     $controller = new UserController();
+
 }
 ?>

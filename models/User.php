@@ -9,7 +9,7 @@ class User {
     }
 
     // 사용자 등록
-    public function registerUser($id, $pw, $name, $email, $phone, $address) {
+    public function setUser($id, $pw, $name, $email, $phone, $address) {
         $pdo = $this->db->connect();
 
         try {
@@ -26,6 +26,18 @@ class User {
             return false;
         }
     }
+    public function setUserAddressByUid($uid, $address) {
+        $pdo = $this->db->connect();
+
+        try {
+            $stmt = $pdo->prepare("UPDATE users SET address = :address WHERE id = :id");
+            $stmt->bindParam(':id', $uid, PDO::PARAM_STR);
+            $stmt->bindParam(':address', $address, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Get User Error: " . $e->getMessage());
+        }
+    }
 
     // 개인정보 중복 체크
     public function checkDuplicate($id, $phone) {
@@ -36,7 +48,7 @@ class User {
             $stmt->bindParam(':id', $id, PDO::PARAM_STR);
             $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC) ? true : false;
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Check Duplicate Error: " . $e->getMessage());
             return false;
