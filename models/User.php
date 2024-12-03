@@ -13,7 +13,7 @@ class User {
         $pdo = $this->db->connect();
 
         try {
-            $stmt = $pdo->prepare("INSERT INTO users (id, pw, name, email, phone, address) VALUES (:id, :pw, :name, :email, :phone, :address)");
+            $stmt = $pdo->prepare("INSERT INTO users (id, pw, name, email, phone, $address) VALUES (:id, :pw, :name, :email, :phone, :address)");
             $stmt->bindParam(':id', $id, PDO::PARAM_STR);
             $stmt->bindParam(':pw', $pw, PDO::PARAM_STR);
             $stmt->bindParam(':name', $name, PDO::PARAM_STR);

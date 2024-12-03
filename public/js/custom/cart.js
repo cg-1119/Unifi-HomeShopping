@@ -153,6 +153,7 @@ function updateCart() {
         .then(data => {
             if (data.success) {
                 console.log('Cart synced with server:', data.cart);
+                localStorage.setItem('cart', JSON.stringify(data.cart));
             } else {
                 console.error('Error syncing cart:', data.error);
             }

@@ -22,14 +22,18 @@ class LoginController{
         }
     }
     public function logout() {
-        if (!isset($_SESSION)) {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        $_SESSION = array();
+        $cart = $_SESSION['cart'] ?? [];
+        $_SESSION = [];
+        $_SESSION['cart'] = $cart;
+
+        session_destroy();
+
         if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', time() - 42000, '/');
         }
-        session_destroy();
     }
 }
 

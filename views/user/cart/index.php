@@ -5,42 +5,44 @@ session_start();
 $data = json_decode(file_get_contents('php://input'), true);
 $cart = $_SESSION['cart'] ?? [];
 $totalPrice = 0;
-if ($data) {
-    foreach ($data['cart'] as $productId => $item) {
-        $cart[$productId] = [
-            'id' => $item['id'],
-            'name' => htmlspecialchars($item['name']),
-            'price' => floatval($item['price']),
-            'thumbnail' => htmlspecialchars($item['thumbnail']),
-            'quantity' => intval($item['quantity']),
-        ];
+
+if (!$cart) {
+    // Update cart based on incoming data
+    if (isset($data['cart'])) {
+        foreach ($data['cart'] as $productId => $item) {
+            $cart[$productId] = [
+                'id' => $item['id'],
+                'name' => htmlspecialchars($item['name']),
+                'price' => floatval($item['price']),
+                'thumbnail' => htmlspecialchars($item['thumbnail']),
+                'quantity' => intval($item['quantity']),
+            ];
+        }
+        $_SESSION['cart'] = $cart;
     }
-}
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? null;
-    $productId = $_POST['product_id'] ?? null;
+    // 요청 처리
+    $action = $data['action'] ?? null;
+    $productId = $data['product_id'] ?? null;
 
-    // 수량 업데이트
-    if ($action === 'updateQuantity' && $productId && isset($_POST['quantity'])) {
-        $quantity = intval($_POST['quantity']);
+    if ($action === 'updateQuantity' && $productId && isset($data['quantity'])) {
+        $quantity = intval($data['quantity']);
         if (isset($cart[$productId]) && $quantity > 0) {
             $cart[$productId]['quantity'] = $quantity;
         }
-    } // 상품 삭제
-    elseif ($action === 'remove' && $productId) unset($cart[$productId]);
-    // 장바구니 비우기
-    elseif ($action === 'clear') $cart = [];
+    } elseif ($action === 'remove' && $productId) {
+        unset($cart[$productId]);
+    } elseif ($action === 'clear') {
+        $cart = [];
+    }
 
-    // 세션 업데이트
     $_SESSION['cart'] = $cart;
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
 }
 // 총 금액 계산
 foreach ($cart as $item) {
     $totalPrice += $item['price'] * $item['quantity'];
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="ko">
