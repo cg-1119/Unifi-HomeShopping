@@ -7,14 +7,13 @@ class OrderController
     private $orderModel;
     private $orderDetailModel;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->orderModel = new Order();
         $this->orderDetailModel = new OrderDetail();
     }
 
-    public function createOrder()
-    {
+    // 주문 생성
+    public function createOrder() {
         try {
             $uid = $_POST['uid'] ?? null;
             $address = $_POST['address'] ?? null;
@@ -35,8 +34,7 @@ class OrderController
         }
     }
 
-    public function cancelOrder()
-    {
+    public function cancelOrder() {
         try {
             $orderId = $_POST['orderId'];
             $this->orderModel->getOrderStatus($orderId, 'cancelled');
@@ -46,10 +44,8 @@ class OrderController
             echo json_encode(['success' => false, 'message' => '주문이 취소 중 오류가 발생하였습니다.']);
         }
     }
-    public function updateOrderStatus()
-    {
+    public function updateOrderStatus() {
         try {
-            // JSON 데이터를 읽어서 배열로 변환
             $inputData = json_decode(file_get_contents('php://input'), true);
 
             $orderId = $inputData['order_id'] ?? null;
@@ -60,7 +56,6 @@ class OrderController
                 return;
             }
 
-            // Order 모델에서 상태 업데이트
             $this->orderModel->getOrderStatus($orderId, $orderStatus);
 
             echo json_encode(['success' => true, 'message' => '주문 상태가 업데이트되었습니다.']);
@@ -69,20 +64,23 @@ class OrderController
             echo json_encode(['success' => false, 'message' => '주문 상태 업데이트 중 오류가 발생했습니다.']);
         }
     }
-
-    public function showOrderDetailsById($orderId)
-    {
+    // 사용자 주문 내역 조회
+    public function showUserOrders($uid) {
         try {
-            $orderId = $_GET['order_id'] ?? $_SESSION['last_order_id'] ?? null;
-            if (!$orderId) {
-                header('Location: /views/home/index.php');
-                exit;
-            };
-            $orderDetails = $this->orderDetailModel->getOrderDetailsByOrderId($orderId);
+            $orders = $this->orderModel->getOrdersByUserid($uid);
 
-            include $_SERVER['DOCUMENT_ROOT'] . '/views/order/order_complete.php';
+            foreach ($orders as $key => $order) {
+                $orderDetails = $this->orderDetailModel->getOrderDetailsByOrderId($order['id']);
+                $orders[$key]['details'] = $orderDetails; // 배열의 특정 키에 추가
+            }
+            session_start();
+            $_SESSION['orders'] = $orders;
+
+            header('Location: /views/user/mypage.php');
+            exit;
         } catch (PDOException $e) {
-            error_log("showOrderDetailsById error", $e->getMessage());
+            error_log('showUserOrders 오류',$e->getMessage());
+            exit;
         }
     }
 }
@@ -100,7 +98,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $controller = new OrderController();
-    if($_GET["action"] === "showOrderDetailsById") $controller->showOrderDetailsById($_GET['orderId']);
+    if ($_GET['action'] === 'myPage') {
+        session_start();
+        $controller->showUserOrders($_SESSION['user']['uid']);
+    }
 }
-
 ?>

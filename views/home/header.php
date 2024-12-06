@@ -27,7 +27,7 @@ if (session_id() == '') {
                                 <i class="bi bi-person-circle" style="font-size: 24px;"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="/views/user/mypage.php">마이페이지</a></li>
+                                <li><a class="dropdown-item" href="/controllers/OrderController.php?action=myPage">마이페이지</a></li>
                                 <li><a class="dropdown-item" href="/views/user/cart/index.php" onclick="updateCart()">장바구니</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#" id="logout-link">로그아웃</a></li>

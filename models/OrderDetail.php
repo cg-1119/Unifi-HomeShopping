@@ -28,7 +28,7 @@ class OrderDetail
         }
     }
 
-    // 2. 특정 주문의 상세 정보 조회
+    // 특정 주문의 상세 정보 조회
     public function getOrderDetailsByOrderId($orderId)
     {
         try {
@@ -58,7 +58,7 @@ class OrderDetail
         }
     }
 
-    // 3. 모든 주문 상세 조회 (관리자용)
+    // 모든 주문 상세 조회 (관리자용)
     public function getAllOrderDetails()
     {
         $pdo = $this->db->connect();

@@ -10,8 +10,7 @@ class Order
     }
 
     // 주문 생성
-    public function setOrder($uid, $address, $phone)
-    {
+    public function setOrder($uid, $address, $phone) {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("INSERT INTO orders (user_id, address, phone) 
                 VALUES (:user_id, :address, :phone)");
@@ -24,8 +23,7 @@ class Order
     }
 
     // 주문 상태 업데이트
-    public function getOrderStatus($orderId, $status)
-    {
+    public function getOrderStatus($orderId, $status) {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("UPDATE orders SET status = :status WHERE id = :order_id");
         $stmt->execute([
@@ -35,8 +33,7 @@ class Order
     }
 
     // 배송 상태 업데이트
-    public function updateDeliveryStatus($orderId, $deliveryStatus)
-    {
+    public function updateDeliveryStatus($orderId, $deliveryStatus) {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("UPDATE orders SET delivery_status = :delivery_status WHERE id = :order_id");
         $stmt->execute([
@@ -46,11 +43,11 @@ class Order
     }
 
     // 특정 사용자의 주문 조회
-    public function getOrdersByUserId($userId)
-    {
+    public function getOrdersByUserid($uid) {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_date DESC");
-        $stmt->execute(['user_id' => $userId]);
+        $stmt->bindparam(":user_id", $uid);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
