@@ -13,7 +13,7 @@ function updateTotal(price) {
 }
 
 // 장바구니에 상품 추가
-function addToCart(productId, quantity) {
+function addToCart(productId, quantity, action) {
     if (!productId || quantity <= 0) {
         alert("올바른 상품 정보가 필요합니다.");
         return;
@@ -51,12 +51,43 @@ function addToCart(productId, quantity) {
             if (data.success) {
                 // 세션 데이터로 로컬스토리지 동기화
                 localStorage.setItem('cart', JSON.stringify(data.cart));
-                openModal();
+                if(action === 'redirect') {
+                    showBootstrapSpinner("구매 페이지로 이동 중...");
+                    setTimeout(() => {
+                        window.location.href = '/views/order/checkout.php';
+                    }, 1000);
+                }
             } else {
                 alert('서버와의 통신에 실패했습니다.');
             }
         })
         .catch((error) => console.error('AJAX 요청 오류:', error));
+}
+
+// 스피너 HTML 생성
+function showBootstrapSpinner(message) {
+    const spinnerOverlay = document.createElement('div');
+    spinnerOverlay.id = 'spinner-overlay';
+    spinnerOverlay.style.position = 'fixed';
+    spinnerOverlay.style.top = '0';
+    spinnerOverlay.style.left = '0';
+    spinnerOverlay.style.width = '100%';
+    spinnerOverlay.style.height = '100%';
+    spinnerOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    spinnerOverlay.style.display = 'flex';
+    spinnerOverlay.style.justifyContent = 'center';
+    spinnerOverlay.style.alignItems = 'center';
+    spinnerOverlay.style.zIndex = '1050';
+    spinnerOverlay.innerHTML = `
+        <div class="text-center text-white">
+            <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">로딩 중...</span>
+            </div>
+            <p class="mt-3">${message}</p>
+        </div>
+    `;
+
+    document.body.appendChild(spinnerOverlay);
 }
 
 // cart/index.php

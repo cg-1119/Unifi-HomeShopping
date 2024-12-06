@@ -16,7 +16,7 @@ if (!$product) {
 
 // 상품 이미지 가져오기
 $productImages = $productModel->getProductImages($productId);
-$imageUrlArray= array();
+$imageUrlArray = array();
 
 // 이미지 분류
 foreach ($productImages as $image) {
@@ -57,7 +57,7 @@ foreach ($productImages as $image) {
     <div class="d-flex justify-content-between">
         <!-- 왼쪽: 대표 이미지 및 추가 이미지 선택 -->
         <div class="product-thumbnail mb-3">
-            <img id="main-image" src="<?php echo  $imageUrlArray[0]; ?>" alt="대표 이미지" class="img-fluid">
+            <img id="main-image" src="<?php echo $imageUrlArray[0]; ?>" alt="대표 이미지" class="img-fluid">
         </div>
         <!-- 오른쪽: 상품 정보 및 구매 -->
         <div class="border-box" style="padding: 20px; background-color: #f9f9f9;">
@@ -76,11 +76,13 @@ foreach ($productImages as $image) {
                         value="1"
                         style="width: 100px;"
                         oninput="updateTotal(<?php echo $product['price']; ?>)">
-                <p class="mt-2">총 상품 금액: <span id="total-price" class="text-danger"><?php echo $product['price']; ?>원</span></p>
+                <p class="mt-2">총 상품 금액: <span id="total-price"
+                                               class="text-danger"><?php echo $product['price']; ?>원</span></p>
             </div>
             <div class="d-grid gap-2 mb-3">
-                <button type="button" class="btn btn-success btn-lg" onclick="location.href='/order/checkout.php?id=<?php echo $productId; ?>'">
-                    구매하기
+                <button type="button" class="btn btn-success btn-lg"
+                        onclick="addToCart(<?php echo $product['id']; ?>, parseInt(document.getElementById('quantity').value || 1), 'redirect')">
+                구매하기
                 </button>
             </div>
             <div class="d-flex justify-content-between">
@@ -89,7 +91,7 @@ foreach ($productImages as $image) {
                         type="button"
                         class="btn btn-primary btn-lg"
                         data-bs-toggle="modal" data-bs-target="#cartModal"
-                        onclick="addToCart(<?php echo $product['id']; ?>, parseInt(document.getElementById('quantity').value || 1))">
+                        onclick="addToCart(<?php echo $product['id']; ?>, parseInt(document.getElementById('quantity').value || 1), 'modal')">
                     장바구니에 추가
                 </button>
             </div>
@@ -99,8 +101,8 @@ foreach ($productImages as $image) {
     <div class="thumbnail-images">
         <?php foreach ($imageUrlArray as $imageUrl): ?>
             <img src="<?php echo $imageUrl; ?>" alt="추가 이미지" class="img-thumbnail me-2 mb-2"
-                style="width: 80px; height: 80px; cursor: pointer;"
-                onclick="changeImage('<?php echo $imageUrl; ?>')">
+                 style="width: 80px; height: 80px; cursor: pointer;"
+                 onclick="changeImage('<?php echo $imageUrl; ?>')">
         <?php endforeach; ?>
     </div>
     <!-- 상품 설명을 구매 섹션 아래로 이동 -->
