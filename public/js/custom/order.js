@@ -113,6 +113,7 @@ function submitCheckout(orderId, finalPrice) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                localStorage.removeItem('cart'); // 장바구니 초기화
                 alert('결제가 완료되었습니다!');
                 window.location.href = `/views/order/order_complete.php?orderId=${data.orderId}`;
             } else {

@@ -34,8 +34,12 @@ class PaymentController
             $this->paymentModel->setPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice);
             $this->paymentModel->setUserPoint($orderId, $paymentPrice);
             $this->paymentModel->setOrderStatus($orderId, 'completed');
-            
-            $_SESSION['cart'] = '';
+
+            // 세션 초기화
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            unset($_SESSION['cart']);
             echo json_encode(['success' => true, 'orderId' => $orderId, 'message' => '결제가 성공적으로 처리되었습니다.']);
 
         } catch (Exception $e) {
