@@ -152,10 +152,9 @@ function updateCart() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log('Cart synced with server:', data.cart);
                 localStorage.setItem('cart', JSON.stringify(data.cart));
             } else {
-                console.error('Error syncing cart:', data.error);
+                console.error('장바구니 업데이트 오류:', data.error);
             }
         });
 }
