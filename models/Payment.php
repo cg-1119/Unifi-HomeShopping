@@ -44,6 +44,18 @@ class Payment
             'payment_price' => $paymentPrice
         ]);
     }
+    public function setOrderStatus($orderId, $status) {
+        $pdo = $this->db->connect();
+        try {
+            $stmt =$pdo->prepare("UPDATE orders SET status = :status WHERE id = :orderId");
+            $stmt->bindParam(":orderId", $orderId, PDO::PARAM_INT);
+            $stmt->bindParam(":status", $status);
+            return $stmt->execute();
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+
+    }
     // 특정 주문의 결제 정보 조회
     public function getPaymentByOrderId($orderId) {
         $pdo = $this->db->connect();
