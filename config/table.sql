@@ -28,7 +28,7 @@ CREATE TABLE product_images (
 CREATE TABLE orders (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         user_id INT NOT NULL,
-                        address TEXT DEFAULT NULL,
+                        address VARCHAR(255) DEFAULT NULL,
                         phone VARCHAR(20) DEFAULT NULL,
                         order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
                         status ENUM('pending', 'completed', 'cancelled') DEFAULT 'pending', -- 주문 상태
