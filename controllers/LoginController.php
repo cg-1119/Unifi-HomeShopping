@@ -26,10 +26,8 @@ class LoginController{
             session_start();
         }
         $cart = $_SESSION['cart'] ?? [];
-        $_SESSION = [];
-        $_SESSION['cart'] = $cart;
-
         session_destroy();
+        $_SESSION['cart'] = $cart;
 
         if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', time() - 42000, '/');
