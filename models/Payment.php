@@ -5,14 +5,12 @@ class Payment
 {
     private $db;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->db = new Database();
     }
 
     // 결제 데이터 추가
-    public function setPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice)
-    {
+    public function setPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice) {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("INSERT INTO payments (order_id, payment_method, payment_info, payment_price) 
                 VALUES (:order_id, :payment_method, :payment_info, :payment_price)");
@@ -26,12 +24,11 @@ class Payment
     }
 
     // 포인트 추가
-    public function setUserPoint($orderId, $paymentPrice)
-    {
+    public function setUserPoint($orderId, $paymentPrice) {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("
         UPDATE users
-        SET points = points + (:payment_price * 0.01)
+        SET point = point + (:payment_price * 0.01)
         WHERE uid = (
             SELECT user_id 
             FROM orders
@@ -47,11 +44,8 @@ class Payment
             'payment_price' => $paymentPrice
         ]);
     }
-
-
     // 특정 주문의 결제 정보 조회
-    public function getPaymentByOrderId($orderId)
-    {
+    public function getPaymentByOrderId($orderId) {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("SELECT * FROM payments WHERE order_id = :order_id");
         $stmt->execute(['order_id' => $orderId]);
@@ -59,8 +53,7 @@ class Payment
     }
 
     // 모든 결제 데이터 조회 (관리자용)
-    public function getAllPayments()
-    {
+    public function getAllPayments() {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("SELECT * FROM payments");
         $stmt->execute();
