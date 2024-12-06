@@ -26,6 +26,20 @@ class User {
             return false;
         }
     }
+
+    // 사용자 조회
+    public function getUserByUid($uid) {
+        $pdo = $this->db->connect();
+
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE uid = :uid");
+            $stmt->bindParam(':uid', $uid, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetch();
+        } catch (PDOException $e) {
+            error_log("getUserByUid error: " . $e->getMessage());
+        }
+    }
     // 배송지 변경
     public function setUserAddressByUid($uid, $address) {
         $pdo = $this->db->connect();
