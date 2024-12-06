@@ -38,6 +38,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
                 </ul>
             </div>
             <div class="box" style="width: 40%;">
+                <input type="hidden" name="uid" value="<?= $user['uid']?>">
                 <button class="btn btn-outline-secondary" type="submit" name="action" value="modifyUserAddress">변경하기</button>
             </div>
         </div>

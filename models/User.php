@@ -26,16 +26,36 @@ class User {
             return false;
         }
     }
+    // 배송지 변경
     public function setUserAddressByUid($uid, $address) {
         $pdo = $this->db->connect();
 
         try {
-            $stmt = $pdo->prepare("UPDATE users SET address = :address WHERE id = :id");
-            $stmt->bindParam(':id', $uid, PDO::PARAM_STR);
+            $stmt = $pdo->prepare("UPDATE users SET address = :address WHERE uid = :uid");
+            $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
             $stmt->bindParam(':address', $address, PDO::PARAM_STR);
-            return $stmt->execute();
+            $result = $stmt->execute();
+            $this->refreshSessionData($uid);
+            return $result;
         } catch (PDOException $e) {
             error_log("Get User Error: " . $e->getMessage());
+        }
+    }
+
+    // 세션 정보 최신화
+    private function refreshSessionData($uid) {
+        $pdo = $this->db->connect();
+
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE uid = :uid");
+            $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
+            $stmt->execute();
+
+            session_start();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($user) $_SESSION['user'] = $user;
+        } catch (PDOException $e) {
+            error_log("유저 정보 불러오기 오류" . $e->getMessage());
         }
     }
 
