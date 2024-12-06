@@ -25,7 +25,9 @@ foreach ($cart as $item) {
     $totalPrice += $item['price'] * $item['quantity'];
 }
 
+
 $user = $_SESSION['user'] ?? null;
+$point = $user['point'] ?? 0;
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -153,10 +155,10 @@ $user = $_SESSION['user'] ?? null;
             </div>
             <h3>포인트 혜택</h3>
             <div class="mb-4">
-                <p>보유 포인트: <strong><?= htmlspecialchars($user['point']) ?> 원</strong></p>
+                <p>보유 포인트: <strong><?php echo number_format($point) ?> 원</strong></p>
                 <label class="form-check-label">사용 포인트</label>
                 <input type="number" name="point" class="form-control mb-2"
-                       placeholder="사용할 포인트" min="0" max="<?= htmlspecialchars($user['point']) ?>"
+                       placeholder="사용할 포인트" min="0" max="<?= htmlspecialchars($point) ?>"
                        oninput="pointInputChange(this)">
                 <p id="point">적립 예정 포인트: <strong class="text-primary"><?= number_format(ceil(($totalPrice) / 100)) ?> 원</strong>(총 주문 금액의 1%)</p>
             </div>

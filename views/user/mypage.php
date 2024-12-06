@@ -6,6 +6,8 @@ if(!$_SESSION['user']) {
     echo "<script>alert('로그인 후 사용 가능합니다.'); location.href ='/views/home/index.php';</script>";
 }
 $user = $_SESSION['user'];
+
+$point = $user['point'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +30,7 @@ $user = $_SESSION['user'];
         <div class="card-body">
             <div class="d-flex justify-content-between">
                 <p class="card-text"><strong>안녕하세요 <?=$user['id']?>님</strong><br></p>
-                <p><strong>보유 포인트: <?php echo number_format($user['point']); ?>원</strong></p>
+                <p><strong>보유 포인트: <?php echo number_format($point); ?>원</strong></p>
             </div>
             <a href="/views/user/setting.php"  class="btn btn-secondary">기본 배송지 수정</a>
         </div>
@@ -37,12 +39,8 @@ $user = $_SESSION['user'];
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">찜한 목록</h5>
-            <ul class="list-group">
-                <!-- 예시 데이터 -->
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    상품 A
-                    <span class="badge bg-primary rounded-pill">₩50,000</span>
-                </li>
+            <ul class="list-group">ㅛ
+                미구현
             </ul>
         </div>
     </div>
