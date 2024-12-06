@@ -83,13 +83,19 @@ $point = $user['point'] ?? 0;
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary" onclick="submitCheckout()">결제 완료</button>
+                <button type="button" class="btn btn-primary"
+                        data-user="<?= htmlspecialchars($user['uid']) ?>"
+                        data-cart="<?= htmlspecialchars(json_encode($cart), ENT_QUOTES, 'UTF-8') ?>"
+                        data-finalPrice="<?= number_format($totalPrice) ?>"
+                        onclick="createOrderPayment(this);">
+                        결제 완료
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 주문 데이터를 저장하는 숨겨진 요소 -->
+
 <div id="orderData" style="display: none;"></div>
 
 <div class="container mt-5">
@@ -167,11 +173,7 @@ $point = $user['point'] ?? 0;
                 <p>최종 결제 금액: <strong class="text-success" id="finalPrice"><?= number_format($totalPrice) ?> 원</strong></p>
             </div>
             <button type="button" class="btn btn-primary w-100"
-                    data-bs-toggle="modal" data-bs-target="#checkoutModal"
-                    data-user="<?= htmlspecialchars($user['uid']) ?>"
-                    data-cart="<?= htmlspecialchars(json_encode($cart), ENT_QUOTES, 'UTF-8') ?>"
-                    data-finalPrice="<?= number_format($totalPrice) ?>"
-                    onclick="createOrder(this)">주문하기
+                    data-bs-toggle="modal" data-bs-target="#checkoutModal">주문하기
             </button>
         </div>
     </div>

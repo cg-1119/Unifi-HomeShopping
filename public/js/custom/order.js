@@ -27,59 +27,12 @@ function updateFinalPrice(pointInput) {
     paymentButton.setAttribute('data-finalPrice', finalPrice);
 }
 
-// 핸들링 함수
+// 유효성, 금액 계산 핸들링 함수
 function pointInputChange(pointInput) {
     validatePointInput(pointInput)
     updateFinalPrice(pointInput)
 }
 
-// 주문 생성 함수
-function createOrder(data) {
-    const uid = data.getAttribute('data-user');
-    const cart = JSON.parse(data.getAttribute('data-cart'));
-    let address = '';
-    let phone = '';
-    const finalPrice = data.getAttribute('data-finalPrice')
-
-    const useDefaultAddress = document.querySelector('input[name=address]:checked').value
-
-    if (useDefaultAddress) {
-        // 기본 배송지 값 설정
-        address = document.getElementById('default-address').textContent;
-        phone = document.getElementById('default-phone').textContent;
-    } else {
-        // 새 배송지 값 설정
-        address = document.querySelector('input[name="address"].form-control').value;
-        phone = document.querySelector('input[name="phone"]').value;
-    }
-
-    const formData = new FormData();
-    formData.append('action', 'createOrder');
-    formData.append('uid', uid);
-    formData.append('address', address || '기본 주소');
-    formData.append('phone', phone || '기본 전화번호');
-    formData.append('cart', JSON.stringify(cart));
-    formData.append('finalPrice', finalPrice)
-
-    fetch('/controllers/OrderController.php', {
-        method: 'POST',
-        body: formData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // 데이터를 특정 ID를 가진 DOM 요소에 저장
-                const orderDataElement = document.getElementById('orderData');
-                orderDataElement.setAttribute('data-order-id', data.orderId);
-                orderDataElement.setAttribute('data-final-price', data.finalPrice);
-            } else {
-                alert('주문 생성 중 오류가 발생했습니다.');
-            }
-        })
-        .catch(error => {
-            console.error('주문 생성 오류:', error);
-        });
-}
 // 결제 수단 변경
 function togglePaymentFields(selectedMethod) {
     document.querySelectorAll('.payment-fields').forEach(field => field.classList.add('d-none'));
@@ -92,11 +45,56 @@ function togglePaymentFields(selectedMethod) {
     }
 }
 
+// 주문 생성 함수
+function createOrder(data) {
+    const uid = data.getAttribute('data-user');
+    const cart = JSON.parse(data.getAttribute('data-cart'));
+    let address = '';
+    let phone = '';
+    const finalPrice = data.getAttribute('data-finalPrice')
+
+    const useDefaultAddress = document.querySelector('input[name=address]:checked').value
+
+    // 배송지 값 설정
+    if (useDefaultAddress) {
+        address = document.getElementById('default-address').textContent;
+        phone = document.getElementById('default-phone').textContent;
+    } else {
+        address = document.querySelector('input[name="address"].form-control').value;
+        phone = document.querySelector('input[name="phone"]').value;
+    }
+
+    const formData = new FormData();
+    formData.append('action', 'createOrder');
+    formData.append('uid', uid);
+    formData.append('address', address || '기본 주소');
+    formData.append('phone', phone || '기본 전화번호');
+    formData.append('cart', JSON.stringify(cart));
+    formData.append('finalPrice', finalPrice)
+
+    return fetch('/controllers/OrderController.php', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 데이터를 특정 ID를 가진 DOM 요소에 저장
+                const orderDataElement = document.getElementById('orderData');
+                orderDataElement.setAttribute('data-order-id', data.orderId);
+                orderDataElement.setAttribute('data-final-price', data.finalPrice);
+                return data;
+            } else {
+                alert('주문 생성 중 오류가 발생했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('주문 생성 오류:', error);
+        });
+}
+
 // 결제 정보 제출
-function submitCheckout() {
-    const orderDataElement = document.getElementById('orderData');
-    const orderId = orderDataElement.getAttribute('data-order-id');
-    const finalPrice = orderDataElement.getAttribute('data-final-price');
+function submitCheckout(orderId, finalPrice) {
     const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
     const paymentInfo = document.querySelector(`#${paymentMethod}Fields input`).value;
 
@@ -122,4 +120,16 @@ function submitCheckout() {
             }
         })
         .catch(error => console.error('결제 처리 오류:', error));
+}
+
+// 테이블 생성 핸들링 함수
+function createOrderPayment(data) {
+    createOrder(data)
+        .then(orderData => {
+            submitCheckout(orderData.orderId, orderData.finalPrice);
+        })
+        .catch(error => {
+            console.error('주문, 결제 처리 오류', error);
+            alert(error.message);
+        });
 }
