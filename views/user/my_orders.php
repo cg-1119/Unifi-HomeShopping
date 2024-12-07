@@ -1,10 +1,12 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Seoul');
 if (!isset($_SESSION['user'])) {
     header('Location: /views/user/login.php');
     exit;
 }
 
+// 주문 정보
 foreach ($_SESSION['orders'] as $order) {
     if ($order['id'] === (int)$_GET['order_id']) {
         $orderDetails = $order;
@@ -14,8 +16,13 @@ if (!isset($orderDetails)) {
     echo "<script>alert('유효하지 않은 접근입니다.'); location.href='/views/user/mypage.php';</script>";
     exit;
 }
-
 $totalPrice = 0;
+
+// 결제 정보
+require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Payment.php';
+$paymentModel = new Payment();
+$payment = $paymentModel->getPaymentByOrderId($orderDetails['id']);
+
 
 // 배송 상태 함수
 function renderDeliveryStatus($currentStatus) {
@@ -46,7 +53,6 @@ function renderDeliveryStatus($currentStatus) {
     $output .= '</div>';
     return $output;
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -54,6 +60,7 @@ function renderDeliveryStatus($currentStatus) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/bootstrap.css">
+    <link rel="stylesheet" href="/public/css/custom-style.css">
     <title>주문 상세 정보</title>
 </head>
 <body>
@@ -61,7 +68,8 @@ function renderDeliveryStatus($currentStatus) {
 
 <div class="container mt-5">
     <h2 class="text-center">주문 상세 정보</h2>
-    <!--<h5 class="mt-4">주문 번호:</h5>-->
+
+    <!-- 주문 상품 정보 -->
     <ul class="list-group">
         <?php foreach ($orderDetails['details'] as $detail):
             $price = $detail['price'] * $detail['quantity'];
@@ -85,12 +93,29 @@ function renderDeliveryStatus($currentStatus) {
     </ul>
     <p style="text-align-last: end">총 금액: <strong class="text-success" id="finalPrice"><?= number_format($totalPrice) ?>
             원</strong></p>
-    <div class="mt-4">
-        <h2 class="text-center">배송 상태</h2>
-        <div class="d-flex justify-content-around">
-            <?= renderDeliveryStatus($orderDetails['delivery_status']) ?>
+
+    <!-- 결제 정보 -->
+    <div class="card mt-4 mb-4">
+        <div class="card-header">
+            <h5>결제 정보</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>결제 방법:</strong> <?= htmlspecialchars($payment['payment_method'] ?? '정보 없음') ?></p>
+            <p><strong>결제 금액:</strong> <?= number_format($payment['payment_price'] ?? 0) ?>원</p>
+            <p><strong>결제 날짜:</strong> <?= date('Y년 m월 d일', strtotime($payment['payment_date'])) ?></p>
         </div>
     </div>
+
+    <!-- 배송 상태 -->
+    <?php if ($orderDetails['status'] !== 'cancelled'): ?>
+        <div class="mt-4">
+            <h2 class="text-center">배송 상태</h2>
+            <div class="d-flex justify-content-around">
+                <?= renderDeliveryStatus($orderDetails['delivery_status']) ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <div class="text-center mt-5">
         <a href="/views/user/mypage.php" class="btn btn-primary">마이페이지로 돌아가기</a>
     </div>
