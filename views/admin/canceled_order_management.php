@@ -34,6 +34,7 @@ $totalPages = ceil($totalCanceledOrders / $perPage);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>취소된 주문 관리</title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
+    <link rel="stylesheet" href="/public/css/custom-style.css">
 </head>
 <body>
 <div class="container mt-5">

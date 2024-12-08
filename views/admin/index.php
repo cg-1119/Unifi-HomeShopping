@@ -40,7 +40,7 @@ session_start();
                 <div class="card-body">
                     <h5 class="card-title">회원 관리</h5>
                     <p class="card-text">회원 정보 조회 및 관리</p>
-                    <a href="/views/admin/manage_users.php" class="btn btn-primary">회원 관리</a>
+                    <a href="/views/admin/user_management.php" class="btn btn-primary">회원 관리</a>
                 </div>
             </div>
         </div>
