@@ -23,7 +23,7 @@ class Order
     }
 
     // 주문 상태 업데이트
-    public function getOrderStatus($orderId, $status) {
+    public function updateOrderStatus($orderId, $status) {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("UPDATE orders SET status = :status WHERE id = :order_id");
         $stmt->execute([
@@ -32,6 +32,170 @@ class Order
         ]);
     }
 
+    // 주문 취소 이유 업데이트
+    public function updateOrderCancelReason($orderId, $cancel_reason) {
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("
+            UPDATE order_details
+            SET cancel_reason = :cancel_reason
+            WHERE order_id = :order_id
+        ");
+            $stmt->bindParam(':cancel_reason', $cancel_reason, PDO::PARAM_STR);
+            $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("updateOrderCancelReason error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // 주문 조회
+    public function getOrderById($orderId) {
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM orders WHERE id = :order_id");
+            $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("getOrderById error: " . $e->getMessage());
+            return false;
+        }
+    }
+    // 특정 사용자의 주문 조회
+    public function getOrdersByUserid($uid) {
+        $pdo = $this->db->connect();
+        $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_date DESC");
+        $stmt->bindparam(":user_id", $uid);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // 관리자용
+    // 모든 주문 가져오기
+    public function getAllOrders($offset, $limit) {
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("
+            SELECT 
+                o.id, 
+                o.user_id, 
+                o.order_date,
+                o.status,
+                o.delivery_status, 
+                SUM(od.price * od.quantity) AS total_price
+            FROM 
+                orders o
+            LEFT JOIN 
+                order_details od ON o.id = od.order_id
+            WHERE 
+                o.status != 'cancelled'
+            GROUP BY 
+                o.id, o.user_id, o.order_date, o.status, o.delivery_status
+            ORDER BY 
+            o.order_date DESC
+            LIMIT :offset, :limit
+            ");
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("getAllOrders error: " . $e->getMessage());
+            return false;
+        }
+    }
+    // 전체 주문 수 가져오기
+    public function getTotalOrderCount() {
+        $pdo = $this->db->connect();
+        $stmt = $pdo->query("SELECT COUNT(*) as total FROM orders");
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+    // 배송 상태 기준 주문 가져오기
+    public function getOrdersByDeliveryStatus($deliveryStatus, $offset, $limit) {
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("
+            SELECT 
+                o.id, 
+                o.user_id, 
+                o.order_date,
+                o.status,
+                o.delivery_status, 
+                SUM(od.price * od.quantity) AS total_price
+            FROM 
+                orders o
+            LEFT JOIN 
+                order_details od ON o.id = od.order_id
+            WHERE 
+                o.delivery_status = :delivery_status
+            AND o.status != 'cancelled'
+            GROUP BY 
+                o.id, o.user_id, o.order_date, o.status, o.delivery_status
+           ORDER BY 
+            o.order_date DESC
+            LIMIT :offset, :limit
+                ");
+            $stmt->bindparam(":delivery_status", $deliveryStatus, PDO::PARAM_STR);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("getOrdersByDeliveryStatus error: " . $e->getMessage());
+            return false;
+        }
+    }
+    // 배송 상태별 주문 수 가져오기
+    public function getTotalOrderCountByDeliveryStatus($delivery_status) {
+        $pdo = $this->db->connect();
+        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE delivery_status = :delivery_status");
+        $stmt->bindParam(':delivery_status', $delivery_status, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
+    // 취소된 주문 가져오기
+    public function getCanceledOrders($offset, $limit) {
+        $pdo = $this->db->connect();
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("
+        SELECT 
+            o.id, 
+            o.user_id, 
+            o.order_date,
+            o.status, 
+            SUM(od.price * od.quantity) AS total_price,
+            o.cancel_reason
+        FROM 
+            orders o
+        LEFT JOIN 
+            order_details od ON o.id = od.order_id
+        WHERE 
+            o.status = 'cancelled'
+        GROUP BY 
+            o.id, o.user_id, o.order_date, o.status, o.cancel_reason
+        ORDER BY 
+            o.order_date DESC
+        LIMIT :offset, :limit
+        ");
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("getCanceledOrders error: " . $e->getMessage());
+            return false;
+        }
+    }
+    // 총 취소된 주문 수 가져오기
+    public function getTotalCanceledOrderCount() {
+        $pdo = $this->db->connect();
+        $stmt = $pdo->query("SELECT COUNT(*) as total FROM orders WHERE status = 'cancelled'");
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
     // 배송 상태 업데이트
     public function updateDeliveryStatus($orderId, $deliveryStatus) {
         $pdo = $this->db->connect();
@@ -40,14 +204,5 @@ class Order
             'delivery_status' => $deliveryStatus,
             'order_id' => $orderId
         ]);
-    }
-
-    // 특정 사용자의 주문 조회
-    public function getOrdersByUserid($uid) {
-        $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_date DESC");
-        $stmt->bindparam(":user_id", $uid);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
