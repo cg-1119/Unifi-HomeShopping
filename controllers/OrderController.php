@@ -33,17 +33,7 @@ class OrderController
             echo json_encode(['success' => false, 'message' => '주문 생성 중 오류가 발생했습니다.']);
         }
     }
-
-    public function cancelOrder() {
-        try {
-            $orderId = $_POST['orderId'];
-            $this->orderModel->getOrderStatus($orderId, 'cancelled');
-            echo json_encode(['success' => true, 'message' => '주문이 취소되었습니다.']);
-        } catch (PDOException $e) {
-            error_log("주문 취소 오류" . $e->getMessage());
-            echo json_encode(['success' => false, 'message' => '주문이 취소 중 오류가 발생하였습니다.']);
-        }
-    }
+    // 주문 상태 업데이트
     public function updateOrderStatus() {
         try {
             $inputData = json_decode(file_get_contents('php://input'), true);
@@ -56,7 +46,7 @@ class OrderController
                 return;
             }
 
-            $this->orderModel->getOrderStatus($orderId, $orderStatus);
+            $this->orderModel->updateOrderStatus($orderId, $orderStatus);
 
             echo json_encode(['success' => true, 'message' => '주문 상태가 업데이트되었습니다.']);
         } catch (Exception $e) {
@@ -73,7 +63,6 @@ class OrderController
                 $orderDetails = $this->orderDetailModel->getOrderDetailsByOrderId($order['id']);
                 $orders[$key]['details'] = $orderDetails; // 배열의 특정 키에 추가
             }
-            session_start();
             $_SESSION['orders'] = $orders;
 
             header('Location: /views/user/mypage.php');
@@ -83,12 +72,52 @@ class OrderController
             exit;
         }
     }
+    // 주문 취소
+    public function cancelOrder() {
+        try {
+            $orderId = $_POST['order_id'];
+            $cancel_reason = $_POST['cancel_reason'] ?? null;
+            $this->orderModel->updateOrderStatus($orderId, 'cancelled');
+            $this->orderModel->updateOrderCancelReason($orderId, $cancel_reason);
+            echo "<script>alert('주문이 취소되었습니다.'); location.href = '/controllers/OrderController.php?action=myPage';</script>";
+        } catch (PDOException $e) {
+            error_log("주문 취소 오류" . $e->getMessage());
+            echo json_encode(['success' => false, 'message' => '주문이 취소 중 오류가 발생하였습니다.']);
+            echo "<script>alert('유효하지 않은 요청입니다.'); history.back();</script>";
+        }
+    }
+
+    
+    // 관리자용
+    // 주문 삭제
+    public function deleteOrder() {
+        $orderId = $_GET['order_id'] ?? null;
+
+        if ($orderId) {
+            $this->orderModel->deleteOrder($orderId);
+        }
+
+        header('Location: /views/admin/order_management.php');
+    }
+
+    // 배달 상태 업데이트
+    public function updateDeliveryStatus() {
+        $orderId = $_POST['order_id'] ?? null;
+        $status = $_POST['delivery_status'] ?? null;
+
+        if ($orderId && $status) {
+            $this->orderModel-> updateDeliveryStatus($orderId, $status);
+        }
+
+        header("Location: /views/admin/order_detail.php?order_id=$orderId");
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
     $controller = new OrderController();
     if ($_POST["action"] === "createOrder") $controller-> createOrder();
     else if ($_POST["action"] === "cancelOrder") $controller->cancelOrder();
+    else if ($_POST["action"] === "updateDeliveryStatus") $controller->updateDeliveryStatus();
 
     $inputData = json_decode(file_get_contents('php://input'), true);
     if ($inputData && $inputData['action'] === 'updateOrderStatus' ){

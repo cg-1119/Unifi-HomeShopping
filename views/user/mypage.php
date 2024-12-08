@@ -6,6 +6,7 @@ session_start();
 if (!$_SESSION['user']) {
     echo "<script>alert('로그인 후 사용 가능합니다.'); location.href ='/views/home/index.php';</script>";
 }
+
 $user = $_SESSION['user'];
 $point = $user['point'] ?? 0;
 
@@ -23,7 +24,6 @@ $orders = $_SESSION['orders'];
 </head>
 <body>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
-
 <div class="container mt-5">
     <h2 class="text-center mb-4">마이 페이지</h2>
 
@@ -99,11 +99,14 @@ $orders = $_SESSION['orders'];
                         <li class="list-group-item mb-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <?php if ($order['delivery_status'] === 'pending' && $order['status'] === 'completed'): ?>
-                                    <form method="POST" action="/controllers/OrderController.php" onsubmit="return confirmCancel();">
-                                        <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['id']) ?>">
-                                        <input type="hidden" name="action" value="cancelOrder">
-                                        <button type="submit" class="btn btn-danger btn-sm">배송 취소</button>
-                                    </form>
+                                    <button
+                                            type="button"
+                                            class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#cancelOrderModal"
+                                            onclick="setOrderId(<?= htmlspecialchars($order['id']) ?>)">
+                                        주문 취소
+                                    </button>
                                 <?php endif; ?>
                                 <strong class="ms-auto">총 금액: <?= number_format(array_sum(array_map(function ($item) {
                                         return $item['price'] * $item['quantity'];
@@ -119,12 +122,53 @@ $orders = $_SESSION['orders'];
         <?php endif; ?>
     </div>
 </div>
+<!-- 주문 취소 확인 모달 -->
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <form method="POST" action="/controllers/OrderController.php" id="cancelOrderForm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelOrderModalLabel">주문 취소 확인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>취소 사유를 선택하세요:</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cancel_reason" id="reasonChangeMind"
+                               value="change_of_mind" required>
+                        <label class="form-check-label" for="reasonChangeMind">단순 변심</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cancel_reason" id="reasonWrongPurchase"
+                               value="wrong_purchase" required>
+                        <label class="form-check-label" for="reasonWrongPurchase">잘못 구매함</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cancel_reason" id="reasonAddItems"
+                               value="add_more_items" required>
+                        <label class="form-check-label" for="reasonAddItems">상품을 더 추가하고 구매 예정</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cancel_reason" id="reasonOther" value="other"
+                               required>
+                        <label class="form-check-label" for="reasonOther">기타</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="order_id" id="modalOrderId">
+                    <input type="hidden" name="action" value="cancelOrder">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="submit" class="btn btn-danger">확인</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
 </body>
 <script>
-    function confirmCancel() {
-        const isConfirmed = confirm("정말로 배송을 취소하시겠습니까?");
-        return isConfirmed;
+    function setOrderId(orderId) {
+        document.getElementById('modalOrderId').value = orderId;
     }
 </script>
 </html>
