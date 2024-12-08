@@ -24,6 +24,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
 ?>
 <div class="container">
     <div class="d-flex justify-content-center"><h2>수정</div>
+    <a href="/views/user/mypage.php" class="btn btn-secondary mb-4">뒤로 가기</a>
     <form method="POST" action="/controllers/UserController.php" class="" novalidate>
         <div class="d-flex flex-column justify-content-center">
             <div class="border-box">
