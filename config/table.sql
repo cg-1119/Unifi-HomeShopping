@@ -7,6 +7,7 @@ CREATE TABLE users (
     phone VARCHAR(20) NOT NULL UNIQUE,
     address TEXT,
     point INT DEFAULT 0,
+    is_active TINYINT(1) DEFAULT 1,
     is_admin BOOLEAN DEFAULT 0
 );
 CREATE TABLE products (
