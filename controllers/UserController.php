@@ -89,7 +89,7 @@ class UserController {
             exit;
         }
     }
-    // views/custom/reset_password
+    // views/user/find/reset_password
     public function resetPassword() {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         $newPassword = isset($_POST['newPassword']) ? trim($_POST['newPassword']) : '';
@@ -103,6 +103,18 @@ class UserController {
         } else {
             echo "<script>alert('비밀번호 재설정에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
+    }
+    // views/admin/user_management
+    public function deactivateUser() {
+        $uid = $_GET['uid'];
+        $success = $this->userModel->deactivateUser($uid);
+
+        if ($success) {
+            header('Location: /views/admin/user_management.php?success=사용자가 비활성화되었습니다.');
+        } else {
+            header('Location: /views/admin/user_management.php?error=비활성화에 실패했습니다.');
+        }
+        exit;
     }
 }
 
@@ -124,5 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
 } else if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action'])) {
     $controller = new UserController();
 
+    if ($_GET['action'] === 'deactivateUser')
+        $controller->deactivateUser();
 }
 ?>
