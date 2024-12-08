@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 date_default_timezone_set('Asia/Seoul');
+require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Wishlist.php';
 
 session_start();
 if (!$_SESSION['user']) {
@@ -11,6 +12,9 @@ $user = $_SESSION['user'];
 $point = $user['point'] ?? 0;
 
 $orders = $_SESSION['orders'];
+
+$wishlistModel = new Wishlist();
+$wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
 ?>
 
 <!DOCTYPE html>
@@ -24,9 +28,28 @@ $orders = $_SESSION['orders'];
 </head>
 <body>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<!-- 장바구니 추가 모달 -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">알림</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>장바구니에 상품을 담았습니다.</p>
+                <p>장바구니로 이동하시겠습니까?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <a href="/views/user/cart/index.php" class="btn btn-primary">장바구니로</a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container mt-5">
     <h2 class="text-center mb-4">마이 페이지</h2>
-
+    <!-- 정보 표시 -->
     <h5 class="mb-4">내 정보</h5>
     <div class="card mb-4">
         <div class="card-body">
@@ -37,16 +60,47 @@ $orders = $_SESSION['orders'];
             <a href="/views/user/setting.php" class="btn btn-secondary">기본 배송지 수정</a>
         </div>
     </div>
-
+    <!-- 찜 목록 -->
     <h5 class="card-title mb-4">찜한 목록</h5>
     <div class="card mb-4">
         <div class="card-body">
-            <ul class="list-group">
-                미구현
-            </ul>
+            <?php if (!empty($wishlist)): ?>
+                <ul class="list-group">
+                    <?php foreach ($wishlist as $item): ?>
+                        <li class="list-group-item d-flex align-items-center">
+                            <button class="btn btn-outline-secondary me-3"
+                                    onclick="removeFromWishlist(<?= $item['id'] ?>)">
+                                <i class="bi bi-heart-fill"></i> 찜 취소
+                            </button>
+                            <button class="btn btn-outline-success me-3"
+                                    data-bs-toggle="modal" data-bs-target="#cartModal"
+                                    onclick="addToCart(<?= $item['id'] ?>, 1, 'modal')">
+                                <i class="bi bi-cart-plus"></i> 장바구니에 추가
+                            </button>
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <a href="/views/product/detail.php?id=<?= $item['id'] ?>"
+                                   style="text-decoration: none; color: inherit;"
+                                   class="d-flex align-items-center">
+                                    <img id="main-image" src="<?= htmlspecialchars($item['product_image'] ?? '/default-thumbnail.jpg') ?>"
+                                         alt="상품 이미지"
+                                         style="width: 60px; height: 60px; margin-right: 15px;">
+                                    <span id="product_name"><?= htmlspecialchars($item['name']) ?></span>
+                                </a>
+                            </div>
+                            <div>
+                                <p id="product_price" class="mb-0">
+                                    <strong>가격:</strong> <?= number_format($item['price']) ?>원
+                                </p>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <p class="text-center">찜한 상품이 없습니다.</p>
+            <?php endif; ?>
         </div>
     </div>
-
+    <!-- 주문 내역 -->
     <h5 class="card-title mb-4">주문 내역</h5>
     <div class="card mb-4">
         <?php if (!empty($orders)): ?>
@@ -123,7 +177,8 @@ $orders = $_SESSION['orders'];
     </div>
 </div>
 <!-- 주문 취소 확인 모달 -->
-<div class="modal fade" id="cancelOrderModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
     <form method="POST" action="/controllers/OrderController.php" id="cancelOrderForm">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -166,6 +221,7 @@ $orders = $_SESSION['orders'];
 </div>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
 </body>
+<script src="/public/js/custom/product.js"></script>
 <script>
     function setOrderId(orderId) {
         document.getElementById('modalOrderId').value = orderId;

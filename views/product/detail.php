@@ -1,8 +1,14 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Product.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Wishlist.php';
 header('Content-Type: text/html; charset=utf-8');
 
+session_start();
+
+// 모델 불러오기
 $productModel = new Product();
+$wishlistModel = new Wishlist();
+
 
 // 상품 ID 가져오기
 $productId = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -21,6 +27,16 @@ $imageUrlArray = array();
 // 이미지 분류
 foreach ($productImages as $image) {
     $imageUrlArray[] = $image['image_url'];
+}
+
+// 로그인 여부 확인
+$isLoggedIn = isset($_SESSION['user']);
+$uid = $isLoggedIn ? $_SESSION['user']['uid'] : null;
+
+// 찜 상태 확인
+$isInWishlist = false;
+if ($isLoggedIn) {
+    $isInWishlist = $wishlistModel->isProductInWishlist($uid, $productId);
 }
 ?>
 <!DOCTYPE html>
@@ -62,8 +78,8 @@ foreach ($productImages as $image) {
         <!-- 오른쪽: 상품 정보 및 구매 -->
         <div class="border-box" style="padding: 20px; background-color: #f9f9f9;">
             <div class="mb-1">
-                <h4><?php echo htmlspecialchars($product['name']); ?></h4><br>
-                <p class="price">가격: <strong><?php echo number_format($product['price']); ?>원</strong></p>
+                <h4 id="product_name"><?php echo htmlspecialchars($product['name']); ?></h4><br>
+                <p id ="product_price" class="price">가격: <strong><?php echo number_format($product['price']); ?>원</strong></p>
             </div>
             <div class="mb-3">
                 <label for="quantity">수량</label>
@@ -81,12 +97,26 @@ foreach ($productImages as $image) {
             </div>
             <div class="d-grid gap-2 mb-3">
                 <button type="button" class="btn btn-success btn-lg"
-                        onclick="addToCart(<?php echo $product['id']; ?>, parseInt(document.getElementById('quantity').value || 1), 'redirect')">
-                구매하기
+                        onclick="addToCart(<?= $product['id'] ?>, parseInt(document.getElementById('quantity').value || 1), 'redirect')">
+                    구매하기
                 </button>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary btn-lg">찜하기</button>
+                <?php if ($isLoggedIn): ?>
+                    <?php if ($isInWishlist): ?>
+                        <button class="btn btn-outline-secondary" onclick="removeFromWishlist(<?= $productId ?>)">
+                            <i class="bi bi-heart-fill"></i> 찜 취소
+                        </button>
+                    <?php else: ?>
+                        <button class="btn btn-outline-danger" onclick="addToWishlist(<?= $productId ?>)">
+                            <i class="bi bi-heart"></i> 찜하기
+                        </button>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <button class="btn btn-outline-primary" onclick="promptLogin()">
+                        <i class="bi bi-person"></i> 찜하기
+                    </button>
+                <?php endif; ?>
                 <button
                         type="button"
                         class="btn btn-primary btn-lg"
@@ -134,12 +164,6 @@ foreach ($productImages as $image) {
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
 <script src="/public/js/custom/cart.js"></script>
-<script>
-    // 대표 이미지 변경 함수
-    function changeImage(newImageUrl) {
-        const mainImage = document.getElementById('main-image');
-        mainImage.src = newImageUrl;
-    }
-</script>
+<script src="/public/js/custom/product.js"></script>
 </body>
 </html>
