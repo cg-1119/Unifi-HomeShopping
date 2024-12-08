@@ -37,9 +37,9 @@ class Order
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("
-            UPDATE order_details
+            UPDATE orders
             SET cancel_reason = :cancel_reason
-            WHERE order_id = :order_id
+            WHERE id = :order_id
         ");
             $stmt->bindParam(':cancel_reason', $cancel_reason, PDO::PARAM_STR);
             $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
