@@ -49,8 +49,9 @@ function addToCart(productId, quantity, action) {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-                // 세션 데이터로 로컬스토리지 동기화
+                // 로컬스토리지 업데이트
                 localStorage.setItem('cart', JSON.stringify(data.cart));
+                // 구매하기 버튼 액션
                 if(action === 'redirect') {
                     showBootstrapSpinner("구매 페이지로 이동 중...");
                     setTimeout(() => {
