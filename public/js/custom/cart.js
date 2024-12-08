@@ -19,8 +19,8 @@ function addToCart(productId, quantity, action) {
         return;
     }
 
-    const productName = document.querySelector("h4").innerText;
-    const productPrice = parseInt(document.querySelector(".price strong").innerText.replace(/[^0-9]/g, ""), 10);
+    const productName = document.getElementById("product_name").innerText;
+    const productPrice = parseInt(document.getElementById("product_price").innerText.replace(/[^0-9]/g, ""), 10);
     const thumbnailImage = document.getElementById("main-image").src.split('localhost:8080')[1];
 
     let cart = JSON.parse(localStorage.getItem('cart')) || {};
