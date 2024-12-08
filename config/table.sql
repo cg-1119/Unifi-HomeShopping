@@ -41,6 +41,7 @@ CREATE TABLE order_details (
                                product_id INT NOT NULL,
                                quantity INT NOT NULL,
                                price INT NOT NULL,
+                               cancel_reason ENUM('none', 'change_of_mind', 'wrong_purchase', 'add_more_items', 'other') DEFAULT 'none',
                                FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
                                FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
