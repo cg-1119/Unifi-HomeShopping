@@ -36,9 +36,8 @@ class PaymentController
             $this->paymentModel->setOrderStatus($orderId, 'completed');
 
             // 세션 초기화
-            if (session_status() === PHP_SESSION_NONE) {
+            if (session_status() === PHP_SESSION_NONE)
                 session_start();
-            }
             unset($_SESSION['cart']);
             echo json_encode(['success' => true, 'orderId' => $orderId, 'message' => '결제가 성공적으로 처리되었습니다.']);
 
