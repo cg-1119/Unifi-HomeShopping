@@ -153,36 +153,51 @@ class Order
         $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE delivery_status = :delivery_status");
         $stmt->bindParam(':delivery_status', $delivery_status, PDO::PARAM_STR);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+        return $stmt->fetchColumn();
     }
 
     // 취소된 주문 가져오기
-    public function getCanceledOrders($offset, $limit) {
-        $pdo = $this->db->connect();
+    public function getCanceledOrders($offset, $limit, $isProcessed = null) {
         $pdo = $this->db->connect();
         try {
-            $stmt = $pdo->prepare("
-        SELECT 
-            o.id, 
-            o.user_id, 
-            o.order_date,
-            o.status, 
-            SUM(od.price * od.quantity) AS total_price,
-            o.cancel_reason
-        FROM 
-            orders o
-        LEFT JOIN 
-            order_details od ON o.id = od.order_id
-        WHERE 
-            o.status = 'cancelled'
-        GROUP BY 
-            o.id, o.user_id, o.order_date, o.status, o.cancel_reason
-        ORDER BY 
-            o.order_date DESC
-        LIMIT :offset, :limit
-        ");
+            $sql = "
+            SELECT 
+                o.id, 
+                o.user_id, 
+                o.order_date,
+                o.cancel_reason,
+                o.is_cancelled_by_admin,
+                SUM(od.price * od.quantity) AS total_price
+            FROM 
+                orders o
+            LEFT JOIN 
+                order_details od ON o.id = od.order_id
+            WHERE 
+                o.status = 'cancelled'
+        ";
+
+            // 검색 조건 추가
+            if ($isProcessed !== null) {
+                $sql .= " AND o.is_cancelled_by_admin = :is_processed";
+            }
+
+            $sql .= "
+            GROUP BY 
+                o.id, o.user_id, o.order_date, o.cancel_reason, o.is_cancelled_by_admin
+            ORDER BY 
+                o.order_date DESC
+            LIMIT :offset, :limit
+        ";
+
+            $stmt = $pdo->prepare($sql);
+
+            // 바인딩
+            if ($isProcessed !== null) {
+                $stmt->bindParam(':is_processed', $isProcessed, PDO::PARAM_BOOL);
+            }
             $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
             $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -191,10 +206,26 @@ class Order
         }
     }
     // 총 취소된 주문 수 가져오기
-    public function getTotalCanceledOrderCount() {
+    public function getTotalCanceledOrderCount($isProcessed) {
         $pdo = $this->db->connect();
-        $stmt = $pdo->query("SELECT COUNT(*) as total FROM orders WHERE status = 'cancelled'");
-        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+        try {
+            $query = "SELECT COUNT(*) FROM orders WHERE status = 'cancelled'";
+            if ($isProcessed !== null) {
+                $query .= " AND is_cancelled_by_admin = :is_processed";
+            }
+
+            $stmt = $pdo->prepare($query);
+
+            if ($isProcessed !== null) {
+                $stmt->bindParam(':is_processed', $isProcessed, PDO::PARAM_INT);
+            }
+
+            $stmt->execute();
+            return (int) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("getTotalCanceledOrderCount error: " . $e->getMessage());
+            return false;
+        }
     }
     // 배송 상태 업데이트
     public function updateDeliveryStatus($orderId, $deliveryStatus) {
@@ -204,5 +235,18 @@ class Order
             'delivery_status' => $deliveryStatus,
             'order_id' => $orderId
         ]);
+    }
+    // 취소 처리
+    public function updatecancellation($orderId) {
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("UPDATE orders SET is_cancelled_by_admin = 1 WHERE id = :order_id");
+            $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            error_log("cancellationProcess error: " . $e->getMessage());
+            return false;
+        }
     }
 }

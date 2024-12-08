@@ -7,13 +7,15 @@ class OrderController
     private $orderModel;
     private $orderDetailModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->orderModel = new Order();
         $this->orderDetailModel = new OrderDetail();
     }
 
     // 주문 생성
-    public function createOrder() {
+    public function createOrder()
+    {
         try {
             $uid = $_POST['uid'] ?? null;
             $address = $_POST['address'] ?? null;
@@ -27,14 +29,16 @@ class OrderController
             foreach ($cart as $item) $this->orderDetailModel->setOrderDetail($orderId, $item['id'], $item['quantity'], $item['price']);
 
             $_SESSION['order_id'] = $orderId;
-            echo json_encode(['success' => true, 'orderId' => $orderId, 'finalPrice' => $finalPrice], );
+            echo json_encode(['success' => true, 'orderId' => $orderId, 'finalPrice' => $finalPrice]);
         } catch (PDOException $e) {
             error_log("주문 생성 오류: " . $e->getMessage());
             echo json_encode(['success' => false, 'message' => '주문 생성 중 오류가 발생했습니다.']);
         }
     }
+
     // 주문 상태 업데이트
-    public function updateOrderStatus() {
+    public function updateOrderStatus()
+    {
         try {
             $inputData = json_decode(file_get_contents('php://input'), true);
 
@@ -54,8 +58,10 @@ class OrderController
             echo json_encode(['success' => false, 'message' => '주문 상태 업데이트 중 오류가 발생했습니다.']);
         }
     }
+
     // 사용자 주문 내역 조회
-    public function showUserOrders($uid) {
+    public function showUserOrders($uid)
+    {
         try {
             $orders = $this->orderModel->getOrdersByUserid($uid);
 
@@ -68,12 +74,14 @@ class OrderController
             header('Location: /views/user/mypage.php');
             exit;
         } catch (PDOException $e) {
-            error_log('showUserOrders 오류',$e->getMessage());
+            error_log('showUserOrders 오류', $e->getMessage());
             exit;
         }
     }
+
     // 주문 취소
-    public function cancelOrder() {
+    public function cancelOrder()
+    {
         try {
             $orderId = $_POST['order_id'];
             $cancel_reason = $_POST['cancel_reason'] ?? null;
@@ -87,10 +95,11 @@ class OrderController
         }
     }
 
-    
+
     // 관리자용
     // 주문 삭제
-    public function deleteOrder() {
+    public function deleteOrder()
+    {
         $orderId = $_GET['order_id'] ?? null;
 
         if ($orderId) {
@@ -101,26 +110,36 @@ class OrderController
     }
 
     // 배달 상태 업데이트
-    public function updateDeliveryStatus() {
+    public function updateDeliveryStatus()
+    {
         $orderId = $_POST['order_id'] ?? null;
         $status = $_POST['delivery_status'] ?? null;
 
         if ($orderId && $status) {
-            $this->orderModel-> updateDeliveryStatus($orderId, $status);
+            $this->orderModel->updateDeliveryStatus($orderId, $status);
         }
 
         header("Location: /views/admin/order_detail.php?order_id=$orderId");
+    }
+
+    public function processOrderCancellation() {
+        $orderId = $_POST['order_id'] ?? null;
+        if ($this->orderModel->updatecancellation($orderId))
+            echo "<script>alert('취소 처리가 완료되었습니다.'); location.href = '../views/admin/canceled_order_management.php';</script>";
+        else
+            echo "<script>alert('취소 처리 중 오류가 발생했습니다.'); history.back();</script>";
     }
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
     $controller = new OrderController();
-    if ($_POST["action"] === "createOrder") $controller-> createOrder();
+    if ($_POST["action"] === "createOrder") $controller->createOrder();
     else if ($_POST["action"] === "cancelOrder") $controller->cancelOrder();
     else if ($_POST["action"] === "updateDeliveryStatus") $controller->updateDeliveryStatus();
+    else if ($_POST["action"] === "processCancellation") $controller->processOrderCancellation();
 
     $inputData = json_decode(file_get_contents('php://input'), true);
-    if ($inputData && $inputData['action'] === 'updateOrderStatus' ){
+    if ($inputData && $inputData['action'] === 'updateOrderStatus') {
         $controller->updateOrderStatus();
     }
 }
