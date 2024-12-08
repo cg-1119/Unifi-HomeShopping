@@ -33,6 +33,7 @@ CREATE TABLE orders (
                         order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
                         status ENUM('pending', 'completed', 'cancelled') DEFAULT 'pending', -- 주문 상태
                         delivery_status ENUM('pending', 'shipped', 'delivered') DEFAULT 'pending', -- 배달 상태
+                        cancel_reason ENUM('change_of_mind', 'wrong_purchase', 'add_more_items', 'other') DEFAULT NULL, -- 주문 취소 사유
                         FOREIGN KEY (user_id) REFERENCES users(uid)
 );
 CREATE TABLE order_details (
@@ -41,7 +42,6 @@ CREATE TABLE order_details (
                                product_id INT NOT NULL,
                                quantity INT NOT NULL,
                                price INT NOT NULL,
-                               cancel_reason ENUM('none', 'change_of_mind', 'wrong_purchase', 'add_more_items', 'other') DEFAULT 'none',
                                FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
                                FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
