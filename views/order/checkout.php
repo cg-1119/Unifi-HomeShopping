@@ -40,7 +40,7 @@ $point = $user['point'] ?? 0;
     <script src="/public/js/custom/order.js" defer></script>
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 <!-- 결제 모달 -->
 <div class="modal fade" id="checkoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -178,6 +178,6 @@ $point = $user['point'] ?? 0;
         </div>
     </div>
 </div>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 </body>
 </html>

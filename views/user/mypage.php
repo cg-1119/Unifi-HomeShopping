@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Wishlist.php';
 
 session_start();
 if (!$_SESSION['user']) {
-    echo "<script>alert('로그인 후 사용 가능합니다.'); location.href ='/views/home/index.php';</script>";
+    echo "<script>alert('로그인 후 사용 가능합니다.'); location.href ='../main/index.php';</script>";
 }
 
 $user = $_SESSION['user'];
@@ -27,7 +27,7 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
     <title>마이 페이지</title>
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 <!-- 장바구니 추가 모달 -->
 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -219,7 +219,7 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
         </div>
     </form>
 </div>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 </body>
 <script src="/public/js/custom/product.js"></script>
 <script>

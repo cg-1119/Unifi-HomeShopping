@@ -10,7 +10,7 @@
 </head>
 
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 <div class="container">
     <form class="needs-validation" method="POST" action="/controllers/UserController.php" novalidate>
         <div class="mt-5 d-flex flex-column justify-content-center">
@@ -43,7 +43,7 @@
 
 <script src="/public/js/custom/validation.js"></script>
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php';
 ?>
 </body>
 

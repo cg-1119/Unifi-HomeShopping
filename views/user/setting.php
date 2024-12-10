@@ -3,7 +3,7 @@ session_start();
 header('Content-Type: text/html; charset=utf-8');
 
 if(!$_SESSION['user']) {
-    echo "<script>alert('로그인 후 사용 가능합니다.'); location.href ='/views/home/index.php';</script>";
+    echo "<script>alert('로그인 후 사용 가능합니다.'); location.href ='../main/index.php';</script>";
 }
 $user = $_SESSION['user'];
 ?>
@@ -20,7 +20,7 @@ $user = $_SESSION['user'];
 
 <body>
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php';
 ?>
 <div class="container">
     <div class="d-flex justify-content-center"><h2>수정</div>
@@ -47,7 +47,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
 </div>
 
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php';
 ?>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>

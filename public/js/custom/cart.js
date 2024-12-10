@@ -169,7 +169,7 @@ function clearCart() {
         .catch((error) => console.error("Error:", error));
 }
 
-//views/home/header.php
+//views/main/header.php
 
 function updateCart() {
     const cartData = JSON.parse(localStorage.getItem('cart')) || [];

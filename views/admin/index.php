@@ -12,7 +12,7 @@ session_start();
     <title>관리자 페이지</title>
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 
 <div class="container mt-5">
     <h2>관리자 페이지</h2>
@@ -47,7 +47,7 @@ session_start();
     </div>
 </div>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 
 <script src="/public/js/bootstrap.js"></script>
 </body>

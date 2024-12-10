@@ -11,7 +11,7 @@
 
 <body>
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php';
 ?>
 <div class="container">
     <div class="d-flex justify-content-center"><h2>로그인</h2></div>
@@ -51,7 +51,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
 
 <script src="../../public/js/custom/validation.js"></script>
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php';
 ?>
 </body>
 

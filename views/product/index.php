@@ -19,7 +19,7 @@ $products = $productModel->getProducts($selectedCategory);
     <title>상품 목록</title>
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 
 <div class="container mt-5">
     <!-- 검색 -->
@@ -101,7 +101,7 @@ $products = $productModel->getProducts($selectedCategory);
     </div>
 </div>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 <script src="/public/js/custom/search.js"></script>
 </body>
 </html>

@@ -64,7 +64,7 @@ function renderDeliveryStatus($currentStatus) {
     <title>주문 상세 정보</title>
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 
 <div class="container mt-5">
     <h2 class="text-center m-5">주문 상세 정보</h2>
@@ -121,6 +121,6 @@ function renderDeliveryStatus($currentStatus) {
     </div>
 </div>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 </body>
 </html>

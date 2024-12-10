@@ -16,7 +16,7 @@ class LoginController{
         if ($user) {
             session_start();
             $_SESSION['user'] = $user;
-            echo "<script>location.href = '/views/home/index.php';</script>";
+            echo "<script>location.href = '../views/main/index.php';</script>";
         } else {
             echo '<script>alert("로그인 실패: ID 또는 비밀번호가 올바르지 않습니다."); history.back();</script>';
         }

@@ -3,7 +3,7 @@ session_start();
 
 // 관리자 로그인 여부 확인
 if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] != 1) {
-    echo "<script>alert('관리자만 접근할 수 있습니다.'); location.href = '/views/home/index.php';</script>";
+    echo "<script>alert('관리자만 접근할 수 있습니다.'); location.href = '../main/index.php';</script>";
     exit;
 }
 ?>
@@ -19,7 +19,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] != 1) {
     <title>상품 등록</title>
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 
 <div class="container mt-5">
     <h2>상품 등록</h2>
@@ -59,7 +59,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] != 1) {
     </form>
 </div>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 <script src="/public/js/bootstrap.js"></script>
 </body>
 </html>

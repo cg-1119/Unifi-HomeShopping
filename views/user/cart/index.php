@@ -54,7 +54,7 @@ foreach ($cart as $item) {
     <title>장바구니</title>
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 
 <div class="container mt-5">
     <h2 class="text-center m-5">장바구니</h2>
@@ -119,7 +119,7 @@ foreach ($cart as $item) {
     <?php endif; ?>
 </div>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 <script src="/public/js/custom/cart.js"></script>
 </body>
 </html>

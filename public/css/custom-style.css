@@ -38,6 +38,47 @@ footer {
     margin-top: auto;
     padding: 10px 0;
 }
+/* main/index */
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+.welcome-container {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
+    overflow: hidden; /* 텍스트가 잘리도록 설정 */
+    border-right: 2px solid white; /* 깜박이는 커서 효과 */
+    animation: typing 4s steps(30, end), blink 0.5s step-end infinite;
+}
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 25%;
+    }
+}
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+/* 타이핑 후 커서 사라지기 */
+.welcome-container.typing-done {
+    border-right: none;
+}
 
 /* box */
 

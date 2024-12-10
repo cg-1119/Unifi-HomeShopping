@@ -49,7 +49,7 @@ if ($isLoggedIn) {
     <title><?php echo htmlspecialchars($product['name']); ?></title>
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -162,7 +162,7 @@ if ($isLoggedIn) {
     </div>-->
 </div>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 <script src="/public/js/custom/cart.js"></script>
 <script src="/public/js/custom/product.js"></script>
 </body>

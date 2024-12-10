@@ -6,7 +6,7 @@ $orderDetailModel = new Orderdetail();
 
 $orderId = $_GET['orderId'] ?? null;
 if (!$orderId) {
-    echo "<script>alert('유효하지 않은 접근입니다.'); location.href = '/views/home/index.php';</script>";
+    echo "<script>alert('유효하지 않은 접근입니다.'); location.href = '../main/index.php';</script>";
     exit;
 }
 
@@ -23,7 +23,7 @@ $totalPrice = 0;
     <link rel="stylesheet" href="/public/css/bootstrap.css">
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 
 <div class="container mt-5">
     <h1 class="text-center">결제가 성공적으로 완료되었습니다!</h1>
@@ -65,11 +65,11 @@ $totalPrice = 0;
         <p>최종 결제 금액: <strong class="text-success" id="finalPrice"><?= number_format($totalPrice) ?> 원</strong></p>
     </div>
     <div class="text-center mt-5">
-        <a href="/views/home/index.php" class="btn btn-primary">홈으로 돌아가기</a>
+        <a href="/views/main/index.php" class="btn btn-primary">홈으로 돌아가기</a>
         <a href="/views/user/mypage.php" class="btn btn-secondary">주문 내역 보기</a>
     </div>
 </div>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 </body>
 </html>

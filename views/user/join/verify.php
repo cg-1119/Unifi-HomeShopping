@@ -10,7 +10,7 @@
 </head>
 <body>
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php';
 ?>
 <div class="container">
     <div class="d-flex justify-content-center"><h2>정보 입력</div>
@@ -81,7 +81,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
     </form>
 </div>
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php';
 ?>
 <!-- JavaScript 파일 연결 -->
 <script src="/public/js/custom/inputValidation.js"></script>
