@@ -20,12 +20,10 @@
 
     <div>
         <div class="container text-center">
-            <a href="/views/product/index.php" class="text-decoration-none text-black">상품 리스트</a>
         </div>
     </div>
 
     <div class="container my-5">
-        <h2 class="text-center">추천 제품 리스트</h2>
     </div>
 
     <?php

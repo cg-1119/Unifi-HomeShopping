@@ -67,7 +67,7 @@ function renderDeliveryStatus($currentStatus) {
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
 
 <div class="container mt-5">
-    <h2 class="text-center">주문 상세 정보</h2>
+    <h2 class="text-center m-5">주문 상세 정보</h2>
 
     <!-- 주문 상품 정보 -->
     <ul class="list-group">
