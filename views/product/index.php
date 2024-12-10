@@ -41,31 +41,31 @@ $products = $productModel->getProducts($selectedCategory);
     <!-- 카테고리 필터 -->
     <div class="d-flex justify-content-center align-items-center mb-4 flex-wrap">
         <div class="text-center mx-3">
-            <a href="?category=" class="nav-link">
-                <img src="/public/images/icons/icon-all.svg" alt="UniFi Cloud Gateways" class="category-icon" style="width: 50px;">
+            <a href="?category=" class="nav-link" style="flex-direction: column;">
+                <img src="/public/images/icons/icon-all.svg" alt="UniFi Cloud Gateways" class="category-icon" style="width: 40px;">
                 <span>전체</span>
             </a>
         </div>
         <div class="text-center mx-3">
-            <a href="?category=gateway" class="nav-link">
+            <a href="?category=gateway" class="nav-link" style="flex-direction: column;">
                 <img src="/public/images/icons/icon-cloud-gateways.svg" alt="UniFi Cloud Gateways" class="category-icon" style="width: 150px;">
                 <span>클라우드 게이트웨이</span>
             </a>
         </div>
         <div class="text-center mx-3">
-            <a href="?category=switching" class="nav-link">
+            <a href="?category=switching" class="nav-link" style="flex-direction: column;">
                 <img src="/public/images/icons/icon-switching.svg" alt="Switching" class="category-icon" style="width: 100px;">
                 <span>스위칭</span>
             </a>
         </div>
         <div class="text-center mx-3">
-            <a href="?category=wifi" class="nav-link">
+            <a href="?category=wifi" class="nav-link" style="flex-direction: column;">
                 <img src="/public/images/icons/icon-wifi.svg" alt="WiFi" class="category-icon" style="width: 60px;">
                 <span>와이파이</span>
             </a>
         </div>
         <div class="text-center mx-3">
-            <a href="?category=accessories" class="nav-link">
+            <a href="?category=accessories" class="nav-link" style="flex-direction: column;">
                 <img src="/public/images/icons/icon-accessories.svg" alt="Accessories" class="category-icon" style="width: 80px;">
                 <span>악세서리</span>
             </a>
