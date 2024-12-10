@@ -5,13 +5,11 @@ class Product
 {
     private $db;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->db = new Database();
     }
 
-    public function getProductById($productId)
-    {
+    public function getProductById($productId) {
         $pdo = $this->db->connect();
 
         try {
@@ -25,8 +23,7 @@ class Product
         }
     }
 
-    public function getProducts($category = null)
-    {
+    public function getProducts($category = null) {
         $pdo = $this->db->connect();
 
         try {
@@ -80,8 +77,7 @@ class Product
         }
     }
 
-    public function getProductImages($productId)
-    {
+    public function getProductImages($productId) {
         $pdo = $this->db->connect();
 
         try {
@@ -103,8 +99,7 @@ class Product
         }
     }
 
-    public function addProduct($category, $name, $price, $description)
-    {
+    public function addProduct($category, $name, $price, $description) {
         $pdo = $this->db->connect();
 
         try {
@@ -121,8 +116,7 @@ class Product
         }
     }
 
-    public function addProductImage($productId, $filePath, $isThumbnail = false)
-    {
+    public function addProductImage($productId, $filePath, $isThumbnail = false) {
         $pdo = $this->db->connect();
 
         try {
@@ -136,5 +130,33 @@ class Product
             return false;
         }
     }
+    public function searchProducts($query) {
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("
+              SELECT 
+                p.id,   
+                p.name, 
+                p.price,
+                pi.file_path AS product_image
+            FROM 
+                products p
+            LEFT JOIN 
+                product_images pi ON p.id = pi.product_id AND pi.is_thumbnail = 1
+            WHERE 
+                p.name LIKE :query
+            ORDER BY 
+                p.name ASC
+        ");
+            $stmt->bindValue(':query', '%' . $query . '%', PDO::PARAM_STR);
+            $stmt->execute();
+            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $products;
+        } catch (PDOException $e) {
+            error_log("검색 오류: " . $e->getMessage());
+            return false;
+        }
+    }
+
 }
 ?>

@@ -22,6 +22,22 @@ $products = $productModel->getProducts($selectedCategory);
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
 
 <div class="container mt-5">
+    <!-- 검색 -->
+    <div class="search-container d-flex justify-content-center align-items-center position-relative mt-4">
+        <div class="input-group" style="width: 50%; background-color: #f9f9f9; border-radius: 10px;">
+        <span class="input-group-text" style="background: transparent; border: none;">
+            <i class="bi bi-search" style="font-size: 1.2rem; color: gray;"></i>
+        </span>
+        <!-- 검색 입력창 -->
+        <input type="text" id="searchInput" class="form-control" placeholder="상품명을 입력하세요"
+               style="border: none; background-color: transparent; height: 45px;">
+        <!-- 검색 결과 -->
+        <div id="searchResults" class="list-group mt-2"
+             style="display: none; position: absolute; z-index: 1000; width: 100%; top: 100%;"></div>
+        </div>
+    </div>
+
+
     <!-- 카테고리 필터 -->
     <div class="d-flex justify-content-center align-items-center mb-4 flex-wrap">
         <div class="text-center mx-3">
@@ -32,13 +48,13 @@ $products = $productModel->getProducts($selectedCategory);
         </div>
         <div class="text-center mx-3">
             <a href="?category=gateway" class="nav-link">
-                <img src="/public/images/icons/icon-cloud-gateways.svg" alt="UniFi Cloud Gateways" class="category-icon" style="width: 130px;">
+                <img src="/public/images/icons/icon-cloud-gateways.svg" alt="UniFi Cloud Gateways" class="category-icon" style="width: 150px;">
                 <span>클라우드 게이트웨이</span>
             </a>
         </div>
         <div class="text-center mx-3">
             <a href="?category=switching" class="nav-link">
-                <img src="/public/images/icons/icon-switching.svg" alt="Switching" class="category-icon" style="width: 80px;">
+                <img src="/public/images/icons/icon-switching.svg" alt="Switching" class="category-icon" style="width: 100px;">
                 <span>스위칭</span>
             </a>
         </div>
@@ -86,6 +102,7 @@ $products = $productModel->getProducts($selectedCategory);
 </div>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php'; ?>
+<script src="/public/js/custom/search.js"></script>
 </body>
 </html>
 <?php

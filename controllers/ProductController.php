@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Product.php';
-header('Content-Type: text/html; charset=utf-8');
+header('Content-Type: application/json; charset=utf-8');
 
 class ProductController
 {
@@ -96,17 +96,46 @@ class ProductController
             }
             return true;
         }
-
         error_log("No description images uploaded.");
         return true; // 설명 이미지는 필수가 아니므로 true 반환
     }
+    public function searchProducts() {
+        if (!isset($_GET['query'])) {
+            http_response_code(400);
+            echo json_encode(['error' => '검색어가 제공되지 않았습니다.']);
+            return;
+        }
+
+        $query = trim($_GET['query']);
+        if (empty($query)) {
+            echo json_encode([]); // 검색어가 없을 때
+            return;
+        }
+
+        try {
+            $products = $this->productModel->searchProducts($query);
+            echo json_encode($products);
+        } catch (Exception $e) {
+            error_log('컨트롤러 검색 중 오류 발생: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['error' => '서버 내부 오류.']);
+        }
+    }
+
+
 }
 
-// POST 요청 처리
+
+// 요청 처리
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $controller = new ProductController();
     if ($_POST['action'] == 'addProduct') {
         $controller->addProduct();
     }
+}
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
+    $controller = new ProductController();
+    if ($_GET['action'] == 'search')
+        $controller->searchProducts();
 }
 ?>
