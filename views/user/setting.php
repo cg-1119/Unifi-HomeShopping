@@ -33,8 +33,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
                         현재 배송지 : <?= htmlspecialchars($user['address'])?>
                     </li>
                     <li class="list-group-item">
-                        <label class="form-label">새 배송지</label>
-                        <input type="text" class="form-control" name="address" placeholder="배송지 입력">
+                        <label class="form-label">새 배송지 <input type="button" class="btn btn-secondary" onclick="searchPostcode()" value="주소 찾기"></label>
+                        <input type="text" class="form-control" id="roadAddress" name="address" placeholder="배송지 입력 (도로명주소)">
                     </li>
                 </ul>
             </div>
@@ -49,6 +49,33 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
 ?>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function searchPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                var extraRoadAddr = ''; // 참고 항목 변수
+
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraRoadAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraRoadAddr !== ''){
+                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                }
+                document.getElementById("roadAddress").value = roadAddr;
+
+            }
+        }).open();
+    }
+</script>
 </body>
 
 </html>
