@@ -14,10 +14,6 @@
     <div class="container my-3">
         <div class="row justify-content-end">
             <div class="col-md-6">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="검색어를 입력하세요">
-                    <button class="btn btn-outline-secondary" type="button">검색</button>
-                </div>
             </div>
         </div>
     </div>
