@@ -59,7 +59,8 @@ $totalPages = ceil($totalUsers / $perPage);
         </thead>
         <tbody>
         <?php if (!empty($users)): ?>
-            <?php foreach ($users as $user): ?>
+            <?php foreach ($users as $user):
+                if(!$user['point']) $user['point'] = 0?>
                 <tr>
                     <td><?= htmlspecialchars($user['uid']) ?></td>
                     <td><?= htmlspecialchars($user['id']) ?></td>
