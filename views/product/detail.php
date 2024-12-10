@@ -69,7 +69,7 @@ if ($isLoggedIn) {
 </div>
 
 <div class="container">
-    <a href="/views/product/index.php" class="text-decoration-none text-black">상품 리스트</a>
+    <a href="/views/product/index.php" class="btn btn-secondary mb-4">뒤로 가기</a>
     <div class="d-flex justify-content-between">
         <!-- 왼쪽: 대표 이미지 및 추가 이미지 선택 -->
         <div class="product-thumbnail mb-3">
@@ -96,9 +96,9 @@ if ($isLoggedIn) {
                                                class="text-danger"><?php echo $product['price']; ?>원</span></p>
             </div>
             <div class="d-grid gap-2 mb-3">
-                <button type="button" class="btn btn-success btn-lg"
+                <button type="button" class="btn btn-outline-primary"
                         onclick="addToCart(<?= $product['id'] ?>, parseInt(document.getElementById('quantity').value || 1), 'redirect')">
-                    구매하기
+                    <i class="bi bi-upc-scan"></i> 구매하기
                 </button>
             </div>
             <div class="d-flex justify-content-between">
@@ -119,10 +119,10 @@ if ($isLoggedIn) {
                 <?php endif; ?>
                 <button
                         type="button"
-                        class="btn btn-primary btn-lg"
+                        class="btn btn-outline-success"
                         data-bs-toggle="modal" data-bs-target="#cartModal"
                         onclick="addToCart(<?php echo $product['id']; ?>, parseInt(document.getElementById('quantity').value || 1), 'modal')">
-                    장바구니에 추가
+                    <i class="bi bi-cart-plus"></i> 장바구니에 추가
                 </button>
             </div>
         </div>
