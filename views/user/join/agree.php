@@ -12,7 +12,7 @@
 
 <body>
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php';
 ?>
 <div class="container">
     <div class="d-flex justify-content-center"><h2>약관 동의</div>
@@ -65,7 +65,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php';
 </div>
 
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/views/home/footer.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php';
 ?>
 <!-- JavaScript 파일 연결 -->
 <script src="/public/js/custom/buttonChange.js"></script>
