@@ -152,6 +152,16 @@ footer {
     transform: scale(1.1);
 }
 
+/* 검색 바*/
+#searchResults .list-group-item {
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+#searchResults .list-group-item:hover {
+    background-color: #f0f0f0;
+}
+
 
 /* detail */
 .product-thumbnail {
