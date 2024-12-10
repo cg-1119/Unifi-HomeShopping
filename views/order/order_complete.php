@@ -66,7 +66,7 @@ $totalPrice = 0;
     </div>
     <div class="text-center mt-5">
         <a href="/views/home/index.php" class="btn btn-primary">홈으로 돌아가기</a>
-        <a href="/views/user/my_orders.php?order_id=<?= htmlspecialchars($orderId) ?>" class="btn btn-secondary">주문 내역 보기</a>
+        <a href="/views/user/mypage.php" class="btn btn-secondary">주문 내역 보기</a>
     </div>
 </div>
 
