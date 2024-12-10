@@ -48,7 +48,7 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
     </div>
 </div>
 <div class="container mt-5">
-    <h2 class="text-center mb-4">마이 페이지</h2>
+    <h2 class="text-center m-5">마이 페이지</h2>
     <!-- 정보 표시 -->
     <h5 class="mb-4">내 정보</h5>
     <div class="card mb-4">

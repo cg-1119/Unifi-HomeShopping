@@ -4,9 +4,16 @@
     font-family: Pretendard, 'sans-serif' !important;
 }
 
-body {
-    margin-top: 100px;
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
+
+.container {
+    flex: 1;
+}
+
 /* header */
 .navbar {
     position: relative;
@@ -28,8 +35,8 @@ header {
 
 /* footer */
 footer {
-    bottom: 0;
-    width: 100%;
+    margin-top: auto;
+    padding: 10px 0;
 }
 
 /* box */

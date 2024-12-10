@@ -57,7 +57,7 @@ foreach ($cart as $item) {
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/home/header.php'; ?>
 
 <div class="container mt-5">
-    <h2 class="mb-4">장바구니</h2>
+    <h2 class="m-5">장바구니</h2>
 
     <?php if (empty($cart)): ?>
         <div class="text-center">

@@ -99,7 +99,7 @@ $point = $user['point'] ?? 0;
 <div id="orderData" style="display: none;"></div>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">주문하기</h1>
+    <h1 class="text-center m-5">주문하기</h1>
     <div class="order-container">
         <!-- 왼쪽 영역 -->
         <div class="order-left">
