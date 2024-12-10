@@ -23,12 +23,40 @@ $products = $productModel->getProducts($selectedCategory);
 
 <div class="container mt-5">
     <!-- 카테고리 필터 -->
-    <div class="d-flex justify-content-center mb-4">
-        <a href="index.php" class="btn btn-primary mx-2 <?php echo is_null($selectedCategory) ? 'active' : ''; ?>">전체</a>
-        <a href="index.php?category=wifi" class="btn btn-primary mx-2 <?php echo $selectedCategory === 'wifi' ? 'active' : ''; ?>">와이파이</a>
-        <a href="index.php?category=gateway" class="btn btn-primary mx-2 <?php echo $selectedCategory === 'gateway' ? 'active' : ''; ?>">게이트웨이</a>
-        <a href="index.php?category=accessories" class="btn btn-primary mx-2 <?php echo $selectedCategory === 'accessories' ? 'active' : ''; ?>">악세서리</a>
+    <div class="d-flex justify-content-center align-items-center mb-4 flex-wrap">
+        <div class="text-center mx-3">
+            <a href="?category=" class="nav-link">
+                <img src="/public/images/icons/icon-all.svg" alt="UniFi Cloud Gateways" class="category-icon" style="width: 50px;">
+                <span>전체</span>
+            </a>
+        </div>
+        <div class="text-center mx-3">
+            <a href="?category=gateway" class="nav-link">
+                <img src="/public/images/icons/icon-cloud-gateways.svg" alt="UniFi Cloud Gateways" class="category-icon" style="width: 130px;">
+                <span>클라우드 게이트웨이</span>
+            </a>
+        </div>
+        <div class="text-center mx-3">
+            <a href="?category=switching" class="nav-link">
+                <img src="/public/images/icons/icon-switching.svg" alt="Switching" class="category-icon" style="width: 80px;">
+                <span>스위칭</span>
+            </a>
+        </div>
+        <div class="text-center mx-3">
+            <a href="?category=wifi" class="nav-link">
+                <img src="/public/images/icons/icon-wifi.svg" alt="WiFi" class="category-icon" style="width: 60px;">
+                <span>와이파이</span>
+            </a>
+        </div>
+        <div class="text-center mx-3">
+            <a href="?category=accessories" class="nav-link">
+                <img src="/public/images/icons/icon-accessories.svg" alt="Accessories" class="category-icon" style="width: 80px;">
+                <span>악세서리</span>
+            </a>
+        </div>
     </div>
+
+
 
     <!-- 상품 목록 -->
     <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
