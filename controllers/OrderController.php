@@ -97,18 +97,6 @@ class OrderController
 
 
     // 관리자용
-    // 주문 삭제
-    public function deleteOrder()
-    {
-        $orderId = $_GET['order_id'] ?? null;
-
-        if ($orderId) {
-            $this->orderModel->deleteOrder($orderId);
-        }
-
-        header('Location: /views/admin/order_management.php');
-    }
-
     // 배달 상태 업데이트
     public function updateDeliveryStatus()
     {
