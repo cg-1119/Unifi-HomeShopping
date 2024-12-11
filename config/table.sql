@@ -62,17 +62,17 @@ CREATE TABLE payments
     FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE
 );
 
-CREATE TABLE product_comments
+CREATE TABLE product_reviews
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
-    product_id INT          NOT NULL,
-    user_id    INT          NOT NULL,
-    comment    TEXT     DEFAULT NULL,
-    img_path   VARCHAR(255) NOT NULL,
-    rating     TINYINT UNSIGNED NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    product_id INT  NOT NULL,
+    user_id    INT  NOT NULL,
+    rate       INT  NOT NULL,
+    content    TEXT NOT NULL,
+    image_path VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (product_id) REFERENCES products (id),
-    FOREIGN KEY (user_id) REFERENCES users (uid)
+    FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users (uid) ON DELETE CASCADE
 );
 
 CREATE TABLE wishlist
