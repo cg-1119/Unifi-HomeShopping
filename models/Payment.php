@@ -26,7 +26,8 @@ class Payment
     // 포인트 추가
     public function setUserPoint($orderId, $paymentPrice) {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("
+        try {
+            $stmt = $pdo->prepare("
         UPDATE users
         SET point = point + (:payment_price * 0.01)
         WHERE uid = (
@@ -39,10 +40,14 @@ class Payment
             )
         )
     ");
-        $stmt->execute([
-            'order_id' => $orderId,
-            'payment_price' => $paymentPrice
-        ]);
+            return $stmt->execute([
+                'order_id' => $orderId,
+                'payment_price' => $paymentPrice
+            ]);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
     public function setOrderStatus($orderId, $status) {
         $pdo = $this->db->connect();
