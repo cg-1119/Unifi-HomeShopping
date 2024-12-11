@@ -115,7 +115,8 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
                                 <p class="<?= $order['status'] === 'cancelled' ? 'text-danger' : 'text-primary' ?>">
                                     <?php
                                     if ($order['status'] === 'cancelled') {
-                                        echo '주문 취소';
+                                        if($order['is_cancelled_by_admin']) echo '주문 취소 완료';
+                                        else echo '주문 취소 대기';
                                     } else {
                                         switch ($order['delivery_status']) {
                                             case 'pending':
