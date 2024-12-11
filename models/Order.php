@@ -109,7 +109,7 @@ class Order
     // 전체 주문 수 가져오기
     public function getTotalOrderCount() {
         $pdo = $this->db->connect();
-        $stmt = $pdo->query("SELECT COUNT(*) as total FROM orders");
+        $stmt = $pdo->query("SELECT COUNT(*) as total FROM orders WHERE status != 'cancelled'");
         return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
     // 배송 상태 기준 주문 가져오기
@@ -127,14 +127,15 @@ class Order
             FROM 
                 orders o
             LEFT JOIN 
-                order_details od ON o.id = od.order_id
+                order_details od 
+                ON o.id = od.order_id
             WHERE 
                 o.delivery_status = :delivery_status
-            AND o.status != 'cancelled'
+                AND o.status != 'cancelled'
             GROUP BY 
                 o.id, o.user_id, o.order_date, o.status, o.delivery_status
            ORDER BY 
-            o.order_date DESC
+                o.order_date DESC
             LIMIT :offset, :limit
                 ");
             $stmt->bindparam(":delivery_status", $deliveryStatus, PDO::PARAM_STR);
@@ -150,7 +151,7 @@ class Order
     // 배송 상태별 주문 수 가져오기
     public function getTotalOrderCountByDeliveryStatus($delivery_status) {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE delivery_status = :delivery_status");
+        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE delivery_status = :delivery_status AND status != 'cancelled'");
         $stmt->bindParam(':delivery_status', $delivery_status, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchColumn();
