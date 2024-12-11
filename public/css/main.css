@@ -1,3 +1,8 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+* {
+    font-family: Pretendard, 'sans-serif' !important;
+}
 /* 기본 스타일 */
 body, html {
     margin: 0;
@@ -6,8 +11,26 @@ body, html {
     height: 100%;
     overflow: hidden;
 }
+/* 네비게이션 */
+.nav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: color 0.2s ease-in-out;
+    margin: 0 15px;
+}
 
-/* 섹션 레이아웃 */
+.nav-link:hover {
+    color: #007bff;
+}
+
+.nav-link.active {
+    color: #007bff;
+    font-weight: bold;
+}
+
 .section {
     width: 100%;
     height: 100vh;
@@ -20,7 +43,6 @@ body, html {
     z-index: -1;
 }
 
-/* 배경 */
 .background {
     position: absolute;
     top: 0;
@@ -42,10 +64,10 @@ body, html {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     text-align: center;
     white-space: nowrap;
-    border-right: 2px solid white; /* 타이핑 효과 커서 */
+    border-right: 2px solid white;
     animation: typing 2s steps(30, end), blink 0.5s step-end infinite;
-    overflow: hidden; /* 텍스트 잘림 방지 */
-    z-index: 1; /* 비디오 위에 표시 */
+    overflow: hidden;
+    z-index: 1;
 }
 
 /* 이미지 섹션 */
@@ -87,7 +109,7 @@ body, html {
         width: 0;
     }
     to {
-        width: 45%; /* 텍스트 끝까지 타이핑 */
+        width: 30%; /* 텍스트 끝까지 타이핑 */
     }
 }
 
