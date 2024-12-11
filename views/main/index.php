@@ -25,7 +25,7 @@
     <img src="/public/images/main/page2.jpg" class="background">
     <div class="product-intro">
         <div class="product-item">
-            <h2>클라우드 게이트</h2>
+            <h2>클라우드 게이트웨이</h2>
             <p>강력하고 효율적인 네트워크 관리를 위한 클라우드 기반 솔루션. 언제 어디서나 연결 상태를 제어하세요.</p>
         </div>
         <div class="product-item">
