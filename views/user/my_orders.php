@@ -53,6 +53,9 @@ function renderDeliveryStatus($currentStatus) {
     $output .= '</div>';
     return $output;
 }
+// 리뷰 확인
+require_once $_SERVER['DOCUMENT_ROOT'] . '/models/ProductReview.php';
+$productReview = new ProductReview();
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -89,6 +92,20 @@ function renderDeliveryStatus($currentStatus) {
                 </a>
                 <strong><?= number_format($price) ?>원</strong>
             </li>
+            <?php if ($orderDetails['delivery_status'] === 'delivered'): ?>
+
+            <?php $hasReviewed = $productReview->hasUserReviewedProduct($detail['product_id'], $_SESSION['user']['uid']);?>
+
+            <?php if (!$hasReviewed): ?>
+                <li class="list-group-item">
+                    <a href="javascript:void(0);"
+                                               onclick="window.open('add_review.php?product_id=<?= htmlspecialchars($detail['product_id'])?>&user_id=<?= htmlspecialchars($_SESSION['user']['uid'])?>',
+                                                       'ReviewWindow', 'width=400,height=600,resizable=no,scrollbars=yes');">
+                        <button type="button" class="btn btn-success btn-sm">리뷰 작성</button>
+                    </a>
+                </li>
+            <?php endif ?>
+        <?php endif ?>
         <?php endforeach; ?>
     </ul>
     <p style="text-align-last: end">총 금액: <strong class="text-success" id="finalPrice"><?= number_format($totalPrice) ?>
