@@ -12,8 +12,8 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php';
 ?>
-<div class="container">
-    <div class="d-flex justify-content-center"><h2>정보 입력</div>
+<div class="container mt-5">
+    <div class="d-flex justify-content-center"><h2 class="mt-5">정보 입력</div>
     <form method="POST" action="/controllers/UserController.php" class="needs-validation" novalidate>
         <div class="mt-5 d-flex flex-column justify-content-center">
             <div class="box">

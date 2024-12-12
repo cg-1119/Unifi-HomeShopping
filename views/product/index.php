@@ -23,7 +23,7 @@ $products = $productModel->getProducts($selectedCategory);
 
 <div class="container mt-5">
     <!-- 검색 -->
-    <div class="search-container d-flex justify-content-center align-items-center position-relative mt-4">
+    <div class="search-container d-flex justify-content-center align-items-center position-relative m-5">
         <div class="input-group" style="width: 50%; background-color: #f9f9f9; border-radius: 10px;">
         <span class="input-group-text" style="background: transparent; border: none;">
             <i class="bi bi-search" style="font-size: 1.2rem; color: gray;"></i>

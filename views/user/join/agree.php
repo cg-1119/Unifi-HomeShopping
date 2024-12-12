@@ -14,8 +14,8 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php';
 ?>
-<div class="container">
-    <div class="d-flex justify-content-center"><h2>약관 동의</div>
+<div class="container mt-5">
+    <div class="d-flex justify-content-center"><h2 class="m-5">약관 동의</div>
     <form method-="GET" action="verify.php">
         <div class="d-flex flex-column justify-content-center">
             <div class="border-box">

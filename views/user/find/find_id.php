@@ -11,9 +11,10 @@
 
 <body>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
-<div class="container">
+<div class="container mt-5">
     <form class="needs-validation" method="POST" action="/controllers/UserController.php" novalidate>
         <div class="mt-5 d-flex flex-column justify-content-center">
+            <h2 class="text-center m-5">아이디 찾기</h2>
             <div class="border-box">
                 <div style="padding:24px; width: 100%;">
                     <div class="has-validation">

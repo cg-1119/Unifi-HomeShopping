@@ -13,8 +13,8 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php';
 ?>
-<div class="container">
-    <div class="d-flex justify-content-center"><h2>로그인</h2></div>
+<div class="container mt-5">
+    <div class="d-flex justify-content-center"><h2 class="m-5">로그인</h2></div>
     <form class="needs-validation" method="POST" action="/controllers/LoginController.php" novalidate>
         <div class="mt-5 d-flex flex-column justify-content-center">
             <div class="border-box">
