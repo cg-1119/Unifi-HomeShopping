@@ -1,14 +1,16 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Product.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Wishlist.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/models/ProductReview.php';
 header('Content-Type: text/html; charset=utf-8');
+date_default_timezone_set('Asia/Seoul');
 
 session_start();
 
 // 모델 불러오기
 $productModel = new Product();
 $wishlistModel = new Wishlist();
-
+$productReviewModel = new ProductReview();
 
 // 상품 ID 가져오기
 $productId = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -38,6 +40,14 @@ $isInWishlist = false;
 if ($isLoggedIn) {
     $isInWishlist = $wishlistModel->isProductInWishlist($uid, $productId);
 }
+
+// 상품 리뷰 가져오기
+$productReviews = $productReviewModel->getReviewsByProductId($productId);
+// 평균 레이팅
+$ratingData = $productReviewModel->getAverageRatingAndReviewCount($productId);
+$averageRating = round($ratingData['average_rating'], 1); // 소수점 한 자리까지 반올림
+$reviewCount = $ratingData['review_count'];
+?>
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,7 +78,7 @@ if ($isLoggedIn) {
     </div>
 </div>
 
-<div class="container">
+<div class="container mt-5">
     <a href="/views/product/index.php" class="btn btn-secondary mb-4">뒤로 가기</a>
     <div class="d-flex justify-content-between">
         <!-- 왼쪽: 대표 이미지 및 추가 이미지 선택 -->
@@ -128,12 +138,19 @@ if ($isLoggedIn) {
         </div>
     </div>
     <!-- 추가 이미지 -->
-    <div class="thumbnail-images">
+    <div class="thumbnail-images mt-5">
         <?php foreach ($imageUrlArray as $imageUrl): ?>
             <img src="<?php echo $imageUrl; ?>" alt="추가 이미지" class="img-thumbnail me-2 mb-2"
                  style="width: 80px; height: 80px; cursor: pointer;"
                  onclick="changeImage('<?php echo $imageUrl; ?>')">
         <?php endforeach; ?>
+    </div>
+    <!-- 평균 레이팅 -->
+    <div class="mt-5">
+        <h4>
+            <i class="bi-star-fill text-warning"></i>
+            <?= $averageRating ?> <span class="m-2" style="display: inline-block; width: 5px; height: 5px; background-color: black; border-radius: 50%; vertical-align: middle;"></span> 리뷰(<?= $reviewCount ?>개)
+        </h4>
     </div>
     <!-- 상품 설명을 구매 섹션 아래로 이동 -->
     <div class="mt-5">
@@ -141,29 +158,35 @@ if ($isLoggedIn) {
             <?php echo $product['description']; // HTML 태그 유지 ?>
         </div>
     </div>
-    <!-- 댓글 작성할 예정
-    <div class="mt-4">
-        <h5>댓글 <//?php echo count($comments); ?>개</h5>
-        <//?php if (!empty($comments)): ?>
-            <ul class="list-group mb-4">
-                <//?php foreach ($comments as $comment): ?>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <div>
-                            <strong><//?php echo htmlspecialchars($comment['username']); ?></strong><br>
-                            <span><//?php echo htmlspecialchars($comment['content']); ?></span><br>
-                            <small class="text-muted">작성일: <//?php echo $comment['created_at']; ?></small>
-                        </div>
-                    </li>
-                <//?php endforeach; ?>
-            </ul>
-        <//?php else: ?>
-            <p>댓글이 없습니다.</p>
-        <//?php endif; ?>
-    </div>-->
+    <!-- 리뷰  -->
+    <hr class="mt-5">
+    <div class="mt-5">
+        <h2 class="text-primary mt-5">상품 리뷰</h2>
+        <h4 class="mt-5">
+            <i class="bi-star-fill text-warning"></i>
+            <?= $averageRating ?> <span class="m-2" style="display: inline-block; width: 5px; height: 5px; background-color: black; border-radius: 50%; vertical-align: middle;"></span> 리뷰(<?= $reviewCount ?>개)
+        </h4>
+        <?php if (!empty($productReviews)): ?>
+            <?php foreach ($productReviews as $review): ?>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p><strong>사용자:</strong> <?= htmlspecialchars($review['user_identifier']); ?></p>
+                        <p><strong>별점:</strong> <?= htmlspecialchars($review['rate']); ?>/5</p>
+                        <p><strong>내용:</strong> <?= htmlspecialchars($review['content']); ?></p>
+                        <?php if (!empty($review['image_path'])): ?>
+                            <img src="<?= htmlspecialchars($review['image_path']); ?>" alt="리뷰 이미지" class="img-fluid mt-3" style="max-width: 200px;">
+                        <?php endif; ?>
+                        <small class="text-muted">작성일: <?= date('Y년 m월 d일', strtotime($review['created_at'])) ?></small>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>등록된 리뷰가 없습니다.</p>
+        <?php endif; ?>
+    </div>
 </div>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
-<script src="/public/js/custom/cart.js"></script>
 <script src="/public/js/custom/product.js"></script>
 </body>
 </html>
