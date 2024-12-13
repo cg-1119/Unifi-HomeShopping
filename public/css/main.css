@@ -52,8 +52,8 @@ body, html {
     object-fit: cover; /* 비율 유지하면서 화면 채우기 */
 }
 
-/* 웰컴 컨테이너 */
-.welcome-container {
+/* 헤더 컨테이너 */
+.header-container {
     position: absolute;
     top: 10%;
     left: 50%;
@@ -64,8 +64,6 @@ body, html {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     text-align: center;
     white-space: nowrap;
-    border-right: 2px solid white;
-    animation: typing 2s steps(30, end), blink 0.5s step-end infinite;
     overflow: hidden;
     z-index: 1;
 }
@@ -76,83 +74,61 @@ body, html {
     height: auto;
 }
 
-/* 페이드 인/아웃 효과 */
-.fade-out {
-    animation: fadeOut 0.5s forwards;
+.headerText {
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
 }
 
-.fade-in {
-    animation: fadeIn 0.5s forwards;
+.headerText.fade-in {
+    opacity: 1;
 }
 
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* 타이핑 애니메이션 */
-@keyframes typing {
-    from {
-        width: 0;
-    }
-    to {
-        width: 30%; /* 텍스트 끝까지 타이핑 */
-    }
-}
-
-@keyframes blink {
-    50% {
-        border-color: transparent; /* 커서 깜박임 효과 */
-    }
-}
-
-/* 타이핑 애니메이션 종료 후 */
-.welcome-container.typing-done {
-    animation: none; /* 애니메이션 제거 */
-    border-right: none; /* 커서 제거 */
+.headerText.fade-out {
+    opacity: 0;
 }
 
 .product-intro {
     position: absolute;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+    align-items: stretch;
     justify-content: center;
     color: white;
     text-align: center;
-    margin-top: 100px;
+    margin-top: 10%;
     width: 100%;
 }
 
 .product-item {
-    margin: 30px 0;
     padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    background: rgba(0, 0, 0, 0.6);
-    width: 70%;
-    max-width: 700px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    width: 30%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.product-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .product-item h2 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     margin-bottom: 15px;
 }
 
 .product-item p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 1.8;
 }
