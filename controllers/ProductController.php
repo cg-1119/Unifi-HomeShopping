@@ -1,6 +1,5 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Product.php';
-header('Content-Type: application/json; charset=utf-8');
 
 class ProductController
 {
