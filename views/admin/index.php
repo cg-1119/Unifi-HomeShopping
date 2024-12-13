@@ -15,7 +15,7 @@ session_start();
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 
 <div class="container mt-5">
-    <h2>관리자 페이지</h2>
+    <h2 class="text-center m-5">관리자 페이지</h2>
     <div class="row mt-4">
         <div class="col-md-4">
             <div class="card">

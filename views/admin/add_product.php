@@ -22,7 +22,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] != 1) {
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 
 <div class="container mt-5">
-    <h2>상품 등록</h2>
+    <h2 class="text-center m-5">상품 등록</h2>
     <form action="/controllers/ProductController.php" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label for="category">카테고리</label>

@@ -11,8 +11,10 @@ if (session_id() == '') {
 <header>
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container d-flex justify-content-between align-items-center">
-            <a class="nav-link" href="/views/main/index.php" style="font-weight: bold;">Cg1119</a>
-            <a href="/views/product/index.php" class="text-decoration-none text-black">상품 리스트</a>
+            <div class="d-flex align-items-center gap-2">
+                <a class="nav-link" href="/views/main/index.php" style="font-weight: bold;">Cg1119</a>
+                <a class="nav-link" href="/views/product/index.php">Product</a>
+            </div>
             <div class="d-flex gap-3 align-items-center">
                 <?php if (isset($_SESSION['user'])): ?>
                     <?php if ($_SESSION['user']['is_admin'] == 1): ?>
