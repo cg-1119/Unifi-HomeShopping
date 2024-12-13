@@ -45,8 +45,11 @@ if ($isLoggedIn) {
 $productReviews = $productReviewModel->getReviewsByProductId($productId);
 // 평균 레이팅
 $ratingData = $productReviewModel->getAverageRatingAndReviewCount($productId);
-$averageRating = round($ratingData['average_rating'], 1); // 소수점 한 자리까지 반올림
-$reviewCount = $ratingData['review_count'];
+if($ratingData['average_rating'])
+    $averageRating = round($ratingData['average_rating'], 1); // 소수점 한 자리까지 반올림
+else
+    $averageRating = 0;
+$reviewCount = $ratingData['review_count'] ?? 0;
 ?>
 ?>
 <!DOCTYPE html>
