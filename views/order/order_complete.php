@@ -26,7 +26,7 @@ $totalPrice = 0;
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
 
 <div class="container mt-5">
-    <h1 class="text-center">결제가 성공적으로 완료되었습니다!</h1>
+    <h1 class="text-center m-5">결제가 성공적으로 완료되었습니다!</h1>
     <p class="text-center">주문 번호: <?= htmlspecialchars($orderId) ?></p>
 
     <!-- 주문 상품 정보 -->

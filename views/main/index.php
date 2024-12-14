@@ -64,9 +64,7 @@
         </div>
     </div>
 </div>
-
-
-
+</body>
 <script src="/public/js/custom/main.js"></script>
 <script src="https://unpkg.com/type-hangul"></script>
 <script>
@@ -76,5 +74,4 @@
     });
     TypeHangul.type('#target', { intervalType: 50});
 </script>
-</body>
 </html>
