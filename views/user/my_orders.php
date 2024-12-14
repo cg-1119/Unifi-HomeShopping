@@ -145,7 +145,7 @@ $productReview = new ProductReview();
         const reviewWindow = window.open(
             `add_review.php?product_id=${productId}&user_id=${userId}`,
             'ReviewWindow',
-            'width=400,height=600,resizable=no,scrollbars=yes'
+            'width=500,height=600,resizable=no,scrollbars=yes'
         );
 
         // 일정 간격으로 새 창 상태를 확인
