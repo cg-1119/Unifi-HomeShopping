@@ -99,8 +99,7 @@ $productReview = new ProductReview();
             <?php if (!$hasReviewed): ?>
                 <li class="list-group-item">
                     <a href="javascript:void(0);"
-                                               onclick="window.open('add_review.php?product_id=<?= htmlspecialchars($detail['product_id'])?>&user_id=<?= htmlspecialchars($_SESSION['user']['uid'])?>',
-                                                       'ReviewWindow', 'width=400,height=600,resizable=no,scrollbars=yes');">
+                       onclick="openReviewWindow('<?= htmlspecialchars($detail['product_id'])?>', '<?= htmlspecialchars($_SESSION['user']['uid'])?>');">
                         <button type="button" class="btn btn-success btn-sm">리뷰 작성</button>
                     </a>
                 </li>
@@ -140,4 +139,22 @@ $productReview = new ProductReview();
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 </body>
+<script>
+    function openReviewWindow(productId, userId) {
+        // 새 창 열기
+        const reviewWindow = window.open(
+            `add_review.php?product_id=${productId}&user_id=${userId}`,
+            'ReviewWindow',
+            'width=400,height=600,resizable=no,scrollbars=yes'
+        );
+
+        // 일정 간격으로 새 창 상태를 확인
+        const interval = setInterval(() => {
+            if (reviewWindow.closed) {
+                clearInterval(interval); // Interval 제거
+                location.reload(); // 페이지 새로고침
+            }
+        }, 500); // 500ms 간격으로 확인
+    }
+</script>
 </html>
