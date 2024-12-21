@@ -85,3 +85,12 @@ CREATE TABLE wishlist
     FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE,
     UNIQUE KEY (user_id, product_id) -- 동일한 상품을 중복으로 찜하지 않도록 설정
 );
+
+CREATE TABLE points
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    user_id    INT,
+    point      INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (uid) ON DELETE CASCADE
+);
