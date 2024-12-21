@@ -29,7 +29,7 @@ class OrderController
             foreach ($cart as $item) $this->orderDetailModel->setOrderDetail($orderId, $item['id'], $item['quantity'], $item['price']);
 
             $_SESSION['order_id'] = $orderId;
-            echo json_encode(['success' => true, 'orderId' => $orderId, 'finalPrice' => $finalPrice]);
+            echo json_encode(['success' => true, 'orderId' => $orderId, 'userId' => $uid, 'finalPrice' => $finalPrice]);
         } catch (PDOException $e) {
             error_log("주문 생성 오류: " . $e->getMessage());
             echo json_encode(['success' => false, 'message' => '주문 생성 중 오류가 발생했습니다.']);

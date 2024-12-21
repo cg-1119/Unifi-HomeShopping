@@ -22,33 +22,7 @@ class Payment
         ]);
         return $pdo->lastInsertId();
     }
-
-    // 포인트 추가
-    public function setUserPoint($orderId, $paymentPrice) {
-        $pdo = $this->db->connect();
-        try {
-            $stmt = $pdo->prepare("
-        UPDATE users
-        SET point = point + (:payment_price * 0.01)
-        WHERE uid = (
-            SELECT user_id 
-            FROM orders
-            WHERE id = (
-                SELECT order_id
-                FROM payments
-                WHERE id = :order_id
-            )
-        )
-    ");
-            return $stmt->execute([
-                'order_id' => $orderId,
-                'payment_price' => $paymentPrice
-            ]);
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            return false;
-        }
-    }
+    // 주문 상태 변경
     public function setOrderStatus($orderId, $status) {
         $pdo = $this->db->connect();
         try {

@@ -19,6 +19,7 @@ class PaymentController
             }
 
             $orderId = $inputData["orderId"] ?? null;
+            $userId = $inputData["userId"] ?? null;
             $paymentMethod = $inputData["paymentMethod"] ?? null;
             $paymentPrice = $inputData["paymentPrice"] ?? null;
             $paymentInfo = $inputData["paymentInfo"] ?? null;
@@ -30,10 +31,13 @@ class PaymentController
             if ($paymentPrice <= 0) {
                 echo json_encode(['success' => false, 'message' => '유효하지 않은 결제 금액입니다.']);
             }
-
+            // 결제 저장 밑 주문 상태 변경
             $this->paymentModel->setPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice);
-            $this->paymentModel->setUserPoint($orderId, $paymentPrice);
             $this->paymentModel->setOrderStatus($orderId, 'completed');
+            // 포인트 모델 생성
+            require_once $_SERVER['DOCUMENT_ROOT'] . "/models/Point.php";
+            $pointModel = new Point();
+            $pointModel->setUserPoint($userId, $paymentPrice);
 
             // 세션 초기화
             if (session_status() === PHP_SESSION_NONE)

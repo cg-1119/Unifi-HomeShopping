@@ -80,8 +80,9 @@ function createOrder(data) {
         .then(data => {
             if (data.success) {
                 // 데이터를 특정 ID를 가진 DOM 요소에 저장
-                const orderDataElement = document.getElementById('orderData');
+                const orderDataElement = document.getElementById('orderData')
                 orderDataElement.setAttribute('data-order-id', data.orderId);
+                orderDataElement.setAttribute('data-user-id', data.userId);
                 orderDataElement.setAttribute('data-final-price', data.finalPrice);
                 return data;
             } else {
@@ -94,7 +95,7 @@ function createOrder(data) {
 }
 
 // 결제 정보 제출
-function submitCheckout(orderId, finalPrice) {
+function submitCheckout(orderId, userId, finalPrice) {
     const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
     const paymentInfo = document.querySelector(`#${paymentMethod}Fields input`).value;
 
@@ -105,6 +106,7 @@ function submitCheckout(orderId, finalPrice) {
         body: JSON.stringify({
             action: 'addPayment',
             orderId: orderId,
+            userId: userId,
             paymentPrice: finalPrice,
             paymentMethod: paymentMethod,
             paymentInfo: paymentInfo
@@ -127,7 +129,7 @@ function submitCheckout(orderId, finalPrice) {
 function createOrderPayment(data) {
     createOrder(data)
         .then(orderData => {
-            submitCheckout(orderData.orderId, orderData.finalPrice);
+            submitCheckout(orderData.orderId, orderData.userId, orderData.finalPrice);
         })
         .catch(error => {
             console.error('주문, 결제 처리 오류', error);
