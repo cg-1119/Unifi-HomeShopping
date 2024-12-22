@@ -1,5 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
+
 class Order
 {
     private $db;
@@ -10,7 +11,8 @@ class Order
     }
 
     // 주문 생성
-    public function setOrder($uid, $address, $phone) {
+    public function setOrder($uid, $address, $phone)
+    {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("INSERT INTO orders (user_id, address, phone) 
                 VALUES (:user_id, :address, :phone)");
@@ -23,7 +25,8 @@ class Order
     }
 
     // 주문 상태 업데이트
-    public function updateOrderStatus($orderId, $status) {
+    public function updateOrderStatus($orderId, $status)
+    {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("UPDATE orders SET status = :status WHERE id = :order_id");
         $stmt->execute([
@@ -33,7 +36,8 @@ class Order
     }
 
     // 주문 취소 이유 업데이트
-    public function updateOrderCancelReason($orderId, $cancel_reason) {
+    public function updateOrderCancelReason($orderId, $cancel_reason)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("
@@ -51,7 +55,8 @@ class Order
     }
 
     // 주문 조회
-    public function getOrderById($orderId) {
+    public function getOrderById($orderId)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("SELECT * FROM orders WHERE id = :order_id");
@@ -63,8 +68,10 @@ class Order
             return false;
         }
     }
+
     // 특정 사용자의 주문 조회
-    public function getOrdersByUserid($uid) {
+    public function getOrdersByUserid($uid)
+    {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_date DESC");
         $stmt->bindparam(":user_id", $uid);
@@ -74,7 +81,8 @@ class Order
 
     // 관리자용
     // 모든 주문 가져오기
-    public function getAllOrders($offset, $limit) {
+    public function getAllOrders($offset, $limit)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("
@@ -106,14 +114,18 @@ class Order
             return false;
         }
     }
+
     // 전체 주문 수 가져오기
-    public function getTotalOrderCount() {
+    public function getTotalOrderCount()
+    {
         $pdo = $this->db->connect();
         $stmt = $pdo->query("SELECT COUNT(*) as total FROM orders WHERE status != 'cancelled'");
         return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
+
     // 배송 상태 기준 주문 가져오기
-    public function getOrdersByDeliveryStatus($deliveryStatus, $offset, $limit) {
+    public function getOrdersByDeliveryStatus($deliveryStatus, $offset, $limit)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("
@@ -148,8 +160,10 @@ class Order
             return false;
         }
     }
+
     // 배송 상태별 주문 수 가져오기
-    public function getTotalOrderCountByDeliveryStatus($delivery_status) {
+    public function getTotalOrderCountByDeliveryStatus($delivery_status)
+    {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE delivery_status = :delivery_status AND status != 'cancelled'");
         $stmt->bindParam(':delivery_status', $delivery_status, PDO::PARAM_STR);
@@ -158,7 +172,8 @@ class Order
     }
 
     // 취소된 주문 가져오기
-    public function getCanceledOrders($offset, $limit, $isProcessed = null) {
+    public function getCanceledOrders($offset, $limit, $isProcessed = null)
+    {
         $pdo = $this->db->connect();
         try {
             $sql = "
@@ -206,8 +221,10 @@ class Order
             return false;
         }
     }
+
     // 총 취소된 주문 수 가져오기
-    public function getTotalCanceledOrderCount($isProcessed) {
+    public function getTotalCanceledOrderCount($isProcessed)
+    {
         $pdo = $this->db->connect();
         try {
             $query = "SELECT COUNT(*) FROM orders WHERE status = 'cancelled'";
@@ -222,14 +239,16 @@ class Order
             }
 
             $stmt->execute();
-            return (int) $stmt->fetchColumn();
+            return (int)$stmt->fetchColumn();
         } catch (PDOException $e) {
             error_log("getTotalCanceledOrderCount error: " . $e->getMessage());
             return false;
         }
     }
+
     // 배송 상태 업데이트
-    public function updateDeliveryStatus($orderId, $deliveryStatus) {
+    public function updateDeliveryStatus($orderId, $deliveryStatus)
+    {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("UPDATE orders SET delivery_status = :delivery_status WHERE id = :order_id");
         $stmt->execute([
@@ -237,8 +256,10 @@ class Order
             'order_id' => $orderId
         ]);
     }
+
     // 취소 처리
-    public function updatecancellation($orderId) {
+    public function updatecancellation($orderId)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("UPDATE orders SET is_cancelled_by_admin = 1 WHERE id = :order_id");

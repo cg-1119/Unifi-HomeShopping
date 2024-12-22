@@ -4,12 +4,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Wishlist.php';
 class WishlistController
 {
     private $wishlistModel;
-
     public function __construct()
     {
         $this->wishlistModel = new Wishlist();
     }
-
     // 찜 추가
     public function addToWishlist()
     {
@@ -30,7 +28,6 @@ class WishlistController
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
-
     // 찜 제거
     public function removeFromWishlist()
     {
@@ -51,7 +48,6 @@ class WishlistController
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
-
     // 찜 목록 조회
     public function getWishlist()
     {
@@ -71,7 +67,6 @@ class WishlistController
         }
     }
 }
-
 // 요청 처리
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? null;
@@ -88,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['success' => false, 'message' => '유효하지 않은 요청입니다.']);
     }
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $action = $_GET['action'] ?? null;
     $controller = new WishlistController();

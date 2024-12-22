@@ -14,12 +14,12 @@ class ProductReviewController
     public function addProductReview()
     {
         // 입력 검증
-        $productId = (int) $_POST['product_id'] ?? null;
-        $userId = (int) $_POST['user_id'] ?? null;
-        $rate = (int) $_POST['rate'] ?? null;
+        $productId = (int)$_POST['product_id'] ?? null;
+        $userId = (int)$_POST['user_id'] ?? null;
+        $rate = (int)$_POST['rate'] ?? null;
         $content = $_POST['content'] ?? null;
 
-        if (!$productId || !$userId || !$rate|| !$content) {
+        if (!$productId || !$userId || !$rate || !$content) {
             die(json_encode(['error' => 'Invalid input. Please fill out the form correctly.']));
         }
 

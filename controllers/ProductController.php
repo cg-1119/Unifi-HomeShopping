@@ -98,7 +98,9 @@ class ProductController
         error_log("No description images uploaded.");
         return true; // 설명 이미지는 필수가 아니므로 true 반환
     }
-    public function searchProducts() {
+
+    public function searchProducts()
+    {
         if (!isset($_GET['query'])) {
             http_response_code(400);
             echo json_encode(['error' => '검색어가 제공되지 않았습니다.']);

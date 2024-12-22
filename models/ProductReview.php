@@ -1,26 +1,33 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
+
 class ProductReview
 {
     private $db;
-    public function __construct() {
+
+    public function __construct()
+    {
         $this->db = new Database();
     }
+
     public function createEmptyReview($productId, $userId, $rate, $content) {
         $pdo = $this->db->connect();
 
         try {
             $stmt = $pdo->prepare("INSERT INTO product_reviews (product_id, user_id, rate, content) VALUES (:product_id, :user_id, :rate, :content);");
-            $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
-            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-            $stmt->bindParam(':rate', $rate, PDO::PARAM_INT);
-            $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+            $stmt->execute([
+                'product_id' => $productId,
+                'user_id' => $userId,
+                'rate' => $rate,
+                'content' => $content
+            ]);
             return $stmt->execute();
         } catch (PDOException $e) {
             error_log("createEmptyReview Error: " . $e->getMessage());
             return false;
         }
     }
+
     public function updateImagePath($reviewId, $imagePath) {
         $pdo = $this->db->connect();
 
@@ -72,8 +79,7 @@ class ProductReview
     }
 
 
-    public function hasUserReviewedProduct(int $productId, int $userId): bool
-    {
+    public function hasUserReviewedProduct(int $productId, int $userId): bool {
         $pdo = $this->db->connect();
 
         try {

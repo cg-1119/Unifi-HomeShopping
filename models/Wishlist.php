@@ -4,11 +4,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/config/database.php";
 class Wishlist
 {
     private $db;
-    public function __construct() {
+
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
-    public function setWishlist($userId, $productId) {
+    public function setWishlist($userId, $productId)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("INSERT INTO wishlist (user_id, product_id) VALUES (:user_id, :product_id)");
@@ -21,7 +24,9 @@ class Wishlist
             return false;
         }
     }
-    public function removeFromWishlist($userId, $productId) {
+
+    public function removeFromWishlist($userId, $productId)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("DELETE FROM wishlist WHERE user_id = :user_id AND product_id = :product_id");
@@ -34,8 +39,10 @@ class Wishlist
             return false;
         }
     }
+
     // 찜 여부 확인
-    public function isProductInWishlist($userId, $productId) {
+    public function isProductInWishlist($userId, $productId)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM wishlist WHERE user_id = :user_id AND product_id = :product_id");
@@ -49,7 +56,8 @@ class Wishlist
         }
     }
 
-    public function getWishlistByUser($userId) {
+    public function getWishlistByUser($userId)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("
@@ -75,7 +83,6 @@ class Wishlist
             return false;
         }
     }
-
 
 
 }

@@ -1,9 +1,11 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/models/Payment.php";
 header('Content-Type: text/html; charset=utf-8');
+
 class PaymentController
 {
     private $paymentModel;
+
     public function __construct()
     {
         $this->paymentModel = new Payment();
@@ -39,7 +41,7 @@ class PaymentController
             $pointModel = new Point();
             $pointModel->addUserPoint($userId, $orderId, $paymentPrice, 'purchase');
             // 포인트를 사용 했을 때
-            if($point) {
+            if ($point) {
                 preg_replace('/[^\d]/', '', $point);
                 $pointModel->reducePoint($userId, $orderId, $point, 'use');
                 $_SESSION['user']['point'] = $pointModel->getUserPoint($userId);
@@ -55,25 +57,6 @@ class PaymentController
         } catch (Exception $e) {
             error_log("addPayment error: " . $e->getMessage());
             echo json_encode(['success' => false, 'message' => '결제 처리 중 오류가 발생했습니다.']);
-        }
-    }
-    public function getPaymentByOrderId($orderId)
-    {
-        try {
-            return $this->paymentModel->getPaymentByOrderId($orderId);
-        } catch (Exception $e){
-            error_log("getPaymentByOrderId error: " . $e->getMessage());
-            return null;
-        }
-    }
-    public function getAllPayments()
-    {
-        try {
-            $payments = $this->paymentModel->getAllPayments();
-            return $payments;
-        } catch (Exception $e){
-            error_log("getAllPayments error: " . $e->getMessage());
-            return null;
         }
     }
 }

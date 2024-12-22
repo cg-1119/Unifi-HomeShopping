@@ -57,13 +57,4 @@ class OrderDetail
             return [];
         }
     }
-
-    // 모든 주문 상세 조회 (관리자용)
-    public function getAllOrderDetails()
-    {
-        $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("SELECT * FROM order_details");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
 }

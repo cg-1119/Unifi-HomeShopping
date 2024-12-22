@@ -1,15 +1,18 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/config/database.php";
 
-class User {
+class User
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
     // 사용자 등록
-    public function setUser($id, $pw, $name, $email, $phone, $address) {
+    public function setUser($id, $pw, $name, $email, $phone, $address)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -26,8 +29,10 @@ class User {
             return false;
         }
     }
+
     // 개인정보 중복 체크
-    public function checkDuplicate($id, $phone) {
+    public function checkDuplicate($id, $phone)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -41,8 +46,10 @@ class User {
             return false;
         }
     }
+
     // 사용자 조회
-    public function getUserByUid($uid) {
+    public function getUserByUid($uid)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -54,8 +61,10 @@ class User {
             error_log("getUserByUid error: " . $e->getMessage());
         }
     }
+
     // 배송지 변경
-    public function setUserAddressByUid($uid, $address) {
+    public function setUserAddressByUid($uid, $address)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -71,7 +80,8 @@ class User {
     }
 
     // 세션 정보 최신화
-    private function refreshSessionData($uid) {
+    private function refreshSessionData($uid)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -88,7 +98,8 @@ class User {
     }
 
     // 아이디 찾기
-    public function queryToFindId($name, $phone) {
+    public function queryToFindId($name, $phone)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -104,7 +115,8 @@ class User {
     }
 
     // 비밀번호 찾기
-    public function queryToResetPw($id, $name) {
+    public function queryToResetPw($id, $name)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -121,7 +133,8 @@ class User {
     }
 
     // 비밀번호 업데이트
-    public function updatePassword($id, $newPassword) {
+    public function updatePassword($id, $newPassword)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -140,7 +153,8 @@ class User {
 
     // 관리자 전용
     // 전체 사용자 조회
-    public function getAllUsers($offset, $limit, $isActive = null) {
+    public function getAllUsers($offset, $limit, $isActive = null)
+    {
         $pdo = $this->db->connect();
         try {
             $query = "
@@ -172,7 +186,8 @@ class User {
     }
 
     // 전체 사용자 수 반환
-    public function getTotalUserCount() {
+    public function getTotalUserCount()
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE is_admin = 0");
@@ -183,8 +198,10 @@ class User {
             return false;
         }
     }
+
     // 사용자 비활성화
-    public function deactivateUser($uid) {
+    public function deactivateUser($uid)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("UPDATE users SET is_active = 0 WHERE uid = :uid");
@@ -196,4 +213,5 @@ class User {
         }
     }
 }
+
 ?>

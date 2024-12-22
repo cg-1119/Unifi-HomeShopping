@@ -110,7 +110,8 @@ class OrderController
         header("Location: /views/admin/order_detail.php?order_id=$orderId");
     }
 
-    public function processOrderCancellation() {
+    public function processOrderCancellation()
+    {
         $orderId = $_POST['order_id'] ?? null;
         if ($this->orderModel->updatecancellation($orderId))
             echo "<script>alert('취소 처리가 완료되었습니다.'); location.href = '../views/admin/canceled_order_management.php';</script>";

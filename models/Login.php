@@ -5,11 +5,13 @@ class Login
 {
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
-    public function login($id, $password) {
+    public function login($id, $password)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -34,4 +36,5 @@ class Login
         }
     }
 }
+
 ?>

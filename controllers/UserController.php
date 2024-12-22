@@ -2,15 +2,16 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
 header('Content-Type: text/html; charset=utf-8');
 
-class UserController {
+class UserController
+{
     private $userModel;
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->userModel = new User();
     }
-
     // views/custom/join/input
-    public function register() {
+    public function register()
+    {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         $pw = isset($_POST['pw']) ? trim($_POST['pw']) : '';
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
@@ -33,19 +34,22 @@ class UserController {
             echo "<script>alert('회원가입에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
     }
-    public function modifyUserAddress() {
+
+    public function modifyUserAddress()
+    {
         $uid = $_POST['uid'] ?? null;
         $address = $_POST['address'] ?? null;
 
-        if($this->userModel->setUserAddressByUid($uid ,$address)) {
-             echo "<script>alert('배송지 수정이 완료되었습니다!'); location.href = '/views/user/setting.php';</script>";
+        if ($this->userModel->setUserAddressByUid($uid, $address)) {
+            echo "<script>alert('배송지 수정이 완료되었습니다!'); location.href = '/views/user/setting.php';</script>";
         } else {
             echo "<script>alert('수정에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
     }
 
     // views/custom/find/find_id_result
-    public function requestFindId() {
+    public function requestFindId()
+    {
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
         $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
         $result = $this->userModel->queryToFindId($name, $phone);
@@ -89,8 +93,10 @@ class UserController {
             exit;
         }
     }
+
     // views/user/find/reset_password
-    public function resetPassword() {
+    public function resetPassword()
+    {
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         $newPassword = isset($_POST['newPassword']) ? trim($_POST['newPassword']) : '';
 
@@ -104,8 +110,10 @@ class UserController {
             echo "<script>alert('비밀번호 재설정에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
     }
+
     // views/admin/user_management
-    public function deactivateUser() {
+    public function deactivateUser()
+    {
         $uid = $_GET['uid'];
         $success = $this->userModel->deactivateUser($uid);
 

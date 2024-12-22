@@ -2,14 +2,17 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Login.php';
 header('Content-Type: text/html; charset=utf-8');
 
-class LoginController{
+class LoginController
+{
     private $loginModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->loginModel = new Login();
     }
 
-    public function login() {
+    public function login()
+    {
         $id = isset($_POST["id"]) ? htmlspecialchars(trim($_POST["id"])) : "";
         $password = isset($_POST["password"]) ? htmlspecialchars(trim($_POST["password"])) : "";
         $user = $this->loginModel->login($id, $password);
@@ -21,7 +24,9 @@ class LoginController{
             echo '<script>alert("로그인 실패: ID 또는 비밀번호가 올바르지 않습니다."); history.back();</script>';
         }
     }
-    public function logout() {
+
+    public function logout()
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -41,8 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
     if ($_POST['action'] === 'login') {
         $controller->login();
-    }
-    else if ($_POST['action'] === 'logout') {
+    } else if ($_POST['action'] === 'logout') {
         $controller->logout();
     }
 }

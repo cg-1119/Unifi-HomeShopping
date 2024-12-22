@@ -5,12 +5,14 @@ class Point
 {
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
     // 포인트 추가
-    public function addUserPoint($userId, $orderId, $paymentPrice, $type) {
+    public function addUserPoint($userId, $orderId, $paymentPrice, $type)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("INSERT INTO points (user_id, order_id, point, type) VALUES (:user_id, :order_id, :point, :type)");
@@ -25,8 +27,10 @@ class Point
             return false;
         }
     }
+
     // 포인트 차감
-    public function reducePoint($userId, $orderId, $point, $type) {
+    public function reducePoint($userId, $orderId, $point, $type)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("INSERT INTO points (user_id, order_id, point, type) VALUES (:user_id, :order_id, :point, :type)");
@@ -41,8 +45,10 @@ class Point
             return false;
         }
     }
+
     // 특정 유저의 총 포인트 조회
-    public function getUserPoint($userId) {
+    public function getUserPoint($userId)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("SELECT COALESCE(SUM(point), 0) AS total_points FROM points WHERE user_id = :user_id");
@@ -55,8 +61,10 @@ class Point
             return false;
         }
     }
+
     // 특정 유저의 포인트 내역 조회
-    public function getUserPointInfo($userId) {
+    public function getUserPointInfo($userId)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("SELECT * FROM points WHERE user_id = :user_id");
@@ -69,8 +77,10 @@ class Point
             return false;
         }
     }
+
     // 특정 주문 적립 포인트 조회
-    public function getPointByOrderId($orderId) {
+    public function getPointByOrderId($orderId)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("SELECT point FROM points WHERE order_id = :order_id");

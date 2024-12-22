@@ -5,11 +5,13 @@ class Product
 {
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
-    public function getProductById($productId) {
+    public function getProductById($productId)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -23,7 +25,8 @@ class Product
         }
     }
 
-    public function getProducts($category = null) {
+    public function getProducts($category = null)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -77,7 +80,8 @@ class Product
         }
     }
 
-    public function getProductImages($productId) {
+    public function getProductImages($productId)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -99,7 +103,8 @@ class Product
         }
     }
 
-    public function addProduct($category, $name, $price, $description) {
+    public function addProduct($category, $name, $price, $description)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -116,7 +121,8 @@ class Product
         }
     }
 
-    public function addProductImage($productId, $filePath, $isThumbnail = false) {
+    public function addProductImage($productId, $filePath, $isThumbnail = false)
+    {
         $pdo = $this->db->connect();
 
         try {
@@ -130,7 +136,9 @@ class Product
             return false;
         }
     }
-    public function searchProducts($query) {
+
+    public function searchProducts($query)
+    {
         $pdo = $this->db->connect();
         try {
             $stmt = $pdo->prepare("
@@ -159,4 +167,5 @@ class Product
     }
 
 }
+
 ?>
