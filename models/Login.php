@@ -14,7 +14,14 @@ class Login
 
         try {
             $hashedPassword = hash('sha256', $password); // 비밀번호 해싱 (SHA-256)
-            $stmt = $pdo->prepare("SELECT uid, id, name, email, phone, address, point, is_admin FROM users WHERE id = :id AND pw = :pw");
+            $stmt = $pdo->prepare(
+                "SELECT u.uid, u.id, u.name, u.email, u.phone, u.address, u.is_admin, 
+                    COALESCE(SUM(p.point), 0) AS point
+             FROM users u
+             LEFT JOIN points p ON u.uid = p.user_id
+             WHERE u.id = :id AND u.pw = :pw
+             GROUP BY u.uid"
+            );
             $stmt->bindParam(':id', $id, PDO::PARAM_STR);
             $stmt->bindParam(':pw', $hashedPassword, PDO::PARAM_STR);
             $stmt->execute();

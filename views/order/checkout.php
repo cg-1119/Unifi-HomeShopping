@@ -37,7 +37,6 @@ $point = $user['point'] ?? 0;
     <title>주문 페이지</title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom-style.css">
-    <script src="/public/js/custom/order.js" defer></script>
 </head>
 <body>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/header.php'; ?>
@@ -83,10 +82,11 @@ $point = $user['point'] ?? 0;
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary"
+                <button type="button" class="btn btn-primary" id="submitFinalPrice"
                         data-user="<?= htmlspecialchars($user['uid']) ?>"
                         data-cart="<?= htmlspecialchars(json_encode($cart), ENT_QUOTES, 'UTF-8') ?>"
-                        data-finalPrice="<?= number_format($totalPrice) ?>"
+                        data-finalPrice="0"
+                        data-point="0"
                         onclick="createOrderPayment(this);">
                         결제 완료
                 </button>
@@ -166,7 +166,7 @@ $point = $user['point'] ?? 0;
                 <input type="number" name="point" class="form-control mb-2"
                        placeholder="사용할 포인트" min="0" max="<?= htmlspecialchars($point) ?>"
                        oninput="pointInputChange(this)">
-                <p id="point">적립 예정 포인트: <strong class="text-primary"><?= number_format(ceil(($totalPrice) / 100)) ?> 원</strong>(총 주문 금액의 1%)</p>
+                <p>적립 예정 포인트: <strong class="text-primary" id="point"><?= number_format(ceil(($totalPrice) / 100)) ?> 원</strong>(결제 금액의 1%)</p>
             </div>
             <div>
                 <hr>
@@ -180,4 +180,5 @@ $point = $user['point'] ?? 0;
 </div>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/views/main/footer.php'; ?>
 </body>
+<script src="/public/js/custom/order.js" defer></script>
 </html>

@@ -7,7 +7,6 @@ CREATE TABLE users
     email     VARCHAR(50)  NOT NULL UNIQUE,
     phone     VARCHAR(20)  NOT NULL UNIQUE,
     address   TEXT,
-    point     INT     DEFAULT 0,
     is_active TINYINT(1) DEFAULT 1,
     is_admin  BOOLEAN DEFAULT 0
 );
@@ -90,7 +89,10 @@ CREATE TABLE points
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     user_id    INT,
+    order_id   INT,
     point      INT NOT NULL,
+    type       ENUM('purchase', 'review', 'use', 'cancel', 'other'),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users (uid) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users (uid) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE
 );

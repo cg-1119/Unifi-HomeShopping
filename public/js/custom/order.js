@@ -10,6 +10,14 @@ function validatePointInput(pointInput) {
         pointInput.value = min;
     }
 }
+// 사용 포인트 값 전달 함수
+function updatePointData(pointInput) {
+    const usedPoint = pointInput.value;
+    const paymentButton = document.querySelector('button[data-point]');
+    if (paymentButton) {
+        paymentButton.setAttribute('data-point', usedPoint);
+    }
+}
 
 // 최종 금액 계산
 function updateFinalPrice(pointInput) {
@@ -19,18 +27,18 @@ function updateFinalPrice(pointInput) {
     let usedPoints = parseInt(pointInput.value, 10) || 0;
     // 최종 금액 계산
     const finalPrice = totalPrice - usedPoints;
-    // DOM 업데이트
-    document.getElementById('finalPrice').textContent = new Intl.NumberFormat('ko-KR').format(finalPrice) + ' 원';
 
-    // 버튼의 data-finalPrice 속성 업데이트
-    const paymentButton = document.querySelector('.btn-primary.w-100');
-    paymentButton.setAttribute('data-finalPrice', finalPrice);
+    // DOM 업데이트
+    document.getElementById('point').textContent = new Intl.NumberFormat('ko-KR').format(Math.round(finalPrice / 100)) + ' 원'; // 적립 예정 포인트
+    document.getElementById('finalPrice').textContent = new Intl.NumberFormat('ko-KR').format(finalPrice) + ' 원'; // 최종 결제 금액
+    document.getElementById('submitFinalPrice').setAttribute('data-finalPrice', finalPrice); // 결제 금액 데이터 전달
 }
 
-// 유효성, 금액 계산 핸들링 함수
+// 유효성, 포인트 값 전달, 금액 계산 핸들링 함수
 function pointInputChange(pointInput) {
-    validatePointInput(pointInput)
-    updateFinalPrice(pointInput)
+    validatePointInput(pointInput);
+    updatePointData(pointInput);
+    updateFinalPrice(pointInput);
 }
 
 // 결제 수단 변경
@@ -98,6 +106,7 @@ function createOrder(data) {
 function submitCheckout(orderId, userId, finalPrice) {
     const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
     const paymentInfo = document.querySelector(`#${paymentMethod}Fields input`).value;
+    const point = document.querySelector('input[name="point"]').value;
 
     // 결제 데이터 서버로 전송
     fetch('/controllers/PaymentController.php', {
@@ -108,6 +117,7 @@ function submitCheckout(orderId, userId, finalPrice) {
             orderId: orderId,
             userId: userId,
             paymentPrice: finalPrice,
+            point: point,
             paymentMethod: paymentMethod,
             paymentInfo: paymentInfo
         })

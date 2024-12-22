@@ -20,29 +20,36 @@ class PaymentController
 
             $orderId = $inputData["orderId"] ?? null;
             $userId = $inputData["userId"] ?? null;
-            $paymentMethod = $inputData["paymentMethod"] ?? null;
             $paymentPrice = $inputData["paymentPrice"] ?? null;
+            $point = $inputData["point"] ?? null;
+            $paymentMethod = $inputData["paymentMethod"] ?? null;
             $paymentInfo = $inputData["paymentInfo"] ?? null;
 
-            // 결제 금액 변환 및 검증
-            $paymentPrice = preg_replace('/[^\d]/', '', $paymentPrice); // 숫자만 추출
-            $paymentPrice = (int)$paymentPrice;
+            // 금액 숫자만 추출
+            $paymentPrice = preg_replace('/[^\d]/', '', $paymentPrice);
 
             if ($paymentPrice <= 0) {
                 echo json_encode(['success' => false, 'message' => '유효하지 않은 결제 금액입니다.']);
             }
-            // 결제 저장 밑 주문 상태 변경
+            // 결제 저장 및 주문 상태 변경
             $this->paymentModel->setPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice);
             $this->paymentModel->setOrderStatus($orderId, 'completed');
             // 포인트 모델 생성
             require_once $_SERVER['DOCUMENT_ROOT'] . "/models/Point.php";
             $pointModel = new Point();
-            $pointModel->setUserPoint($userId, $paymentPrice);
+            $pointModel->addUserPoint($userId, $orderId, $paymentPrice, 'purchase');
+            // 포인트를 사용 했을 때
+            if($point) {
+                preg_replace('/[^\d]/', '', $point);
+                $pointModel->reducePoint($userId, $orderId, $point, 'use');
+                $_SESSION['user']['point'] = $pointModel->getUserPoint($userId);
+            }
 
             // 세션 초기화
             if (session_status() === PHP_SESSION_NONE)
                 session_start();
             unset($_SESSION['cart']);
+
             echo json_encode(['success' => true, 'orderId' => $orderId, 'message' => '결제가 성공적으로 처리되었습니다.']);
 
         } catch (Exception $e) {
