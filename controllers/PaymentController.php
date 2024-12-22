@@ -43,14 +43,18 @@ class PaymentController
             // 포인트를 사용 했을 때
             if ($point) {
                 preg_replace('/[^\d]/', '', $point);
+                // 포인트 사용 금액이 가지고 있는 포인트 보다 많을 시 예외
+                if($pointModel->getUserPoint($userId) < $point)
+                    throw new Exception('pointValueOverException');
                 $pointModel->reducePoint($userId, $orderId, $point, 'use');
-                $_SESSION['user']['point'] = $pointModel->getUserPoint($userId);
             }
 
             // 세션 초기화
             if (session_status() === PHP_SESSION_NONE)
                 session_start();
+            // 장바구니 초기화 및 포인트 최신화
             unset($_SESSION['cart']);
+            $_SESSION['user']['point'] = $pointModel->getUserPoint($userId);
 
             echo json_encode(['success' => true, 'orderId' => $orderId, 'message' => '결제가 성공적으로 처리되었습니다.']);
 

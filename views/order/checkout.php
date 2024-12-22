@@ -85,7 +85,7 @@ $point = $user['point'] ?? 0;
                 <button type="button" class="btn btn-primary" id="submitFinalPrice"
                         data-user="<?= htmlspecialchars($user['uid']) ?>"
                         data-cart="<?= htmlspecialchars(json_encode($cart), ENT_QUOTES, 'UTF-8') ?>"
-                        data-finalPrice="0"
+                        data-finalPrice="<?= htmlspecialchars($totalPrice)?>"
                         data-point="0"
                         onclick="createOrderPayment(this);">
                         결제 완료
