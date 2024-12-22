@@ -1,8 +1,10 @@
 <?php
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/OrderDetail.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Point.php';
 
 $orderDetailModel = new Orderdetail();
+$pointModel = new Point();
 
 $orderId = $_GET['orderId'] ?? null;
 if (!$orderId) {
@@ -13,6 +15,9 @@ if (!$orderId) {
 // 주문 상세 정보 가져오기
 $orderDetails = $orderDetailModel->getOrderDetailsByOrderId($orderId);
 $totalPrice = 0;
+
+// 포인트 조회
+$point = $pointModel->getPointByOrderId($orderId);
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -62,11 +67,17 @@ $totalPrice = 0;
         </tbody>
     </table>
     <div>
-        <p>최종 결제 금액: <strong class="text-success" id="finalPrice"><?= number_format($totalPrice) ?> 원</strong></p>
+        <?php if($point): ?>
+            <p>사용 포인트: <strong class="text-primary"><?= number_format($point) ?> 원</strong></p>
+            <p>최종 결제 금액: <small class="text-secondary"><del><?= number_format($totalPrice) ?></del></small>
+                <strong class="text-success"><?= number_format($totalPrice - $point) ?> 원</strong></p>
+        <?php else: ?>
+            <p>최종 결제 금액: <strong class="text-success"><?= number_format($totalPrice - $point) ?> 원</strong></p>
+        <?php endif; ?>
     </div>
     <div class="text-center mt-5">
         <a href="/views/main/index.php" class="btn btn-primary">홈으로 돌아가기</a>
-        <a href="/views/user/mypage.php" class="btn btn-secondary">주문 내역 보기</a>
+        <a href="/controllers/OrderController.php?action=myPage" class="btn btn-secondary">주문 내역 보기</a>
     </div>
 </div>
 

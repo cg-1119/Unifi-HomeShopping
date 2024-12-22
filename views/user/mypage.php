@@ -67,25 +67,25 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
             <?php if (!empty($wishlist)): ?>
                 <ul class="list-group">
                     <?php foreach ($wishlist as $item): ?>
-                        <li class="list-group-item d-flex align-items-center">
-                            <button class="btn btn-outline-secondary me-3"
-                                    onclick="removeFromWishlist(<?= $item['id'] ?>)">
-                                <i class="bi bi-heart-fill"></i> 찜 취소
-                            </button>
-                            <button class="btn btn-outline-success me-3"
-                                    data-bs-toggle="modal" data-bs-target="#cartModal"
-                                    onclick="addToCart(<?= $item['id'] ?>, 1, 'modal')">
-                                <i class="bi bi-cart-plus"></i> 장바구니에 추가
-                            </button>
-                            <div class="d-flex flex-grow-1 align-items-center">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
                                 <a href="/views/product/detail.php?id=<?= $item['id'] ?>"
                                    style="text-decoration: none; color: inherit;"
-                                   class="d-flex align-items-center">
+                                   class="d-flex align-items-center me-3">
                                     <img id="main-image" src="<?= htmlspecialchars($item['product_image'] ?? '/default-thumbnail.jpg') ?>"
                                          alt="상품 이미지"
                                          style="width: 60px; height: 60px; margin-right: 15px;">
                                     <span id="product_name"><?= htmlspecialchars($item['name']) ?></span>
                                 </a>
+                                <button class="btn btn-outline-secondary me-3"
+                                        onclick="removeFromWishlist(<?= $item['id'] ?>)">
+                                    <i class="bi bi-heart-fill"></i> 찜 취소
+                                </button>
+                                <button class="btn btn-outline-success me-3"
+                                        data-bs-toggle="modal" data-bs-target="#cartModal"
+                                        onclick="addToCart(<?= $item['id'] ?>, 1, 'modal')">
+                                    <i class="bi bi-cart-plus"></i> 장바구니에 추가
+                                </button>
                             </div>
                             <div>
                                 <p id="product_price" class="mb-0">
