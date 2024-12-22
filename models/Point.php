@@ -63,17 +63,30 @@ class Point
     }
 
     // 특정 유저의 포인트 내역 조회
-    public function getUserPointInfo($userId)
+    public function getUserPointInfo($userId, $offset, $limit)
     {
         $pdo = $this->db->connect();
         try {
-            $stmt = $pdo->prepare("SELECT * FROM points WHERE user_id = :user_id");
+            $stmt = $pdo->prepare("SELECT * FROM points WHERE user_id = :user_id ORDER BY id DESC LIMIT $offset, $limit");
             $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result;
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Point Model getUserPointInfo Error: " . $e->getMessage());
+            return false;
+        }
+    }
+    // 특정 유저의 포인트 내역 개수
+    public function getTotalUserPointInfo($userId)
+    {
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM points WHERE user_id = :user_id");
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Point Model getTotalUserPoint Error: " . $e->getMessage());
             return false;
         }
     }

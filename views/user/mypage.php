@@ -57,7 +57,10 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
                 <p class="card-text"><strong>안녕하세요 <?= $user['id'] ?>님</strong><br></p>
                 <p><strong>보유 포인트: <?php echo number_format($point); ?>원</strong></p>
             </div>
-            <a href="/views/user/setting.php" class="btn btn-secondary">기본 배송지 수정</a>
+            <div class="d-flex justify-content-between">
+                <a href="/views/user/setting.php" class="btn btn-secondary">기본 배송지 수정</a>
+                <button class="btn btn-secondary" onclick="openPointWindow()">포인트 내역 조회</button>
+            </div>
         </div>
     </div>
     <!-- 찜 목록 -->
@@ -72,7 +75,8 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
                                 <a href="/views/product/detail.php?id=<?= $item['id'] ?>"
                                    style="text-decoration: none; color: inherit;"
                                    class="d-flex align-items-center me-3">
-                                    <img id="main-image" src="<?= htmlspecialchars($item['product_image'] ?? '/default-thumbnail.jpg') ?>"
+                                    <img id="main-image"
+                                         src="<?= htmlspecialchars($item['product_image'] ?? '/default-thumbnail.jpg') ?>"
                                          alt="상품 이미지"
                                          style="width: 60px; height: 60px; margin-right: 15px;">
                                     <span id="product_name"><?= htmlspecialchars($item['name']) ?></span>
@@ -115,7 +119,7 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
                                 <p class="<?= $order['status'] === 'cancelled' ? 'text-danger' : 'text-primary' ?>">
                                     <?php
                                     if ($order['status'] === 'cancelled') {
-                                        if($order['is_cancelled_by_admin']) echo '주문 취소 완료';
+                                        if ($order['is_cancelled_by_admin']) echo '주문 취소 완료';
                                         else echo '주문 취소 대기';
                                     } else {
                                         switch ($order['delivery_status']) {
@@ -226,6 +230,14 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
 <script>
     function setOrderId(orderId) {
         document.getElementById('modalOrderId').value = orderId;
+    }
+    // 포인트 내역 창 열기
+    function openPointWindow() {
+        window.open(
+            `my_point.php`,
+            'pointWindow',
+            'width=500,height=600,resizable=no,scrollbars=yes'
+        );
     }
 </script>
 </html>
