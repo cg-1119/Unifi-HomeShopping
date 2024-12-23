@@ -50,7 +50,7 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
 <div class="container mt-5">
     <h2 class="text-center m-5">마이 페이지</h2>
     <!-- 정보 표시 -->
-    <h5 class="mb-4">내 정보</h5>
+    <h5 class="card-title mb-4">내 정보</h5>
     <div class="card mb-4">
         <div class="card-body">
             <div class="d-flex justify-content-between">
@@ -236,7 +236,7 @@ $wishlist = $wishlistModel->getWishlistByUser($_SESSION['user']['uid']);
         window.open(
             `my_point.php`,
             'pointWindow',
-            'width=500,height=600,resizable=no,scrollbars=yes'
+            'width=650,height=800,resizable=no,scrollbars=yes'
         );
     }
 </script>
