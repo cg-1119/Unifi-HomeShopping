@@ -36,7 +36,7 @@ class Order
     }
 
     // 주문 취소 이유 업데이트
-    public function updateOrderCancelReason($orderId, $cancel_reason)
+    public function updateOrderCancelReason($orderId, $cancelReason)
     {
         $pdo = $this->db->connect();
         try {
@@ -45,7 +45,7 @@ class Order
             SET cancel_reason = :cancel_reason
             WHERE id = :order_id
         ");
-            $stmt->bindParam(':cancel_reason', $cancel_reason, PDO::PARAM_STR);
+            $stmt->bindParam(':cancel_reason', $cancelReason, PDO::PARAM_STR);
             $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -162,11 +162,11 @@ class Order
     }
 
     // 배송 상태별 주문 수 가져오기
-    public function getTotalOrderCountByDeliveryStatus($delivery_status)
+    public function getTotalOrderCountByDeliveryStatus($deliveryStatus)
     {
         $pdo = $this->db->connect();
         $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE delivery_status = :delivery_status AND status != 'cancelled'");
-        $stmt->bindParam(':delivery_status', $delivery_status, PDO::PARAM_STR);
+        $stmt->bindParam(':delivery_status', $deliveryStatus, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchColumn();
     }
