@@ -18,14 +18,18 @@ $isProcessed = $_GET['is_processed'] ?? null;
 
 // 페이지네이션 설정
 $currentPage = $_GET['page'] ?? 1;
-$perPage = 10;
-$offset = ($currentPage - 1) * $perPage;
+$range = 10;
+$offset = ($currentPage - 1) * $range;
 
 // 취소된 주문 가져오기
-$canceledOrders = $orderModel->getCanceledOrders($offset, $perPage, $isProcessed);
+$canceledOrders = $orderModel->getCanceledOrders($offset, $range, $isProcessed);
 $totalCanceledOrders = $orderModel->getTotalCanceledOrderCount($isProcessed);
+$totalPages = ceil($totalCanceledOrders / $range);
 
-$totalPages = ceil($totalCanceledOrders / $perPage);
+$startPage = floor(($currentPage - 1) / $range) * $range + 1;
+$endPage = min($startPage + $range - 1, $totalPages);
+$prevRange = $startPage - 1;
+$nextRange = $endPage + 1;
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -93,6 +97,11 @@ $totalPages = ceil($totalCanceledOrders / $perPage);
     <!-- 페이지 네비게이션 -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
+            <li class="page-item <?= $startPage > 1 ? '' : 'disabled' ?>">
+                <a class="page-link" href="?page=<?= max(1, $prevRange) ?>&is_processed=<?= htmlspecialchars($isProcessed) ?>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                 <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
                     <a class="page-link" href="?page=<?= $i ?>&is_processed=<?= htmlspecialchars($isProcessed) ?>">
@@ -100,6 +109,11 @@ $totalPages = ceil($totalCanceledOrders / $perPage);
                     </a>
                 </li>
             <?php endfor; ?>
+            <li class="page-item <?= $endPage < $totalPages ? '' : 'disabled' ?>">
+                <a class="page-link" href="?page=<?= min($totalPages, $nextRange) ?>&is_processed=<?= htmlspecialchars($isProcessed) ?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </div>

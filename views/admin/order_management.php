@@ -7,22 +7,26 @@ $userModel = new User();
 
 // 페이지네이션 설정
 $currentPage = $_GET['page'] ?? 1;
-$perPage = 10; // 한 페이지에 표시할 주문 수
-$offset = ($currentPage - 1) * $perPage;
+$range = 10; // 한 페이지에 표시할 주문 수
+$offset = ($currentPage - 1) * $range;
 
 // 검색 정보 조회
 $delivery_status = $_GET['delivery_status'] ?? '';
 
 if (!$delivery_status) {
-    $orders = $orderModel->getAllOrders($offset, $perPage);
+    $orders = $orderModel->getAllOrders($offset, $range);
     $totalOrders = $orderModel->getTotalOrderCount();
 } else {
-    $orders = $orderModel->getOrdersByDeliveryStatus($delivery_status, $offset, $perPage);
+    $orders = $orderModel->getOrdersByDeliveryStatus($delivery_status, $offset, $range);
     $totalOrders = $orderModel->getTotalOrderCountByDeliveryStatus($delivery_status);
 }
 
-$totalPages = ceil($totalOrders / $perPage);
+$totalPages = ceil($totalOrders / $range);
 
+$startPage = floor(($currentPage - 1) / $range) * $range + 1;
+$endPage = min($startPage + $range - 1, $totalPages);
+$prevRange = $startPage - 1;
+$nextRange = $endPage + 1;
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -95,6 +99,11 @@ $totalPages = ceil($totalOrders / $perPage);
     <!-- 페이지 네비게이션 -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
+            <li class="page-item <?= $startPage > 1 ? '' : 'disabled' ?>">
+                <a class="page-link" href="?page=<?= max(1, $prevRange) ?>&delivery_status=<?= htmlspecialchars($delivery_status) ?>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                 <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
                     <a class="page-link" href="?page=<?= $i ?>&delivery_status=<?= htmlspecialchars($delivery_status) ?>">
@@ -102,6 +111,11 @@ $totalPages = ceil($totalOrders / $perPage);
                     </a>
                 </li>
             <?php endfor; ?>
+            <li class="page-item <?= $endPage < $totalPages ? '' : 'disabled' ?>">
+                <a class="page-link" href="?page=<?= min($totalPages, $nextRange) ?>&delivery_status=<?= htmlspecialchars($delivery_status) ?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </div>

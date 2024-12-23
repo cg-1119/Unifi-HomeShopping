@@ -5,15 +5,19 @@ $userModel = new User();
 
 // 페이지네이션 설정
 $currentPage = $_GET['page'] ?? 1;
-$perPage = 10; // 한 페이지당 사용자 수
-$offset = ($currentPage - 1) * $perPage;
+$range = 10; // 한 페이지당 사용자 수
+$offset = ($currentPage - 1) * $range;
 
 // 사용자 목록 가져오기
 $isActive = $_GET['is_active'] ?? null;
-$users = $userModel->getAllUsers($offset, $perPage, $isActive);
+$users = $userModel->getAllUsers($offset, $range, $isActive);
 $totalUsers = $userModel->getTotalUserCount();
+$totalPages = ceil($totalUsers / $range);
 
-$totalPages = ceil($totalUsers / $perPage);
+$startPage = floor(($currentPage - 1) / $range) * $range + 1;
+$endPage = min($startPage + $range - 1, $totalPages);
+$prevRange = $startPage - 1;
+$nextRange = $endPage + 1;
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -89,6 +93,11 @@ $totalPages = ceil($totalUsers / $perPage);
     <!-- 페이지 네비게이션 -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
+            <li class="page-item <?= $startPage > 1 ? '' : 'disabled' ?>">
+                <a class="page-link" href="?page=<?= max(1, $prevRange) ?>&is_active=<?= htmlspecialchars($isActive) ?>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                 <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
                     <a class="page-link" href="?page=<?= $i ?>&is_active=<?= htmlspecialchars($isActive) ?>">
@@ -96,6 +105,11 @@ $totalPages = ceil($totalUsers / $perPage);
                     </a>
                 </li>
             <?php endfor; ?>
+            <li class="page-item <?= $endPage < $totalPages ? '' : 'disabled' ?>">
+                <a class="page-link" href="?page=<?= min($totalPages, $nextRange) ?>&is_active=<?= htmlspecialchars($isActive) ?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </div>

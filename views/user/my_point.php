@@ -8,19 +8,24 @@ if (!$_SESSION['user'])
 
 $userId = $_SESSION['user']['uid'];
 
-// 페이지네이션 설정
-$currentPage = $_GET['page'] ?? 1;
-$perPage = 10; // 한 페이지에 표시할 주문 수
-$offset = ($currentPage - 1) * $perPage;
-
 // 포인트 내역 추출
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Point.php';
 $pointModel = new Point();
 
-$points = $pointModel->getUserPointInfo($userId, $offset, $perPage);
-$total = $pointModel->getTotalUserPointInfo($userId);
+// 페이지네이션 설정
+$currentPage = $_GET['page'] ?? 1;
+$range = 10; // 한 페이지에 표시할 주문 수
+$offset = ($currentPage - 1) * $range;
 
-$totalPages = ceil($total / $perPage);
+$points = $pointModel->getUserPointInfo($userId, $offset, $range);
+$total = $pointModel->getTotalUserPointInfo($userId);
+$totalPoint = $pointModel->getUserPoint($userId);
+$totalPages = ceil($total / $range);
+
+$startPage = floor(($currentPage - 1) / $range) * $range + 1;
+$endPage = min($startPage + $range - 1, $totalPages);
+$prevRange = $startPage - 1;
+$nextRange = $endPage + 1;
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -32,11 +37,12 @@ $totalPages = ceil($total / $perPage);
     <title>포인트</title>
 </head>
 <body>
-<div class="container mb-5">
+<div class="container m-5">
     <h1 class="text-center">포인트 내역</h1>
+    <h3 class="text-center mt-5">현재 총 포인트 : <strong class="text-primary"><?= number_format($totalPoint)?>원</strong></h3>
     <!-- 포인트 내역 테이블 -->
     <div class="table-responsive">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered mt-5">
             <thead>
             <tr class="text-center">
                 <th>번호</th>
