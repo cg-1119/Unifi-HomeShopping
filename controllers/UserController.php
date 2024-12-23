@@ -112,17 +112,21 @@ class UserController
     }
 
     // views/admin/user_management
-    public function deactivateUser()
+    public function setActivateUser()
     {
         $uid = $_GET['uid'];
-        $success = $this->userModel->deactivateUser($uid);
-
-        if ($success) {
-            header('Location: /views/admin/user_management.php?success=사용자가 비활성화되었습니다.');
-        } else {
-            header('Location: /views/admin/user_management.php?error=비활성화에 실패했습니다.');
+        $activateStatus = $_GET['$activateStatus'];
+        try {
+            $success = $this->userModel->setActivateUser($uid, $activateStatus);
+            if ($success) {
+                header('Location: /views/admin/user_management.php');
+            }
+            exit;
+        } catch (Exception $e) {
+            error_log("UserController setActivateUser Error: " . $e->getMessage());
+            echo "<script>alert('유저 활성화 상태 오류가 발생했습니다.'); history.go(0);</script>";
         }
-        exit;
+
     }
 }
 
@@ -144,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
 } else if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action'])) {
     $controller = new UserController();
 
-    if ($_GET['action'] === 'deactivateUser')
-        $controller->deactivateUser();
+    if ($_GET['action'] === 'setActivateUser')
+        $controller->setActivateUser();
 }
 ?>

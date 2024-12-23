@@ -7,7 +7,7 @@ CREATE TABLE users
     email     VARCHAR(50)  NOT NULL UNIQUE,
     phone     VARCHAR(20)  NOT NULL UNIQUE,
     address   TEXT,
-    is_active TINYINT(1) DEFAULT 1,
+    activate_status ENUM('deactivate', 'activate') DEFAULT 'activate',
     is_admin  BOOLEAN DEFAULT 0
 );
 CREATE TABLE products

@@ -9,9 +9,14 @@ $range = 10; // 한 페이지당 사용자 수
 $offset = ($currentPage - 1) * $range;
 
 // 사용자 목록 가져오기
-$isActive = $_GET['is_active'] ?? null;
-$users = $userModel->getAllUsers($offset, $range, $isActive);
-$totalUsers = $userModel->getTotalUserCount();
+$activateStatus = $_GET['activate_status'] ?? '';
+if (!$activateStatus) {
+    $users = $userModel->getAllUsers($offset, $range);
+    $totalUsers = $userModel->getTotalUserCount();
+} else {
+    $users = $userModel->getActivateStatusUsers($offset, $range, $activateStatus);
+    $totalUsers = $userModel->getTotalActivateStatusUserCount($activateStatus);
+}
 $totalPages = ceil($totalUsers / $range);
 
 $startPage = floor(($currentPage - 1) / $range) * $range + 1;
@@ -37,10 +42,10 @@ $nextRange = $endPage + 1;
     <form method="GET" action="user_management.php" class="mb-4">
         <div class="row d-flex justify-content-center">
             <div class="col-md-4 d-flex align-items-center">
-                <select name="is_active" class="form-select me-4">
+                <select name="activate_status" class="form-select me-4">
                     <option value="">전체 사용자</option>
-                    <option value="1" <?= $isActive === '1' ? 'selected' : '' ?>>활성 사용자</option>
-                    <option value="0" <?= $isActive === '0' ? 'selected' : '' ?>>비활성 사용자</option>
+                    <option value="activate" <?= $activateStatus === 'activate' ? 'selected' : '' ?>>활성 사용자</option>
+                    <option value="deactivate" <?= $activateStatus === 'deactivate' ? 'selected' : '' ?>>비활성 사용자</option>
                 </select>
                 <button type="submit" class="btn btn-primary col-2">검색</button>
             </div>
@@ -72,12 +77,12 @@ $nextRange = $endPage + 1;
                     <td><?= htmlspecialchars($user['email']) ?></td>
                     <td><?= htmlspecialchars($user['phone']) ?></td>
                     <td><?= number_format($user['point']) ?> P</td>
-                    <td><?= $user['is_active'] ? '<span class="text-success">활성</span>' : '<span class="text-danger">비활성</span>' ?></td>
+                    <td><?= $user['activate_status'] ? '<span class="text-success">활성</span>' : '<span class="text-danger">비활성</span>' ?></td>
                     <td>
-                        <?php if ($user['is_active']): ?>
-                            <a href="/controllers/UserController.php?action=deactivateUser&uid=<?= $user['uid'] ?>" class="btn btn-warning btn-sm" onclick="return confirm('이 사용자를 비활성화 하시겠습니까?')">비활성화</a>
+                        <?php if ($user['activate_status']): ?>
+                            <a href="/controllers/UserController.php?action=setActivateUser&uid=<?= $user['uid'] ?>&$activateStatus=deactivate" class="btn btn-warning btn-sm" onclick="return confirm('이 사용자를 비활성화 하시겠습니까?')">비활성화</a>
                         <?php else: ?>
-                            <span class="text-muted">비활성화됨</span>
+                            <a href="/controllers/UserController.php?action=setActivateUser&uid=<?= $user['uid'] ?>&$activateStatus=activate" class="btn btn-primary btn-sm" onclick="return confirm('이 사용자를 활성화 하시겠습니까?')">활성화</a>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -94,19 +99,19 @@ $nextRange = $endPage + 1;
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item <?= $startPage > 1 ? '' : 'disabled' ?>">
-                <a class="page-link" href="?page=<?= max(1, $prevRange) ?>&is_active=<?= htmlspecialchars($isActive) ?>" aria-label="Previous">
+                <a class="page-link" href="?page=<?= max(1, $prevRange) ?>activate_status=<?= htmlspecialchars($activateStatus) ?>" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                 <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
-                    <a class="page-link" href="?page=<?= $i ?>&is_active=<?= htmlspecialchars($isActive) ?>">
+                    <a class="page-link" href="?page=<?= $i ?>&activate_status=<?= htmlspecialchars($activateStatus) ?>">
                         <?= $i ?>
                     </a>
                 </li>
             <?php endfor; ?>
             <li class="page-item <?= $endPage < $totalPages ? '' : 'disabled' ?>">
-                <a class="page-link" href="?page=<?= min($totalPages, $nextRange) ?>&is_active=<?= htmlspecialchars($isActive) ?>" aria-label="Next">
+                <a class="page-link" href="?page=<?= min($totalPages, $nextRange) ?>&activate_status=<?= htmlspecialchars($activateStatus) ?>" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

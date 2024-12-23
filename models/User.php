@@ -153,30 +153,33 @@ class User
 
     // 관리자 전용
     // 전체 사용자 조회
-    public function getAllUsers($offset, $limit, $isActive = null)
+    public function getAllUsers($offset, $limit)
     {
         $pdo = $this->db->connect();
         try {
             $query = "
         SELECT 
-            uid, id, name, email, phone, address, point, is_active 
+            u.uid, 
+            u.id, 
+            u.name, 
+            u.email, 
+            u.phone, 
+            u.address, 
+            COALESCE(SUM(p.point), 0) AS point, 
+            u.activate_status 
         FROM 
-            users 
+            users u
+        LEFT JOIN 
+            points p ON u.uid = p.user_id
         WHERE 
-            is_admin = 0
+            u.is_admin = 0
+        GROUP BY 
+            u.uid
+        ORDER BY 
+            u.uid ASC
+        LIMIT $offset, $limit
         ";
-            if ($isActive !== null) {
-                $query .= " AND is_active = :is_active";
-            }
-            $query .= " ORDER BY uid ASC LIMIT :offset, :limit";
-
             $stmt = $pdo->prepare($query);
-
-            if ($isActive !== null) {
-                $stmt->bindParam(':is_active', $isActive, PDO::PARAM_INT);
-            }
-            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -199,16 +202,69 @@ class User
         }
     }
 
-    // 사용자 비활성화
-    public function deactivateUser($uid)
+    // 특정 활성화 상태 사용자 조회
+    public function getActivateStatusUsers($offset, $limit, $activateStatus)
     {
         $pdo = $this->db->connect();
         try {
-            $stmt = $pdo->prepare("UPDATE users SET is_active = 0 WHERE uid = :uid");
-            $stmt->execute(['uid' => $uid]);
+            $query = "
+        SELECT 
+            u.uid, 
+            u.id, 
+            u.name, 
+            u.email, 
+            u.phone, 
+            u.address, 
+            COALESCE(SUM(p.point), 0) AS point, 
+            u.activate_status 
+        FROM 
+            users u
+        LEFT JOIN 
+            points p ON u.uid = p.user_id
+        WHERE 
+            u.is_admin = 0 AND u.activate_status = :activate_status
+        GROUP BY 
+            u.uid
+        ORDER BY 
+            u.uid ASC 
+        LIMIT $offset, $limit
+        ";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':activate_status', $activateStatus, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("getAllUsers error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getTotalActivateStatusUserCount($activateStatus)
+    {
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE is_admin = 0 AND activate_status = :activate_status");
+            $stmt->bindParam(':activate_status', $activateStatus, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("getTotalUserCount error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // 사용자 비활성화
+    public function setActivateUser($uid, $activeStatus)
+    {
+        $pdo = $this->db->connect();
+        try {
+            $stmt = $pdo->prepare("UPDATE users SET activate_status = :activate_status WHERE uid = :uid");
+            $stmt->execute([
+                'uid' => $uid,
+                'activate_status' => $activeStatus]);
             return true;
         } catch (PDOException $e) {
-            error_log("deactivateUser error: " . $e->getMessage());
+            error_log("setActiveUser error: " . $e->getMessage());
             return false;
         }
     }
