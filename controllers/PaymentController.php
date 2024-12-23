@@ -39,7 +39,6 @@ class PaymentController
             // 포인트 모델 생성
             require_once $_SERVER['DOCUMENT_ROOT'] . "/models/Point.php";
             $pointModel = new Point();
-            $pointModel->addUserPoint($userId, $orderId, $paymentPrice, 'purchase');
             // 포인트를 사용 했을 때
             if ($point) {
                 preg_replace('/[^\d]/', '', $point);
@@ -48,6 +47,7 @@ class PaymentController
                     throw new Exception('pointValueOverException');
                 $pointModel->reducePoint($userId, $orderId, $point, 'use');
             }
+            $pointModel->addUserPoint($userId, $orderId, $paymentPrice, 'purchase'); // 포인트 적립
 
             // 세션 초기화
             if (session_status() === PHP_SESSION_NONE)
