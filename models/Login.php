@@ -17,7 +17,7 @@ class Login
         try {
             $hashedPassword = hash('sha256', $password); // 비밀번호 해싱 (SHA-256)
             $stmt = $pdo->prepare(
-                "SELECT u.uid, u.id, u.name, u.email, u.phone, u.address, u.is_admin, 
+                "SELECT u.uid, u.id, u.name, u.email, u.phone, u.address, u.is_admin, u.activate_status,
                     COALESCE(SUM(p.point), 0) AS point
              FROM users u
              LEFT JOIN points p ON u.uid = p.user_id
@@ -31,7 +31,7 @@ class Login
             return $user ?: null;
 
         } catch (PDOException $e) {
-            error_log("Login error: " . $e->getMessage());
+            error_log("Login Model login Exception: " . $e->getMessage());
             return null;
         }
     }

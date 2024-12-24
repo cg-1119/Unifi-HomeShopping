@@ -13,15 +13,17 @@ class LoginController
 
     public function login()
     {
-        $id = isset($_POST["id"]) ? htmlspecialchars(trim($_POST["id"])) : "";
-        $password = isset($_POST["password"]) ? htmlspecialchars(trim($_POST["password"])) : "";
+        $id = $_POST["id"] ?? null;
+        $password = $_POST["password"] ?? null;
         $user = $this->loginModel->login($id, $password);
-        if ($user) {
+        if (!$user)
+            echo '<script>alert("로그인 실패: ID 또는 비밀번호가 올바르지 않습니다."); history.back();</script>';
+        else if ($user['activate_status'] == 'deactivate')
+            echo '<script>alert("로그인 실패: 계정이 비활성화 상태 입니다 관리자에게 문의하세요."); history.back();</script>';
+        else {
             session_start();
             $_SESSION['user'] = $user;
             echo "<script>location.href = '../views/main/index.php';</script>";
-        } else {
-            echo '<script>alert("로그인 실패: ID 또는 비밀번호가 올바르지 않습니다."); history.back();</script>';
         }
     }
 
@@ -41,7 +43,7 @@ class LoginController
 }
 
 // POST 요청 처리
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $controller = new LoginController();
 
     if ($_POST['action'] === 'login') {
