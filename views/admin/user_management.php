@@ -77,10 +77,10 @@ $nextRange = $endPage + 1;
                     <td><?= htmlspecialchars($user['email']) ?></td>
                     <td><?= htmlspecialchars($user['phone']) ?></td>
                     <td><?= number_format($user['point']) ?> P</td>
-                    <td><?= $user['activate_status'] ? '<span class="text-success">활성</span>' : '<span class="text-danger">비활성</span>' ?></td>
+                    <td><?= $user['activate_status'] == 'activate' ? '<span class="text-success">활성</span>' : '<span class="text-danger">비활성</span>' ?></td>
                     <td>
-                        <?php if ($user['activate_status']): ?>
-                            <a href="/controllers/UserController.php?action=setActivateUser&uid=<?= $user['uid'] ?>&$activateStatus=deactivate" class="btn btn-warning btn-sm" onclick="return confirm('이 사용자를 비활성화 하시겠습니까?')">비활성화</a>
+                        <?php if ($user['activate_status'] == 'activate'): ?>
+                            <a href="/controllers/UserController.php?action=setActivateUser&uid=<?= $user['uid'] ?>&$activateStatus=deactivate" class="btn btn-secondary btn-sm" onclick="return confirm('이 사용자를 비활성화 하시겠습니까?')">비활성화</a>
                         <?php else: ?>
                             <a href="/controllers/UserController.php?action=setActivateUser&uid=<?= $user['uid'] ?>&$activateStatus=activate" class="btn btn-primary btn-sm" onclick="return confirm('이 사용자를 활성화 하시겠습니까?')">활성화</a>
                         <?php endif; ?>
