@@ -12,7 +12,6 @@ class ProductReview
 
     public function createEmptyReview($productId, $userId, $rate, $content) {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("INSERT INTO product_reviews (product_id, user_id, rate, content) VALUES (:product_id, :user_id, :rate, :content);");
             $stmt->execute([
@@ -23,28 +22,26 @@ class ProductReview
             ]);
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("createEmptyReview Error: " . $e->getMessage());
+            error_log("ProductReview Model createEmptyReview Exception: " . $e->getMessage());
             return false;
         }
     }
 
     public function updateImagePath($reviewId, $imagePath) {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("UPDATE product_reviews SET image_path = :image_path WHERE id = :review_id");
             $stmt->bindParam(':image_path', $imagePath, PDO::PARAM_STR);
             $stmt->bindParam(':review_id', $reviewId, PDO::PARAM_INT);
-            $stmt->execute();
+            return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("updateImagePath Error: " . $e->getMessage());
-            die(json_encode(['error' => 'Failed to update image path.']));
+            error_log("ProductReview Model updateImagePath Exception: " . $e->getMessage());
+            return false;
         }
     }
 
     public function getReviewsByProductId($productId) {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("SELECT pr.id, pr.product_id, pr.user_id, u.id AS user_identifier, pr.rate, pr.content, pr.image_path, pr.created_at 
                                    FROM product_reviews pr
@@ -55,14 +52,13 @@ class ProductReview
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getReviewsByProductId Error: " . $e->getMessage());
-            return [];
+            error_log("ProductReview Model getReviewsByProductId Exception: " . $e->getMessage());
+            return false;
         }
     }
 
     public function getAverageRatingAndReviewCount($productId) {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("
             SELECT AVG(rate) AS average_rating, COUNT(id) AS review_count
@@ -73,8 +69,8 @@ class ProductReview
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getAverageRatingAndReviewCount Error: " . $e->getMessage());
-            return ['average_rating' => 0, 'review_count' => 0];
+            error_log("ProductReview Model getAverageRatingAndReviewCount Exception: " . $e->getMessage());
+            return false;
         }
     }
 
@@ -89,7 +85,7 @@ class ProductReview
             $stmt->execute();
             return $stmt->fetchColumn() > 0;
         } catch (PDOException $e) {
-            error_log("hasUserReviewedProductError: " . $e->getMessage());
+            error_log("ProductReview Model hasUserReviewedProduct Exception: " . $e->getMessage());
             return false;
         }
     }

@@ -14,25 +14,35 @@ class Order
     public function setOrder($uid, $address, $phone)
     {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("INSERT INTO orders (user_id, address, phone) 
+        try {
+            $stmt = $pdo->prepare("INSERT INTO orders (user_id, address, phone) 
                 VALUES (:user_id, :address, :phone)");
-        $stmt->execute([
-            'user_id' => $uid,
-            'address' => $address,
-            'phone' => $phone,
-        ]);
-        return $pdo->lastInsertId(); // 생성된 주문 ID 반환
+            $stmt->execute([
+                'user_id' => $uid,
+                'address' => $address,
+                'phone' => $phone,
+            ]);
+            return $pdo->lastInsertId(); // 생성된 주문 ID 반환
+        } catch (PDOException $e) {
+            error_log("Order Model setOrder Exception: " . $e->getMessage());
+            return false;
+        }
     }
 
     // 주문 상태 업데이트
     public function updateOrderStatus($orderId, $status)
     {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("UPDATE orders SET status = :status WHERE id = :order_id");
-        $stmt->execute([
-            'status' => $status,
-            'order_id' => $orderId
-        ]);
+        try {
+            $stmt = $pdo->prepare("UPDATE orders SET status = :status WHERE id = :order_id");
+            return $stmt->execute([
+                'status' => $status,
+                'order_id' => $orderId
+            ]);
+        } catch (PDOException $e) {
+            error_log("Order Model setOrderStatus Exception: " . $e->getMessage());
+            return false;
+        }
     }
 
     // 주문 취소 이유 업데이트
@@ -49,7 +59,7 @@ class Order
             $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("updateOrderCancelReason error: " . $e->getMessage());
+            error_log("Order Model updateOrderCancelReason Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -64,7 +74,7 @@ class Order
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getOrderById error: " . $e->getMessage());
+            error_log("Order Model getOrderById Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -73,10 +83,15 @@ class Order
     public function getOrdersByUserid($uid)
     {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_date DESC");
-        $stmt->bindparam(":user_id", $uid);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_date DESC");
+            $stmt->bindparam(":user_id", $uid);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Order Model getOrdersByUserid Exception: " . $e->getMessage());
+            return false;
+        }
     }
 
     // 관리자용
@@ -110,7 +125,7 @@ class Order
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getAllOrders error: " . $e->getMessage());
+            error_log("Order Model getAllOrders Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -156,7 +171,7 @@ class Order
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getOrdersByDeliveryStatus error: " . $e->getMessage());
+            error_log("Order Model getOrdersByDeliveryStatus Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -165,10 +180,15 @@ class Order
     public function getTotalOrderCountByDeliveryStatus($deliveryStatus)
     {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE delivery_status = :delivery_status AND status != 'cancelled'");
-        $stmt->bindParam(':delivery_status', $deliveryStatus, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetchColumn();
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE delivery_status = :delivery_status AND status != 'cancelled'");
+            $stmt->bindParam(':delivery_status', $deliveryStatus, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Order Model getTotalOrderCount Exception: " . $e->getMessage());
+            return false;
+        }
     }
 
     // 취소된 주문 가져오기
@@ -217,7 +237,7 @@ class Order
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getCanceledOrders error: " . $e->getMessage());
+            error_log("Order Model getCanceledOrders Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -241,7 +261,7 @@ class Order
             $stmt->execute();
             return (int)$stmt->fetchColumn();
         } catch (PDOException $e) {
-            error_log("getTotalCanceledOrderCount error: " . $e->getMessage());
+            error_log("Order Model getTotalCanceledOrderCount Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -250,15 +270,20 @@ class Order
     public function updateDeliveryStatus($orderId, $deliveryStatus)
     {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("UPDATE orders SET delivery_status = :delivery_status WHERE id = :order_id");
-        $stmt->execute([
-            'delivery_status' => $deliveryStatus,
-            'order_id' => $orderId
-        ]);
+        try {
+            $stmt = $pdo->prepare("UPDATE orders SET delivery_status = :delivery_status WHERE id = :order_id");
+            return $stmt->execute([
+                'delivery_status' => $deliveryStatus,
+                'order_id' => $orderId
+            ]);
+        } catch (PDOException $e) {
+            error_log("Order Model updateDeliveryStatus Exception: " . $e->getMessage());
+            return false;
+        }
     }
 
     // 취소 처리
-    public function updatecancellation($orderId)
+    public function updateCancellation($orderId)
     {
         $pdo = $this->db->connect();
         try {
@@ -267,7 +292,7 @@ class Order
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            error_log("cancellationProcess error: " . $e->getMessage());
+            error_log("Order Model updateCancellation Exception: " . $e->getMessage());
             return false;
         }
     }

@@ -14,15 +14,20 @@ class Payment
     public function setPayment($orderId, $paymentMethod, $paymentInfo, $paymentPrice)
     {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("INSERT INTO payments (order_id, payment_method, payment_info, payment_price) 
+        try {
+            $stmt = $pdo->prepare("INSERT INTO payments (order_id, payment_method, payment_info, payment_price) 
                 VALUES (:order_id, :payment_method, :payment_info, :payment_price)");
-        $stmt->execute([
-            'order_id' => $orderId,
-            'payment_method' => $paymentMethod,
-            'payment_info' => $paymentInfo,
-            'payment_price' => $paymentPrice
-        ]);
-        return $pdo->lastInsertId();
+            $stmt->execute([
+                'order_id' => $orderId,
+                'payment_method' => $paymentMethod,
+                'payment_info' => $paymentInfo,
+                'payment_price' => $paymentPrice
+            ]);
+            return $pdo->lastInsertId();
+        } catch (PDOException $e) {
+            echo "Payment Model setPayment Exception: " . $e->getMessage();
+            return false;
+        }
     }
 
     // 주문 상태 변경
@@ -35,7 +40,8 @@ class Payment
             $stmt->bindParam(":status", $status);
             return $stmt->execute();
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo "Payment Model setOrderStatus Exception: " . $e->getMessage();
+            return false;
         }
 
     }
@@ -44,8 +50,13 @@ class Payment
     public function getPaymentByOrderId($orderId)
     {
         $pdo = $this->db->connect();
-        $stmt = $pdo->prepare("SELECT * FROM payments WHERE order_id = :order_id");
-        $stmt->execute(['order_id' => $orderId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM payments WHERE order_id = :order_id");
+            $stmt->execute(['order_id' => $orderId]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Payment Model getPaymentByOrderId Exception: " . $e->getMessage();
+            return false;
+        }
     }
 }

@@ -17,14 +17,15 @@ class OrderDetail
             $pdo = $this->db->connect();
             $stmt = $pdo->prepare("INSERT INTO order_details (order_id, product_id, quantity, price) 
                 VALUES (:order_id, :product_id, :quantity, :price)");
-            $stmt->execute([
+            return $stmt->execute([
                 'order_id' => $orderId,
                 'product_id' => $productId,
                 'quantity' => $quantity,
                 'price' => $price
             ]);
         } catch (PDOException $e) {
-            error_log("addOrderDetail error", $e->getMessage());
+            error_log("OrderDetail Model setOrderDetail Exception", $e->getMessage());
+            return false;
         }
     }
 
@@ -53,8 +54,8 @@ class OrderDetail
             $stmt->execute(['orderId' => $orderId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            error_log("getOrderDetails error: " . $e->getMessage());
-            return [];
+            error_log("OrderDetail Model getOrderDetailsByOrderId Exception: " . $e->getMessage());
+            return false;
         }
     }
 }

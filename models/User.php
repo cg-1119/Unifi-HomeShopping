@@ -14,7 +14,6 @@ class User
     public function setUser($id, $pw, $name, $email, $phone, $address)
     {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("INSERT INTO users (id, pw, name, email, phone, address) VALUES (:id, :pw, :name, :email, :phone, :address)");
             $stmt->bindParam(':id', $id, PDO::PARAM_STR);
@@ -25,7 +24,7 @@ class User
             $stmt->bindParam(':address', $address, PDO::PARAM_STR);
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Register User Error: " . $e->getMessage());
+            error_log("User Model setUser Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -34,7 +33,6 @@ class User
     public function checkDuplicate($id, $phone)
     {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("SELECT phone FROM users WHERE id = :id AND phone = :phone");
             $stmt->bindParam(':id', $id, PDO::PARAM_STR);
@@ -42,7 +40,7 @@ class User
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Check Duplicate Error: " . $e->getMessage());
+            error_log("User Model checkDuplicate Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -51,14 +49,14 @@ class User
     public function getUserByUid($uid)
     {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("SELECT * FROM users WHERE uid = :uid");
             $stmt->bindParam(':uid', $uid, PDO::PARAM_STR);
             $stmt->execute();
             return $stmt->fetch();
         } catch (PDOException $e) {
-            error_log("getUserByUid error: " . $e->getMessage());
+            error_log("User Model getUserByUid Exception: " . $e->getMessage());
+            return false;
         }
     }
 
@@ -75,7 +73,7 @@ class User
             $this->refreshSessionData($uid);
             return $result;
         } catch (PDOException $e) {
-            error_log("Get User Error: " . $e->getMessage());
+            error_log("User Model setUserAddressByUid Exception: " . $e->getMessage());
         }
     }
 
@@ -93,7 +91,7 @@ class User
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($user) $_SESSION['user'] = $user;
         } catch (PDOException $e) {
-            error_log("유저 정보 불러오기 오류" . $e->getMessage());
+            error_log("User Model refreshSessionData Exception" . $e->getMessage());
         }
     }
 
@@ -110,7 +108,7 @@ class User
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Query To Find ID Error: " . $e->getMessage());
-            return null;
+            return false;
         }
     }
 
@@ -118,17 +116,16 @@ class User
     public function queryToResetPw($id, $name)
     {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("SELECT id FROM users WHERE id = :id AND name = :name");
             $stmt->bindParam(':id', $id, PDO::PARAM_STR);
             $stmt->bindParam(':name', $name, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result ? $result : null;
+            return $result ?? null;
         } catch (PDOException $e) {
-            error_log("Query To Reset Password Error: " . $e->getMessage());
-            return null;
+            error_log("User Model queryToResetPw Exception: " . $e->getMessage());
+            return false;
         }
     }
 
@@ -146,7 +143,7 @@ class User
             $stmt->bindParam(':id', $id, PDO::PARAM_STR);
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Update Password Error: " . $e->getMessage());
+            error_log("User Model updatePassword Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -183,7 +180,7 @@ class User
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getAllUsers error: " . $e->getMessage());
+            error_log("User Model getAllUsers Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -197,7 +194,7 @@ class User
             $stmt->execute();
             return $stmt->fetchColumn();
         } catch (PDOException $e) {
-            error_log("getTotalUserCount error: " . $e->getMessage());
+            error_log("User Model getTotalUserCount Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -234,7 +231,7 @@ class User
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getAllUsers error: " . $e->getMessage());
+            error_log("User Model getActivateStatusUsers Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -248,7 +245,7 @@ class User
             $stmt->execute();
             return $stmt->fetchColumn();
         } catch (PDOException $e) {
-            error_log("getTotalUserCount error: " . $e->getMessage());
+            error_log("User Model getTotalActivateStatusUserCount Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -264,7 +261,7 @@ class User
                 'activate_status' => $activeStatus]);
             return true;
         } catch (PDOException $e) {
-            error_log("setActiveUser error: " . $e->getMessage());
+            error_log("User Model setActivateUser Exception: " . $e->getMessage());
             return false;
         }
     }

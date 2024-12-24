@@ -13,22 +13,20 @@ class Product
     public function getProductById($productId)
     {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("SELECT id, name, price, category, description FROM products WHERE id = :product_id");
             $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Get Product By ID Error: " . $e->getMessage());
-            return null;
+            error_log("Product Model getProductById Exception: " . $e->getMessage());
+            return false;
         }
     }
 
     public function getProducts($category = null)
     {
         $pdo = $this->db->connect();
-
         try {
             if ($category) {
                 $stmt = $pdo->prepare("
@@ -75,15 +73,14 @@ class Product
 
             return $products;
         } catch (PDOException $e) {
-            error_log("Get Products Error: " . $e->getMessage());
-            return null;
+            error_log("Product Model getProducts Exception: " . $e->getMessage());
+            return false;
         }
     }
 
     public function getProductImages($productId)
     {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("
             SELECT 
@@ -98,15 +95,14 @@ class Product
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Get Product Images Error: " . $e->getMessage());
-            return null;
+            error_log("Product Model getProductImages Exception: " . $e->getMessage());
+            return false;
         }
     }
 
     public function addProduct($category, $name, $price, $description)
     {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("INSERT INTO products (category, name, price, description) VALUES (:category, :name, :price, :description)");
             $stmt->bindParam(':category', $category, PDO::PARAM_STR);
@@ -116,15 +112,14 @@ class Product
             $stmt->execute();
             return $pdo->lastInsertId(); // 삽입된 ID 반환
         } catch (PDOException $e) {
-            error_log("Add Product Error: " . $e->getMessage());
-            return null;
+            error_log("Product Model addProduct Exception: " . $e->getMessage());
+            return false;
         }
     }
 
     public function addProductImage($productId, $filePath, $isThumbnail = false)
     {
         $pdo = $this->db->connect();
-
         try {
             $stmt = $pdo->prepare("INSERT INTO product_images (product_id, file_path, is_thumbnail) VALUES (:product_id, :file_path, :is_thumbnail)");
             $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
@@ -132,7 +127,7 @@ class Product
             $stmt->bindParam(':is_thumbnail', $isThumbnail, PDO::PARAM_BOOL);
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Add Product Image Error: " . $e->getMessage());
+            error_log("Product Model addProductImage Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -161,11 +156,10 @@ class Product
             $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $products;
         } catch (PDOException $e) {
-            error_log("검색 오류: " . $e->getMessage());
+            error_log("Product Model searchProducts Exception: " . $e->getMessage());
             return false;
         }
     }
-
 }
 
 ?>

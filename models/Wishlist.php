@@ -20,7 +20,7 @@ class Wishlist
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            error_log("addToWishlist error: " . $e->getMessage());
+            error_log("Wishlist Model setWishlist Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -32,10 +32,9 @@ class Wishlist
             $stmt = $pdo->prepare("DELETE FROM wishlist WHERE user_id = :user_id AND product_id = :product_id");
             $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
             $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
-            $stmt->execute();
-            return true;
+            return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("removeFromWishlist error: " . $e->getMessage());
+            error_log("Wishlist Model removeFromWishlist Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -51,7 +50,7 @@ class Wishlist
             $stmt->execute();
             return $stmt->fetchColumn() > 0;
         } catch (PDOException $e) {
-            error_log("isProductInWishlist error: " . $e->getMessage());
+            error_log("Wishlist Model isProductInWishlist Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -79,7 +78,7 @@ class Wishlist
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getWishlistByUser error: " . $e->getMessage());
+            error_log("Wishlist Model getWishlistByUser Exception: " . $e->getMessage());
             return false;
         }
     }

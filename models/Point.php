@@ -41,7 +41,7 @@ class Point
                 'type' => $type
             ]);
         } catch (PDOException $e) {
-            error_log("Point Model usePoint Error: " . $e->getMessage());
+            error_log("Point Model reducePoint Error: " . $e->getMessage());
             return false;
         }
     }
@@ -86,7 +86,7 @@ class Point
             $stmt->execute();
             return $stmt->fetchColumn();
         } catch (PDOException $e) {
-            error_log("Point Model getTotalUserPoint Error: " . $e->getMessage());
+            error_log("Point Model getTotalUserPointInfo Error: " . $e->getMessage());
             return false;
         }
     }
