@@ -14,12 +14,11 @@ class PaymentController
     public function addPayment()
     {
         try {
+            // json 데이터 입력값 검증
             $inputData = json_decode(file_get_contents('php://input'), true);
-
             if (!$inputData) {
                 echo json_encode(['success' => false, 'message' => '요청 데이터가 잘못되었습니다.']);
             }
-
             $orderId = $inputData["orderId"] ?? null;
             $userId = $inputData["userId"] ?? null;
             $paymentPrice = $inputData["paymentPrice"] ?? null;
@@ -59,8 +58,9 @@ class PaymentController
             echo json_encode(['success' => true, 'orderId' => $orderId, 'message' => '결제가 성공적으로 처리되었습니다.']);
 
         } catch (Exception $e) {
-            error_log("addPayment error: " . $e->getMessage());
+            error_log("PaymentController addPayment Exception: " . $e->getMessage());
             echo json_encode(['success' => false, 'message' => '결제 처리 중 오류가 발생했습니다.']);
+            echo "<script>alert('결제 처리 중 오류가 발생했습니다.')</script>";
         }
     }
 }
