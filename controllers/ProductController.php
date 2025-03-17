@@ -25,13 +25,13 @@ class ProductController
         }
 
         // 썸네일 이미지 처리
-        if (!$this->uploadThumbnail($productId)) {
+        if (!$this->uploadThumbnailImage($productId)) {
             echo "<script>alert('썸네일 업로드에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
             return;
         }
 
         // 상품 설명 이미지 처리
-        if (!$this->uploadDescriptionImages($productId)) {
+        if (!$this->uploadImages($productId)) {
             echo "<script>alert('상품 설명 이미지 업로드에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
             return;
         }
@@ -39,7 +39,7 @@ class ProductController
         echo "<script>alert('상품이 성공적으로 등록되었습니다.'); location.href = '/views/admin/index.php';</script>";
     }
 
-    private function uploadThumbnail($productId)
+    private function uploadThumbnailImage($productId)
     {
         if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
             $thumbnailTmp = $_FILES['thumbnail']['tmp_name'];
@@ -58,16 +58,16 @@ class ProductController
                 $thumbnailUrl = "/uploads/products/$productId/$thumbnailName";
                 return $this->productModel->addProductImage($productId, $thumbnailUrl, true);
             } else {
-                error_log("Failed to upload thumbnail: " . $thumbnailName);
+                error_log("ProductController uploadThumbnailImage Exception: " . $thumbnailName);
                 return false;
             }
         }
 
-        error_log("No thumbnail file uploaded or upload error.");
+        error_log("ProductController uploadThumbnailImage Error.");
         return false;
     }
 
-    private function uploadDescriptionImages($productId)
+    private function uploadImages($productId)
     {
         if (isset($_FILES['descriptionImages'])) {
             $uploadedFiles = $_FILES['descriptionImages'];
@@ -88,15 +88,15 @@ class ProductController
                         $fileUrl = "/uploads/products/$productId/$fileName";
                         $this->productModel->addProductImage($productId, $fileUrl, false);
                     } else {
-                        error_log("Failed to upload description image: " . $fileName);
+                        error_log("ProductController uploadImages Exception: " . $fileName);
                         return false;
                     }
                 }
             }
             return true;
         }
-        error_log("No description images uploaded.");
-        return true; // 설명 이미지는 필수가 아니므로 true 반환
+        error_log("ProductController No uploadImages.");
+        return true; // 썸네일 이미지를 제외한 이미지는 필수가 아니므로 true
     }
 
     public function searchProducts()

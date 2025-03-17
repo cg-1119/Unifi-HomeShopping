@@ -8,7 +8,7 @@ class WishlistController
     {
         $this->wishlistModel = new Wishlist();
     }
-    // 찜 추가
+    // 찜 목록 추가
     public function addToWishlist()
     {
         if (session_status() === PHP_SESSION_NONE)
@@ -19,7 +19,7 @@ class WishlistController
             return;
         }
         try {
-            $userId = $_SESSION['user']['uid'];
+            $userId = $_SESSION['user']['uid'] ?? null;
             $productId = $_POST['product_id'] ?? null;
 
             $result = $this->wishlistModel->setWishlist($userId, $productId);
@@ -73,12 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $controller = new WishlistController();
 
     switch ($action) {
-        case 'add':
-            $controller->addToWishlist();
-            break;
-        case 'remove':
-            $controller->removeFromWishlist();
-            break;
+        case 'add': $controller->addToWishlist(); break;
+        case 'remove': $controller->removeFromWishlist(); break;
         default:
             echo json_encode(['success' => false, 'message' => '유효하지 않은 요청입니다.']);
     }
@@ -88,10 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $controller = new WishlistController();
 
     switch ($action) {
-        case 'list':
-            $controller->getWishlist();
-            break;
-        default:
-            echo json_encode(['success' => false, 'message' => '유효하지 않은 요청입니다.']);
+        case 'list': $controller->getWishlist(); break;
+        default: echo json_encode(['success' => false, 'message' => '유효하지 않은 요청입니다.']);
     }
 }

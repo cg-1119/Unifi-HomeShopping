@@ -9,15 +9,15 @@ class UserController
     {
         $this->userModel = new User();
     }
-    // views/custom/join/input
+    // 사용자 등록
     public function register()
     {
-        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
-        $pw = isset($_POST['pw']) ? trim($_POST['pw']) : '';
-        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-        $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-        $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
-        $address = isset($_POST['address']) ? trim($_POST['address']) : '';
+        $id = $_POST['id'] ?? null;
+        $pw = $_POST['pw'] ?? null;
+        $name = $_POST['name'] ?? null;
+        $email = $_POST['email'] ?? null;
+        $phone = $_POST['phone'] ?? null;
+        $address = $_POST['address'] ?? null;
 
         // 개인정보 중복 확인
         if ($this->userModel->checkDuplicate($id, $phone)) {
@@ -34,7 +34,7 @@ class UserController
             echo "<script>alert('회원가입에 실패했습니다. 다시 시도해주세요.'); history.back();</script>";
         }
     }
-
+    // 주소 변경
     public function modifyUserAddress()
     {
         $uid = $_POST['uid'] ?? null;
@@ -47,13 +47,13 @@ class UserController
         }
     }
 
-    // views/custom/find/find_id_result
+    // 아이디 찾기
     public function requestFindId()
     {
-        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-        $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
+        $name = $_POST['name'] ?? null;
+        $phone = $_POST['phone'] ?? null;
+        // 입력값 검증
         $result = $this->userModel->queryToFindId($name, $phone);
-
         if ($result) {
             session_start();
             $_SESSION['find_id_result'] = array(
@@ -72,11 +72,11 @@ class UserController
         exit;
     }
 
-    // views/custom/find_pw
+    // 비밀번호 초기화를 위한 정보 조회
     public function requestPwReset()
     {
-        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
-        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+        $id = $_POST['id'] ?? null;
+        $name = $_POST['name'] ?? null;
 
         // 사용자 확인
         if ($this->userModel->queryToResetPw($id, $name)) {
@@ -94,11 +94,11 @@ class UserController
         }
     }
 
-    // views/user/find/reset_password
+    // 비밀번호 초기화
     public function resetPassword()
     {
-        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
-        $newPassword = isset($_POST['newPassword']) ? trim($_POST['newPassword']) : '';
+        $id = $_POST['id'] ?? null;
+        $newPassword = $_POST['newPassword'] ?? null;
 
         // 비밀번호 업데이트
         if ($this->userModel->updatePassword($id, $newPassword)) {
@@ -111,7 +111,7 @@ class UserController
         }
     }
 
-    // views/admin/user_management
+    // 유저 활성화 관리
     public function setActivateUser()
     {
         $uid = $_GET['uid'];
@@ -131,21 +131,18 @@ class UserController
 }
 
 // 요청 처리
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $controller = new UserController();
 
-    if ($_POST['action'] === 'register')
-        $controller->register();
-    else if ($_POST['action'] === 'requestFindId')
-        $controller->requestFindId();
-    else if ($_POST['action'] === 'requestPwReset')
-        $controller->requestPwReset();
-    else if ($_POST['action'] === 'resetPassword')
-        $controller->resetPassword();
-    else if ($_POST['action'] === 'modifyUserAddress')
-        $controller->modifyUserAddress();
-
-} else if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action'])) {
+    switch ($_POST['action']) {
+        case 'register': $controller->register(); break;
+        case 'requestFindId': $controller->requestFindId(); break;
+        case 'requestPwReset': $controller->requestPwReset(); break;
+        case 'resetPassword': $controller->resetPassword(); break;
+        case 'modifyUserAddress': $controller->modifyUserAddress(); break;
+        default: die ("유효하지 않는 요청입니다.");
+    }
+} else if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $controller = new UserController();
 
     if ($_GET['action'] === 'setActivateUser')

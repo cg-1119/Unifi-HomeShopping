@@ -51,7 +51,7 @@ class ProductReviewController
             }
         }
 
-        echo "<script>alert('상품이 성공적으로 등록되었습니다.'); window.close();</script>";
+        echo "<script>alert('리뷰가 성공적으로 등록되었습니다.'); window.close();</script>";
     }
 }
 
