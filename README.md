@@ -1,5 +1,4 @@
 # Unifi Home Shopping
-<hr>
 2024 창원대학교 정보통신공학과 DB 프로그래밍 텀프로젝트
 
 유비쿼티 네트웍스의 제품을 소개하는 한글 쇼핑몰을 모의로 제작한 프로젝트입니다. 
@@ -151,7 +150,7 @@ MySQL에서 데이터베이스를 생성하고 config/database.php에서 연결 
 ```sql
 CREATE DATABASE database_name;
 USE database_name;
-SOURCE database/table.sql;
+SOURCE config/table.sql;
 ```
 Database 클래스 안의 필드값에 사용자 환경에 맞게 설정
 ```php
