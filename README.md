@@ -2,22 +2,21 @@
 <hr>
 2024 창원대학교 정보통신공학과 DB 프로그래밍 텀프로젝트
 
-Unifi의 제품을 소개하는 한글 쇼핑몰을 모의로 제작한 프로젝트입니다. 
+유비쿼티 네트웍스의 제품을 소개하는 한글 쇼핑몰을 모의로 제작한 프로젝트입니다. 
 현재 공식 Unifi 상품 페이지에는 한글 지원이 없기 때문에, 한글 사용자들에게 친숙한 인터페이스를 제공하는 가상의 홈쇼핑 웹 애플리케이션을 구현했습니다.
 사용자는 상품을 검색하고, 장바구니에 담고, 결제를 진행할 수 있으며, 관리자 페이지를 통해 상품과 주문을 관리할 수 있습니다.
 
 사용한 기술 스택은 다음과 같습니다.
 - 프론트엔드: HTML, CSS(Bootstrap), JavaScript
 - 벡엔드: PHP 8.1, MySQL 9.0
-<hr>
 
 ## 목차
 
 - [주요 기능](#주요-기능)<br>
 - [프로젝트 구조](#프로젝트-구조)<br>
 - [사용 방법](#사용-방법)
+- [Copyright](#Copyright)
 
-<hr>
 
 ## 주요 기능
 ### 사용자 기능
@@ -30,7 +29,6 @@ Unifi의 제품을 소개하는 한글 쇼핑몰을 모의로 제작한 프로�
 - 상품 등록, 수정, 삭제
 - 주문 관리 (주문 내역 조회 및 상태 변경)
 - 사용자 관리
-<hr>
 
 ## 프로젝트 구조
 ```
@@ -136,7 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ```
-<hr>
 
 ## 사용 방법
 ### 1. XAMPP 세팅
@@ -146,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 ### 2. 프로젝트 클론 및 설정
 ```
-git clone https://github.com/your-repo/unifi-home-shopping.git
+git clone https://github.com/cg-1119/Unifi-HomeShopping.git
 ```
 
 ### 3. 데이터베이스 설정
@@ -167,6 +164,15 @@ class Database {
     private $dbname = "database_name";
 }
 ```
+
+## Copyright
+
+이 프로젝트의 상품들은 모두 유비쿼터 네트웍스의 상품들로 저작권 또한 유비쿼터 네트웍스에 있습니다.<br>
+또한 메인페이지의 이미지 또한 외부 리소스를 사용하였습니다.<br>
+- page1.mp4 (출처: https://www.pexels.com/@pressmaster/)
+- page2.jpg, page3.jpg (출처: https://kr.freepik.com/author/pikisuperstar)
+
+더 자세한 내용은 views/main/copyright.php에서 확인하실 수 있습니다.
 
 
 
